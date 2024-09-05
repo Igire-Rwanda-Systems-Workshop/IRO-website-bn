@@ -1,25 +1,27 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./swagger.json");
-const dotenv = require("dotenv");
-const swaggerJsDoc = require('swagger-jsdoc');
-
-const path = require("path");
-const authRoutes = require("./routes/authRoutes");
-
-// Initialize dotenv to use environment variables
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 dotenv.config();
+import Router from './routes/index.js';
+import { fileURLToPath} from 'url';
+import path from 'path';
 
 // Initialize express app
 const app = express();
 
+const corsOptions = {
+    allowedHeaders: ["Authorization", "Content-Type" ],
+    methods: ["GET", "POST", "PUT", "UPDATE", "DELETE"],
+    origin: "*",
+};
 // Middleware
-app.use(cors());
-app.use(express.json());
-// app.use(authController.authenticateUser);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+app.use(cors());
+app.use(express.json()); 
+app.use('/api/InventorySystem', Router);
 
 // Connect to MongoDB
 const connectDB = async () => {
@@ -37,27 +39,27 @@ const connectDB = async () => {
 connectDB();
 
 // Swagger configuration
-const swaggerOptions = {
-    swaggerDefinition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'Node.js API',
-            version: '1.0.0',
-            description: 'A simple Express API',
-        },
-        servers: [
-            {
-                url: `http://localhost:${process.env.PORT || 5000}`,
-            },
-        ],
-    },
-    apis: [path.join(__dirname, 'routes/*.js'), path.join(__dirname, 'server.js')], // Path to API docs
-};
+// const swaggerOptions = {
+//     swaggerDefinition: {
+//         openapi: '3.0.0',
+//         info: {
+//             title: 'Node.js API',
+//             version: '1.0.0',
+//             description: 'A simple Express API',
+//         },
+//         servers: [
+//             {
+//                 url: `http://localhost:${process.env.PORT || 5000}`,
+//             },
+//         ],
+//     },
+//     apis: [path.join(__dirname, 'routes/*.js'), path.join(__dirname, 'server.js')], // Path to API docs
+// };
 
 // Swagger docs setup
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// const swaggerDocs = swaggerJsDoc(swaggerOptions);
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // // Sample route with Swagger documentation
 // /**
 //  * @swagger
@@ -73,7 +75,7 @@ app.get("/", (req, res) => {
 });
 
 // Routes
-app.use("/api/auth", authRoutes);
+// app.use("/api/auth", authRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
