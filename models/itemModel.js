@@ -41,11 +41,6 @@ const itemSchema = new mongoose.Schema({
         type: String,
         required: true
       },
-      state: {
-        type: String,
-        required: true,
-        enum: ['available', 'borrowed', 'reserved']
-      },
       status: {
         type: String,
         required: true,
