@@ -4,20 +4,25 @@ const bcrypt = require('bcrypt');
 const UserSchema = new mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    userId: { type: String, required: true, unique: true }, 
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: {
+        validator: function(v) {
+          return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v);
+        },
+        message: '{VALUE} is not a valid email address'
+      }
+    },
+    userId: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     isVerified: { type: Boolean, default: false },
     otp: { type: String },
     otpExpires: { type: Date },
     resetPasswordToken: { type: String },
-    resetPasswordExpires: { type: Date },
-    role: {
-        type: String,
-        enum: ['admin', 'operations manager', 'finance manager', 'project director'],
-        default: 'operations manager'
-    }
-});
+    resetPasswordExpires: { type: Date }
+  });
 
 // Hash password before saving the user
 UserSchema.pre('save', async function(next) {
