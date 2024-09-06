@@ -7,13 +7,13 @@ exports.createUser = async (req, res) => {
     const { names, email, password, role } = req.body;
 
     try {
-        // Check if user already exists
+        // Check if the user already exists
         let user = await User.findOne({ email });
         if (user) {
             return res.status(400).json({ msg: 'User already exists' });
         }
 
-        // Create new user
+        // Create a new user
         user = new User({
             names,
             email,
@@ -22,43 +22,40 @@ exports.createUser = async (req, res) => {
         });
 
         await user.save();
-        
 
+        // Send email after user creation
         try {
-            // const { email, subject, text } = req.body;
-            // Create a transporter using your email service
             let transporter = nodemailer.createTransport({
-                service: 'Gmail', // You can use other email services like Outlook, Yahoo, etc.
+                service: 'Gmail', 
                 auth: {
-                    user: 'angeiracyadukunda@gmail.com', // Your email address
-                    pass: 'pepb fftm iqlk fcxa', // Your email password or app-specific password if 2FA is enabled
+                    user: process.env.EMAIL_USER, 
+                    pass: process.env.EMAIL_PASS, 
                 },
             });
-    
-            // Define the email options
+
+            // Define email options
             let mailOptions = {
-                
-                from: 'angeiracyadukunda@gmail.com', // Sender address
-                to:`${email}`, // List of recipients
-                subject: "your account information ", // Subject line
-                 text: `Hello ${names},  your email and password is ${email} , ${password}`
+                from: process.env.EMAIL_USER, // Sender address
+                to:  "angeiracyadukunda@gmail.com", 
+                subject: "Your Account Information", // Email subject
+                text: `Hello ${names}, your email is ${email}, and your password is ${password}`,
             };
-    
+
             // Send the email
-            // let info = await transporter.sendMail(mailOptions);
-            // // Success response
-            // res.status(200).json({ message: 'Email sent successfully',  info });
+            let info = await transporter.sendMail(mailOptions);
+            console.log('Message sent: %s', info.messageId);
+
+            // Send success response and exit function
+            return res.status(201).json({ msg: 'User created and email sent successfully', user, info });
+
         } catch (error) {
             console.error('Error sending email:', error);
-            res.status(500).json({ message: 'Failed to send email', error });
+            return res.status(500).json({ msg: 'Failed to send email', error });
         }
 
-
-
-        res.status(201).json({ msg: 'User created successfully', user });
     } catch (err) {
         console.error('Error creating user:', err);
-        res.status(500).json({ msg: 'Server error' });
+        return res.status(500).json({ msg: 'Server error' });
     }
 };
 
@@ -77,7 +74,7 @@ exports.updateUser = async (req, res) => {
         user.names = names || user.names;
         user.email = email || user.email;
         if (password) {
-            user.password = password; // Will be hashed by pre-save hook
+            user.password = password; 
         }
         user.role = role || user.role;
 
