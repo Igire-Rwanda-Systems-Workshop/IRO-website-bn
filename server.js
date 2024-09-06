@@ -12,20 +12,30 @@ const paymentRoutes = require('./routes/paymentRoutes');
 const path =require('path');
 const url = require('url');
 
-// Initialize dotenv to use environment variables
 dotenv.config();
+import Router from './routes/index.js';
+import { fileURLToPath} from 'url';
+import path from 'path';
 
 // Initialize express app
 const app = express();
 
+const corsOptions = {
+    allowedHeaders: ["Authorization", "Content-Type" ],
+    methods: ["GET", "POST", "PUT", "UPDATE", "DELETE"],
+    origin: "*",
+};
 // Middleware
+ ft/financeMananger-angelique
 app.use(cors());
 app.use(express.json());
 const __fileName = url.fileURLToPath(url.pathToFileURL(__filename));
 console.log(__filename); 
 
 
-
+app.use(cors());
+app.use(express.json()); 
+app.use('/api/InventorySystem', Router);
 
 // Connect to MongoDB
 const connectDB = async () => {
@@ -43,27 +53,27 @@ const connectDB = async () => {
 connectDB();
 
 // Swagger configuration
-const swaggerOptions = {
-    swaggerDefinition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'Node.js API',
-            version: '1.0.0',
-            description: 'A simple Express API',
-        },
-        servers: [
-            {
-                url: `http://localhost:${process.env.PORT || 5000}`,
-            },
-        ],
-    },
-    apis: [path.join(__dirname, 'routes/*.js'), path.join(__dirname, 'server.js')], // Path to API docs
-};
+// const swaggerOptions = {
+//     swaggerDefinition: {
+//         openapi: '3.0.0',
+//         info: {
+//             title: 'Node.js API',
+//             version: '1.0.0',
+//             description: 'A simple Express API',
+//         },
+//         servers: [
+//             {
+//                 url: `http://localhost:${process.env.PORT || 5000}`,
+//             },
+//         ],
+//     },
+//     apis: [path.join(__dirname, 'routes/*.js'), path.join(__dirname, 'server.js')], // Path to API docs
+// };
 
 // Swagger docs setup
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// const swaggerDocs = swaggerJsDoc(swaggerOptions);
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // // Sample route with Swagger documentation
 // /**
 //  * @swagger
@@ -79,10 +89,14 @@ app.get("/", (req, res) => {
 });
 
 // Routes
+
 app.use("/api/auth", authRoutes);
 app.use("/api/auth", createUserRoute);
 app.use('/api/transactions', financeTransactionRoutes);
 app.use('/api/', paymentRoutes);
+
+// app.use("/api/auth", authRoutes);
+
 
 // Start the server
 const PORT = process.env.PORT || 5000;
