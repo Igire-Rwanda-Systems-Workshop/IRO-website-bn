@@ -5,10 +5,12 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 const dotenv = require("dotenv");
 const swaggerJsDoc = require('swagger-jsdoc');
-
-const path = require("path");
 const authRoutes = require("./routes/authRoutes");
 const createUserRoute = require('./routes/createUserRoutes');
+const financeTransactionRoutes = require('./routes/financeTransactionRoutes');
+const paymentRoutes = require('./routes/paymentRoutes'); 
+const path =require('path');
+const url = require('url');
 
 // Initialize dotenv to use environment variables
 dotenv.config();
@@ -19,7 +21,10 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
-// app.use(authController.authenticateUser);
+const __fileName = url.fileURLToPath(url.pathToFileURL(__filename));
+console.log(__filename); 
+
+
 
 
 // Connect to MongoDB
@@ -76,7 +81,8 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/auth", createUserRoute);
-
+app.use('/api/transactions', financeTransactionRoutes);
+app.use('/api/', paymentRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

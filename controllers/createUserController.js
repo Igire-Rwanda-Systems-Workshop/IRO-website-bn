@@ -107,36 +107,3 @@ exports.deleteUser = async (req, res) => {
         res.status(500).json({ msg: 'Server error' });
     }
 };
-
-
-
-// const sendByEmail = async (req, res) => {
-//     try {
-//         // const { email, subject, text } = req.body;
-//         // Create a transporter using your email service
-//         let transporter = nodemailer.createTransport({
-//             service: 'Gmail', // You can use other email services like Outlook, Yahoo, etc.
-//             auth: {
-//                 user: 'angeiracyadukunda@gmail.com', // Your email address
-//                 pass: 'pepb fftm iqlk fcxa', // Your email password or app-specific password if 2FA is enabled
-//             },
-//         });
-
-//         // Define the email options
-//         let mailOptions = {
-            
-//             from: 'angeiracyadukunda@gmail.com', // Sender address
-//             to:"angeiracya@gmail.com", // List of recipients
-//             subject: "your account information ", // Subject line
-//              text: `Hello ${user.names}, your password is ${user.password}`
-//         };
-
-//         // Send the email
-//         let info = await transporter.sendMail(mailOptions);
-//         // Success response
-//         res.status(200).json({ message: 'Email sent successfully',  info });
-//     } catch (error) {
-//         console.error('Error sending email:', error);
-//         res.status(500).json({ message: 'Failed to send email', error });
-//     }
-// };
