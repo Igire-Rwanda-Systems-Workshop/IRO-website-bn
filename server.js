@@ -5,10 +5,12 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 const dotenv = require("dotenv");
 const swaggerJsDoc = require('swagger-jsdoc');
-
-const path = require("path");
 const authRoutes = require("./routes/authRoutes");
 const createUserRoute = require('./routes/createUserRoutes');
+const financeTransactionRoutes = require('./routes/financeTransactionRoutes');
+const paymentRoutes = require('./routes/paymentRoutes'); 
+const path =require('path');
+const url = require('url');
 
 dotenv.config();
 import Router from './routes/index.js';
@@ -24,8 +26,12 @@ const corsOptions = {
     origin: "*",
 };
 // Middleware
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+ ft/financeMananger-angelique
+app.use(cors());
+app.use(express.json());
+const __fileName = url.fileURLToPath(url.pathToFileURL(__filename));
+console.log(__filename); 
+
 
 app.use(cors());
 app.use(express.json()); 
@@ -86,7 +92,8 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/auth", createUserRoute);
-
+app.use('/api/transactions', financeTransactionRoutes);
+app.use('/api/', paymentRoutes);
 
 // app.use("/api/auth", authRoutes);
 
