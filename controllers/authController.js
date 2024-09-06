@@ -1,10 +1,11 @@
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const User = require('../models/auth');
 const { v4: uuidv4 } = require('uuid');
 const Token = require('../models/Token');
 const sendEmail = require('../utils/sendEmail');
+const { Console } = require('console');
 
 // Signup
 exports.signup = async (req, res) => {
@@ -16,7 +17,6 @@ exports.signup = async (req, res) => {
         if (user) {
             return res.status(400).json({ msg: 'User already exists' });
         }
-      console.log (user);
         // Create user and generate a unique userId
         user = new User({ 
             firstName, 
@@ -71,31 +71,35 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Find user
+        // Find user by email
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).json({ msg: 'Invalid credentials' });
+            return res.status(404).json({ msg: 'User not found' });
         }
 
-        // Check if the user is verified
-        if (!user.isVerified) {
-            return res.status(400).json({ msg: 'Account not verified' });
-        }
+        // Debugging: Output provided password and stored hashed password
+        console.log('Provided password:', password);
+        console.log('Provided hashed password:', bcrypt.compareSync(password,user.password));
+        console.log('Stored hashed password:', user.password);
 
-        // Compare passwords
+        // Compare provided password with the stored hashed password
         const isMatch = await bcrypt.compare(password, user.password);
 
+        // Debugging: Check if the password matches
+        console.log('Password match result:', isMatch);
+
         if (!isMatch) {
-            return res.status(400).json({ msg: 'Invalid credentials' });
+            return res.status(400).json({ msg: 'Invalid password' });
         }
 
-        // Generate JWT
-        const token = jwt.sign({ user: { id: user._id } }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        // Generate JWT token (consistent with resetPassword function)
+        const authToken = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.status(200).json({ token });
+        return res.status(200).json({ msg: 'Login successful', token: authToken });
     } catch (err) {
-        res.status(500).json({ msg: 'Server error' });
+        console.error('Error during login:', err);
+        return res.status(500).json({ msg: 'Server error' });
     }
 };
 
@@ -141,42 +145,59 @@ status(500).json({ msg: 'Server error' });
     }
 };
 
-// Reset Password
-exports.resetPassword = async (req, res) => {
-    const { token, newPassword, confirmPassword } = req.body;
 
+exports.resetPassword = async (req, res) => {
     try {
+        const { email, token, newPassword, confirmPassword } = req.body;
+
+        // Validate request parameters
+        if (!email || !token || !newPassword || !confirmPassword) {
+            return res.status(400).json({ msg: 'All fields are required' });
+        }
+
         // Check if passwords match
         if (newPassword !== confirmPassword) {
             return res.status(400).json({ msg: 'Passwords do not match' });
         }
 
-        // Hash the token provided by the user
+        // Hash the token provided by the user for verification
         const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
-        // Find user by reset token and ensure it hasn’t expired
+        // Find user by email and reset token, and ensure it hasn’t expired
         const user = await User.findOne({
+            email,
             resetPasswordToken: token,
             resetPasswordExpires: { $gt: Date.now() }
         });
 
         if (!user) {
-            return res.status(400).json({ msg: 'Invalid or expired token' });
+            return res.status(400).json({ msg: 'Invalid or expired token, or email mismatch' });
         }
 
-        // Hash the new password
-        user.password = await bcrypt.hash(newPassword, 10);
+        // Generate salt and hash the new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-        // Clear reset token fields
-        user.resetPasswordToken = null;
-        user.resetPasswordExpires = null;
-        await user.save();
+        // Update the user's password and clear reset token fields
+        await User.updateOne(
+            { _id: user._id },
+            {
+                $set: {
+                    password: hashedPassword,
+                    resetPasswordToken: null,
+                    resetPasswordExpires: null
+                }
+            }
+        );
 
-        res.status(200).json({ msg: 'Password reset successfully' });
+        // Optionally, you can auto-login the user after the password reset by generating a JWT token
+        const authToken = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        // Respond with success message and JWT token
+        res.status(200).json({ msg: 'Password updated successfully', token: authToken });
     } catch (err) {
-        console.error('Error during password reset:', err);
+        console.error('Error during password update:', err.message);
         res.status(500).json({ msg: 'Server error' });
     }
-    
-
 };
+

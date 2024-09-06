@@ -1,7 +1,15 @@
-import express from 'express';
-import cors from 'cors';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
+const dotenv = require("dotenv");
+const swaggerJsDoc = require('swagger-jsdoc');
+
+const path = require("path");
+const authRoutes = require("./routes/authRoutes");
+const createUserRoute = require('./routes/createUserRoutes');
+
 dotenv.config();
 import Router from './routes/index.js';
 import { fileURLToPath} from 'url';
@@ -75,7 +83,13 @@ app.get("/", (req, res) => {
 });
 
 // Routes
+
+app.use("/api/auth", authRoutes);
+app.use("/api/auth", createUserRoute);
+
+
 // app.use("/api/auth", authRoutes);
+
 
 // Start the server
 const PORT = process.env.PORT || 5000;
