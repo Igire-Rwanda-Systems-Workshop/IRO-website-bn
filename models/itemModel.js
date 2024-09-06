@@ -44,7 +44,10 @@ const itemSchema = new mongoose.Schema({
       status: {
         type: String,
         required: true,
-        enum: ['lost', 'damaged', 'used', 'renewed']
+        enum: {
+          values: ['lost', 'damaged', 'renewed', 'used'],
+          message: '{VALUE} is not a valid status. Choose either "lost", "damaged", "rejected" or "used".'
+        },
       },
       color: {
         type: String,
