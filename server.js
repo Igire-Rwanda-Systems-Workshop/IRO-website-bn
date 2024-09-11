@@ -1,19 +1,24 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./swagger.json");
-const dotenv = require("dotenv");
-const swaggerJsDoc = require('swagger-jsdoc');
+// const express = require("express");
+// const cors = require("cors");
+// const mongoose = require("mongoose");
+// const swaggerUi = require("swagger-ui-express");
+// const swaggerDocument = require("./swagger.json");
+// const dotenv = require("dotenv");
+// const swaggerJsDoc = require('swagger-jsdoc');
 
-const path = require("path");
-const authRoutes = require("./routes/authRoutes");
-const createUserRoute = require('./routes/createUserRoutes');
-
+// const path = require("path");
+// const authRoutes = require("./routes/authRoutes");
+// const createUserRoute = require('./routes/createUserRoutes');
+import cors from 'cors';
+import mongoose from 'mongoose';
+import express from 'express';
+import dotenv from 'dotenv';
 dotenv.config();
 import Router from './routes/index.js';
 import { fileURLToPath} from 'url';
 import path from 'path';
+import swaggerUi from 'swagger-ui-express';
+import swagger from './docs/swagger.json' assert {type:"json"}
 
 // Initialize express app
 const app = express();
@@ -30,6 +35,7 @@ const __dirname = path.dirname(__filename);
 app.use(cors());
 app.use(express.json()); 
 app.use('/api/InventorySystem', Router);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 
 // Connect to MongoDB
 const connectDB = async () => {
@@ -84,8 +90,8 @@ app.get("/", (req, res) => {
 
 // Routes
 
-app.use("/api/auth", authRoutes);
-app.use("/api/auth", createUserRoute);
+// app.use("/api/auth", authRoutes);
+// app.use("/api/auth", createUserRoute);
 
 
 // app.use("/api/auth", authRoutes);
