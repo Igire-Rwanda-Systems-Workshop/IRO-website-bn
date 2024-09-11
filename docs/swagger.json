@@ -26,7 +26,7 @@
                 "summary": "Create an account",
                 "description": "To make an appointment first sign up",
                 "tags": [
-                    "Authentication"
+                    "User-Auth"
                 ],
                 "parameters": [
                     {
@@ -51,7 +51,7 @@
                 "summary": "Login into your account",
                 "description": "To do something first login",
                 "tags": [
-                    "Authentication"
+                    "User-Auth"
                 ],
                 "parameters": [
                     {
@@ -76,7 +76,7 @@
                 "summary": "verify your otp",
                 "description": "verify your account",
                 "tags": [
-                    "Authentication"
+                    "User-Auth"
                 ],
                 "parameters": [
                     {
@@ -101,7 +101,7 @@
                 "summary": "incase you forgot your password",
                 "description": "if you forgot your password",
                 "tags": [
-                    "Authentication"
+                    "User-Auth"
                 ],
                 "parameters": [
                     {
@@ -126,7 +126,7 @@
                 "summary": "reset your password",
                 "description": "set another password incase you forgot your password",
                 "tags": [
-                    "Authentication"
+                    "User-Auth"
                 ],
                 "parameters": [
                     {
@@ -151,7 +151,7 @@
                 "summary": "updating a user",
                 "description": "updating the users",
                 "tags": [
-                    "Authentication"
+                    "User-Auth"
                 ],
                 "parameters": [
                     {
@@ -186,7 +186,7 @@
                 "summary": "Delete a user by ID",
                 "description": "Delete a user by ID",
                 "tags": [
-                    "Authentication"
+                    "User-Auth"
                 ],
                 "parameters": [
                     {
