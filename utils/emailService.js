@@ -1,7 +1,10 @@
-const nodemailer = require('nodemailer');
+import nodemailer from 'nodemailer';
+import { config } from 'dotenv';
+
+config()
 
 // Configure the transporter
-const transporter = nodemailer.createTransport({
+const  transporter = nodemailer.createTransport({
   service: 'gmail', // Use your email service
   auth: {
     user: process.env.EMAIL_USER,
@@ -10,10 +13,10 @@ const transporter = nodemailer.createTransport({
 });
 
 // Send OTP to admin
-exports.sendOTP = (email, otp) => {
+const sendOTP = (email, otp) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: email,
+    to: "angeiracyadukunda@gmail.com",
     subject: 'Verify Your Account',
     text: `Your OTP for verification is: ${otp}`,
   };
@@ -22,10 +25,10 @@ exports.sendOTP = (email, otp) => {
 };
 
 // Send user credentials
-exports.sendCredentials = (email, password, role) => {
+const sendCredentials = (email, password, role) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: email,
+    to: "angeiracyadukunda@gmail.com",
     subject: 'Your Login Credentials',
     text: `You have been assigned the role of ${role}. Your login password is: ${password}`,
   };
@@ -34,13 +37,22 @@ exports.sendCredentials = (email, password, role) => {
 };
 
 // Send password reset token
-exports.sendResetToken = (email, token) => {
+const sendResetToken = (email, token) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: email,
+    to: "angeiracyadukunda@gmail.com",
     subject: 'Password Reset Request',
     text: `Here is your password reset token: ${token}`,
   };
 
   return transporter.sendMail(mailOptions);
 };
+
+// Export the email services
+const emailServices = {
+  sendOTP,
+  sendCredentials,
+  sendResetToken,
+}
+
+export default emailServices;

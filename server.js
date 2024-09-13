@@ -1,25 +1,25 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
-require('dotenv').config();
-const userRoutes = require('./routes/userRoutes');
-const financeTransactionRoutes = require('./routes/financeTransactionRoutes');
-const paymentRoutes = require('./routes/paymentRoutes'); 
-const path =require('path');
-const url = require('url');
+import express from "express";
+import cors  from "cors";
+import  mongoose from "mongoose";
+import dotenv  from 'dotenv';
+dotenv.config();
+import  path from 'path';
+import  url from 'url' ;
+import Router from "./routes/index.js";
+import { fileURLToPath } from "url";
 
 
 
 // Initialize express app
 const app = express();
 
-const corsOptions = {
+const  corsOptions = {
     allowedHeaders: ["Authorization", "Content-Type" ],
     methods: ["GET", "POST", "PUT", "UPDATE", "DELETE"],
     origin: "*",
 };
-const __fileName = url.fileURLToPath(url.pathToFileURL(__filename));
-console.log(__filename); 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename); 
 
 
 // Middleware
@@ -48,11 +48,9 @@ app.get("/", (req, res) => {
   res.send("Welcome to the Node.js API!");
 });
 
-// Routes
-app.use('/api/', userRoutes); 
-app.use('/api/transactions', financeTransactionRoutes);
-app.use('/api/', paymentRoutes);
 
+// Routes
+app.use ('/api/system', Router);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -61,7 +59,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 5000;
+const  PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log("\x1b[36m%s\x1b[0m", `Server running on port ${PORT}`);
 });
