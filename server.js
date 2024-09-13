@@ -7,6 +7,7 @@ import Router from './routes/index.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
+import Router2 from './Employee/Routes/index.js';
 import swaggerUi from 'swagger-ui-express';
 import swagger from './docs/swagger.json' assert {type:"json"}
 
@@ -26,6 +27,7 @@ const __dirname = path.dirname(__filename);
 app.use(cors());
 app.use(express.json()); 
 app.use('/api/InventorySystem', Router);
+app.use('/api/Employee', Router2);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 
 // Connect to MongoDB

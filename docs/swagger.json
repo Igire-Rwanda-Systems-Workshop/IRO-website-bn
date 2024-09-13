@@ -816,6 +816,130 @@
                     }
                 }
             }
+        },
+        "/api/InventorySystem/payment/payments": {
+            "post": {
+                "summary": "Create a payment",
+                "description": "add a proof payment",
+                "tags": [
+                    "Payments"
+                ],
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "finance_id",
+                       "type":"string",
+                        "required": true,
+                        "description": "payment object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "request_id",
+                       "type":"string",
+                        "required": true,
+                        "description": "payment object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "amount",
+                       "type":"string",
+                        "required": true,
+                        "description": "payment object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "proof_of_payment",
+                       "type":"file",
+                        "required": true,
+                        "description": "payment object"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": " proof of payment created  successfully"
+                    },
+                    "401":{
+                        "description":"payment not created"
+                    }
+                }
+            }
+        },
+        "/api/InventorySystem/payment/findPaymentId/{id}": {
+            "get": {
+                "summary": "get a payment by ID",
+                "description": "get a single payment by ID",
+                "tags": [ 
+                    "Payments"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the payment to get",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "single payment got it!"
+                    },
+                    "404": {
+                        "description": "payment not found"
+                    }
+                }
+            }
+        },
+        "/api/InventorySystem/finance/viewTransaction/{id}": {
+            "get": {
+                "summary": "get a transaction by ID",
+                "description": "get a single transaction by ID",
+                "tags": [ 
+                    "Finance"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the transaction to get",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "single transaction got it!"
+                    },
+                    "404": {
+                        "description": " transaction not found"
+                    }
+                }
+            }
+        },
+        "/api/InventorySystem/finance/initiate": {
+            "post": {
+                "summary": "Create a initiation ",
+                "description": "Create a initiation",
+                "tags": [
+                    "Finance"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "finance object"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "finance created"
+                    }
+                }
+            }
         }
     }
 }
