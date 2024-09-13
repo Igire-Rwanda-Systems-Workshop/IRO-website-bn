@@ -1,10 +1,12 @@
-// controllers/financeTransactionController.js
-const FinanceTransaction = require('../models/FinanceTransaction');
-const nodemailer = require('nodemailer');
-const path = require('path');
+import readable from "readable-stream";
+import  FinanceTransaction from '../models/FinanceTransaction.js';
+import  Notification  from '../models/notificationModel.js'; 
+import nodemailer from 'nodemailer';
+import User from '../models/userModel.js';
+import notificationController from '../controllers/notificationController.js';
 
 // View Transaction
-exports.viewTransaction = async (req, res) => {
+const viewTransaction = async (req, res) => {
     try {
         const transaction = await FinanceTransaction.findById(req.params.id);
         if (!transaction) {
@@ -18,7 +20,7 @@ exports.viewTransaction = async (req, res) => {
 };
 
 // Send Email
-exports.sendEmail = async (email, subject, text) => {
+const sendEmail = async (email, subject, text) => {
     try {
         let transporter = nodemailer.createTransport({
             service: 'Gmail',
@@ -42,71 +44,125 @@ exports.sendEmail = async (email, subject, text) => {
     }
 };
 
-// Initiate Payment
-exports.initiatePayment = async (req, res) => {
+const initiatePayment = async (req, res) => {
     try {
         const { requestId, amount, comment } = req.body;
 
+        // Create a new finance transaction
         const newTransaction = new FinanceTransaction({
             requestId,
             amount,
             comment,
         });
 
+        // Save the new transaction
         await newTransaction.save();
 
-        // Optionally send an email notification
+        // Send email notification
         const subject = 'Payment Initiated';
         const text = `Your payment of ${amount} has been initiated.`;
-        exports.sendEmail('recipient-email@example.com', subject, text);
+        await  sendEmail ('angeiracyadukunda@gmail.com', subject, text);  // Update this with the actual recipient email logic
 
+        // Fetch the relevant user roles from the database
+        const financeManager = await User.findOne({ role: 'financeManager' });
+        const operationsManager = await User.findOne({ role: 'operationsManager' });
+        const projectDirector = await User.findOne({ role: 'projectDirector' });
+
+        // Notify Finance Manager
+        if (financeManager) {
+            await notificationController.createNotification({
+                message: `Payment of ${amount} has been initiated for request ${requestId}.`,
+                recipient: operationsManager._id,  // Ensure the recipient is populated
+                type: 'Payment Initiated'  // Use the correct enum value
+            });
+        }
+
+        // Notify Operations Manager
+        if (operationsManager) {
+            await notificationController.createNotification({
+                message: `A payment of ${amount} has been initiated for your request ${requestId}.`,
+                recipient: projectDirector._id,  // Ensure the recipient is populated
+                type: 'Payment Initiated'  // Use the correct enum value
+            });
+        }
+
+        // Notify Project Director
+        if (projectDirector) {
+            await notificationController.createNotification({
+                message: `A payment of ${amount} has been initiated for request ${requestId}.`,
+                recipient: projectDirector._id,  // Ensure the recipient is populated
+                type: 'Payment Initiated'  // Use the correct enum value
+            });
+        }
+
+        // Optionally trigger any additional notification logic for the finance manager
+        const financeManagerId = financeManager ? financeManager._id : null;
+        if (financeManagerId) {
+            await notificationController.triggerPaymentNotification(financeManagerId, amount);
+        }
+
+        // Send success response
         res.status(201).json({ msg: 'Payment initiated successfully', newTransaction });
+
     } catch (err) {
-        console.error(err.message);
+        console.error('Error initiating payment:', err.message);
         res.status(500).json({ msg: 'Server error' });
     }
 };
 
-// get all payment
 
-exports.getAllPayment = async (req, res) => {
+// Get All Payments
+const getAllPayment = async (req, res) => {
     try {
         const transactions = await FinanceTransaction.find();
         res.status(200).json(transactions);
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ msg: 'Server error' });
-
     }
-    
 };
 
-
-
-
-
-
-
-
-
-
-
-
 // Upload Proof of Payment
+const uploadProofOfPayment = async (req, res) => {
+    try {
+        const transaction = await FinanceTransaction.findById(req.params.id);
+        if (!transaction) {
+            return res.status(404).json({ msg: 'Transaction not found' });
+        }
 
-// exports.uploadProofOfPayment = async (req, res) => {
-//     try {
-//         const transaction = await FinanceTransaction.findById(req.params.id);
-//         if (!transaction) {
-//             return res.status(404).json({ msg: 'Transaction not found' });
-//         }
+        transaction.proofOfPayment = req.file.path;
+        await transaction.save();
 
-//         transaction.proofOfPayment = req.file.path;
-//         await transaction.save();
+        // Send notifications about proof of payment
+        const operationsManager = await User.findOne({ role: 'operationsManager' });
+        const projectDirector = await User.findOne({ role: 'projectDirector' });
 
-//         res.status(200).json({ msg: 'Proof of payment uploaded successfully', transaction });
-//     } catch (err) {
-//         console.error(err.message);
-//         res.status(500).json({ msg: 'Server error' });
-//     }
-// };
+        if (operationsManager) {
+            await Notification.createNotification(
+                `Proof of payment has been uploaded for request ${transaction.requestId}`,
+                operationsManager._id,
+                'Payment Update'
+            );
+        }
+
+        if (projectDirector) {
+            await Notification.createNotification(
+                `Proof of payment has been uploaded for request ${transaction.requestId}`,
+                projectDirector._id,
+                'Payment Update'
+            );
+        }
+
+        res.status(200).json({ msg: 'Proof of payment uploaded successfully', transaction });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ msg: 'Server error' });
+    }
+};
+const financeControllers = {
+    viewTransaction,
+    initiatePayment,
+    getAllPayment,
+    uploadProofOfPayment,
+}
+export default financeControllers;

@@ -1,16 +1,21 @@
-const User = require('../models/userModel');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const emailService = require('../utils/emailService');
-const { sendEmail } = require('../utils/emailUtils');
-const otpService = require('../utils/otpService');
-const passwordUtils = require('../utils/passwordUtils');
+import readable from "readable-stream";
+import  bcrypt from  'bcrypt';
+import jwt  from 'jsonwebtoken';
+import crypto from 'crypto';
+import emailServices  from '../utils/emailService.js'
+import sendEmail from '../utils/emailUtils.js';
+import otpService  from '../utils/otpService.js';
+// import passwordUtils  from '../utils/passwordUtils.js';
+import notificationControllers from './notificationController.js';
+// import { error, log } from "console";
+import notificationModel from "../models/notificationModel.js";
+import userModel from "../models/userModel.js";
+import tokenModel from '../models/Token.js'
 
-let otpStorage = {}; // Temporary store for OTP
+let otpStorage = {}; 
 
 // Admin Signup
-exports.adminSignup = async (req, res) => {
+const adminSignup = async (req, res) => {
     const { name, email, password } = req.body;
   
     // Generate OTP and store in otpStorage
@@ -18,14 +23,16 @@ exports.adminSignup = async (req, res) => {
     otpStorage[email] = otp;
   
     // Create new admin user
-    const newAdmin = new User({ name, email, password, role: 'admin' });
+    const newAdmin = new userModel({ name, email, password, role: 'admin' });
     
     try {
         // Save new admin user
         await newAdmin.save();
   
         // Send OTP to email
-        await emailService.sendOTP(email, otp);
+        await emailServices.sendOTP(email, otp);
+
+    
   
         res.status(201).json({ message: 'Signup successful, check your email for OTP' });
     } catch (error) {
@@ -34,13 +41,13 @@ exports.adminSignup = async (req, res) => {
     
 };
 
-// Verify OTP for Admin
-exports.verifyOTP = async (req, res) => {
+
+const verifyOTP = async (req, res) => {
     const { email, otp } = req.body;
     const storedOTP = otpStorage[email];
 
     if (otpService.verifyOTP(otp, storedOTP)) {
-        await User.findOneAndUpdate({ email }, { isVerified: true });
+        await userModel.findOneAndUpdate({ email }, { isVerified: true });
         delete otpStorage[email];
         res.json({ message: 'Account verified successfully' });
     } else {
@@ -48,13 +55,14 @@ exports.verifyOTP = async (req, res) => {
     }
 };
 
-// Login
-exports.login = async (req, res) => {
+
+/// Login Controller
+const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
         // Find user by email
-        const user = await User.findOne({ email });
+        const user = await userModel.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
@@ -65,62 +73,77 @@ exports.login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
 
-        // Check if user is verified
+        // Check if user is verified (for admin)
         if (user.role === 'admin' && !user.isVerified) {
             return res.status(403).json({ message: 'Admin must verify the account before login' });
         }
-      
-        // Generate JWT token for successful login
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
-            expiresIn: '1d',
-        });
 
-        res.json({ message: 'Login successful', token, role: user.role });
+        // Generate JWT token for successful login
+        const token = jwt.sign(
+            { id: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '1d' }
+        );
+
+        // Store the token in the database (optional)
+        const expirationDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // Token expiration set to 1 day
+        const newToken = new tokenModel({
+            token,
+            user: user._id,
+            expirationDate
+        });
+        await newToken.save(); // Save the token in the DB
+
+        // Return the response with the token and user role
+        return res.status(200).json({ message: 'Login successful', token, role: user.role });
+
     } catch (error) {
-        res.status(500).json({ message: 'Login failed', error: error.message });
+        // Return any server error
+        return res.status(500).json({ message: 'Login failed', error: error.message });
     }
 };
 
+
 // Create User (by Admin)
-exports.createUser = async (req, res) => {
+const createUser = async (req, res) => {
     const { name, email, role } = req.body;
     const password = Math.random().toString(36).slice(-8); // Generate random password
 
-    const newUser = new User({ name, email, password, role });
+    const newUser = new userModel({ name, email, password, role });
     await newUser.save();
 
-    await emailService.sendCredentials(email, password, role);
+    await emailServices.sendCredentials(email, password, role);
     res.status(201).json({ message: 'User created and credentials sent' });
 };
 
 // Update User (by Admin)
-exports.updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
     const { id } = req.params;
     const { name, email, role } = req.body;
 
-    const updatedUser = await User.findByIdAndUpdate(id, { name, email, role ,isVerified:true }, { new: true });
+    const updatedUser = await userModel.findByIdAndUpdate(id, { name, email, role ,isVerified:true }, { new: true });
     if (!updatedUser) return res.status(404).json({ message: 'User not found' });
 
     res.json({ message: 'User updated successfully', updatedUser });
 };
 
 // Delete User (by Admin)
-exports.deleteUser = async (req, res) => {
+const deleteUser = async (req, res) => {
     const { id } = req.params;
 
-    const deletedUser = await User.findByIdAndDelete(id);
+    const deletedUser = await userModel.findByIdAndDelete(id);
     if (!deletedUser) return res.status(404).json({ message: 'User not found' });
 
     res.json({ message: 'User deleted successfully' });
 };
 
 
-exports.forgotPassword = async (req, res) => {
+const forgotPassword = async (req, res) => {
     const { email } = req.body;
 
     try {
         // Find user by email
-        const user = await User.findOne({ email });
+        const user = await userModel.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -155,7 +178,7 @@ exports.forgotPassword = async (req, res) => {
 
 
 // Reset password (for both Admin and Users)
-exports.resetPassword = async (req, res) => {
+const resetPassword = async (req, res) => {
     const { token, newPassword, confirmNewPassword } = req.body;
 
     // Check if the passwords match
@@ -164,7 +187,7 @@ exports.resetPassword = async (req, res) => {
     }
 
     // Find user by reset token
-    const user = await User.findOne({
+    const user = await userModel.findOne({
         resetToken: token,
         resetTokenExpire: { $gt: Date.now() }, // Check if token is still valid
     });
@@ -181,3 +204,16 @@ exports.resetPassword = async (req, res) => {
 
     res.json({ message: 'Password has been reset successfully' });
 };
+
+const userController = {
+    adminSignup,
+    verifyOTP,
+    login,
+    createUser,
+    updateUser,
+    deleteUser,
+    forgotPassword,
+    resetPassword,
+}
+
+export default userController;
