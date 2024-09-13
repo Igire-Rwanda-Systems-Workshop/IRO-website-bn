@@ -1,12 +1,13 @@
-const Payment = require('../models/PaymentModel');
+import paymentModel from '../models/PaymentModel.js';
+import notificationModel from '../models/notificationModel.js';
+import userModel from '../models/userModel.js'; // Assuming there is a User Model
 
 // Record Payment
-exports.recordPayment = async (req, res) => {
+const recordPayment = async (req, res) => {
     const { finance_id, request_id, amount, payment_method } = req.body;
     const file = req.file;  // Handle file upload
 
     try {
-    
         console.log({ finance_id, request_id, amount, payment_method, file });
 
         // Validate file existence and its properties
@@ -16,7 +17,7 @@ exports.recordPayment = async (req, res) => {
         console.log(file);
 
         // Create a new payment instance
-        const payment = new Payment({
+        const payment = new paymentModel({
             finance_id,
             request_id,
             amount,
@@ -32,6 +33,26 @@ exports.recordPayment = async (req, res) => {
         // Save the payment to the database
         const savedPayment = await payment.save();
 
+        // Notify the Operations Manager and Project Director about the payment
+        const operationsManager = await userModel.findById(payment.finance_id); // Assuming finance_id is the Operations Manager's id
+        const projectDirector = await User.findOne({ role: 'projectDirector' });
+
+        if (operationsManager) {
+            await notificationModel.createNotification(
+                `Payment of ${amount} has been recorded for request ${request_id}`, 
+                operationsManager._id,
+                'Payment Update'
+            );
+        }
+
+        if (projectDirector) {
+            await notificationModel.createNotification(
+                `A payment of ${amount} has been made for request ${request_id}`, 
+                projectDirector._id,
+                'Payment Update'
+            );
+        }
+
         return res.status(201).json({ 
             message: "Payment recorded successfully", 
             payment: savedPayment 
@@ -42,17 +63,14 @@ exports.recordPayment = async (req, res) => {
     }
 };
 
-
-
-
 // Fetch Payment by ID or Fetch All Payments
-exports.viewPayment = async (req, res) => {
+const viewPayment = async (req, res) => {
     try {
         const paymentId = req.params.id;
 
         // If the id is "all", fetch all payments
         if (paymentId === "all") {
-            const payments = await Payment.find();
+            const payments = await paymentModel.find();
             return res.status(200).json({
                 message: "All payments retrieved successfully",
                 payments: payments
@@ -60,7 +78,7 @@ exports.viewPayment = async (req, res) => {
         }
 
         // Otherwise, find payment by ID
-        const payment = await Payment.findById(paymentId);
+        const payment = await paymentModel.findById(paymentId);
 
         // Check if payment exists
         if (!payment) {
@@ -78,11 +96,10 @@ exports.viewPayment = async (req, res) => {
     }
 };
 
-
-exports.getAllPayments= async(req,res)=>{
-    try{
+const getAllPayments = async (req, res) => {
+    try {
         // Fetch all payments from the database
-        const payments = await Payment.find();
+        const payments = await paymentModel.find();
         
         // Return all payment details
         return res.status(200).json({
@@ -93,6 +110,11 @@ exports.getAllPayments= async(req,res)=>{
         console.error("Error retrieving payments:", error);
         return res.status(500).json({ message: "Server error", error });
     }
-    }
+};
 
- 
+const paymentController = {
+    recordPayment,
+    viewPayment,
+    getAllPayments
+}
+export default paymentController;

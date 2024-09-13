@@ -1,7 +1,7 @@
 import tokenModel from "../Models/tokenModel.js";
-import BadRequestError from "../../BadRequestError.js";
+import BadRequestError from "../../Errors/BadRequestError.js";
 import { validationResult } from "express-validator";
-import asyncWrapper from "../../async.js";
+import asyncWrapper from "../../middleware/async.js";
 
 const addToken = asyncWrapper(async (req, res, next)=>{
     const errors = validationResult(req);

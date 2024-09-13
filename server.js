@@ -14,7 +14,7 @@ import swagger from './docs/swagger.json' assert {type:"json"}
 // Initialize express app
 const app = express();
 
-const corsOptions = {
+const  corsOptions = {
     allowedHeaders: ["Authorization", "Content-Type" ],
     methods: ["GET", "POST", "PUT", "UPDATE", "DELETE"],
     origin: "*",
@@ -26,7 +26,7 @@ const __dirname = path.dirname(__filename);
 // Middleware
 app.use(cors());
 app.use(express.json()); 
-app.use('/api/InventorySystem', Router);
+app.use('/api/Inventory', Router);
 app.use('/api/Employee', Router2);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 
@@ -50,8 +50,6 @@ app.get("/", (req, res) => {
   res.send("Welcome to the Node.js API!");
 });
 
-// Routes
-
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -60,7 +58,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 5000;
+const  PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log("\x1b[36m%s\x1b[0m", `Server running on port ${PORT}`);
 });

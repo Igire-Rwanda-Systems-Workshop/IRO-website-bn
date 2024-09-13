@@ -75,7 +75,7 @@ const signIn = asyncWrapper(async (req, res, next) => {
     }
 
     // Check if the user exists
-    const foundUser = await userModel.findOne({ email: req.body.email });
+    const foundUser = await userModel.findOne({email: req.body.email });
     if (!foundUser) {
         return next(new BadRequestError("Invalid email or password"));
     }
@@ -86,7 +86,7 @@ const signIn = asyncWrapper(async (req, res, next) => {
     }
 
     // Compare the password asynchronously
-    const isPasswordVerified = await bcrypt.compare(req.body.password, foundUser.password);
+    const isPasswordVerified = await bcrypt.compareSync(req.body.password, foundUser.password);
     if (!isPasswordVerified) {
         return next(new BadRequestError("Invalid email or password!"));
     }
@@ -131,7 +131,7 @@ const forgotPassword = asyncWrapper(async (req,res)=>{
         user: foundUser ._id,
         expirationDate: new Date().getTime() + (60 * 1000 *30)
     });
-    const link = `http://localhost:4000/reset-password?token=${token}&id=${foundUser.id}`;
+    const link = `http://localhost:5000/reset-password?token=${token}&id=${foundUser.id}`;
     const emailBody = `click on the link bellow to reset your password\n\n${link}`;
 
     await sendEmail(req.body.email, "Reset your password", emailBody);
@@ -144,7 +144,7 @@ const forgotPassword = asyncWrapper(async (req,res)=>{
     const { token, id, password } = req.body;
 
     //validate input
-    if(!token || id || !password){
+    if(!token || !id || !password){
        return next(new BadRequestError("Token, id and new password are required"));
     }
     //verify token

@@ -21,7 +21,7 @@
         "https"
     ],
     "paths": {
-        "/signup": {
+        "api/Inventory/signup": {
             "post": {
                 "summary": "Create an account",
                 "description": "To make an appointment first sign up",
@@ -46,7 +46,7 @@
                 }
             }
         },
-        "/login": {
+        "api/Inventory/login": {
             "post": {
                 "summary": "Login into your account",
                 "description": "To do something first login",
@@ -71,7 +71,7 @@
                 }
             }
         },
-        "/verify-otp": {
+        "api/Inventory/verify-otp": {
             "post": {
                 "summary": "verify your otp",
                 "description": "verify your account",
@@ -96,7 +96,7 @@
                 }
             }
         },
-        "/forgot-Password": {
+        "api/Inventory/forgot-Password": {
             "post": {
                 "summary": "incase you forgot your password",
                 "description": "if you forgot your password",
@@ -121,7 +121,7 @@
                 }
             }
         },
-        "/reset-Password": {
+        "api/Inventory/reset-Password": {
             "post": {
                 "summary": "reset your password",
                 "description": "set another password incase you forgot your password",
@@ -146,7 +146,7 @@
                 }
             }
         },
-        "/update-user/{id}": {
+        "api/Inventory/update-user/{id}": {
             "put": {
                 "summary": "updating a user",
                 "description": "updating the users",
@@ -181,7 +181,7 @@
                 }
             }
         },
-        "/delete-user/{id}": {
+        "api/Inventory/delete-user/{id}": {
             "delete": {
                 "summary": "Delete a user by ID",
                 "description": "Delete a user by ID",
@@ -207,7 +207,7 @@
                 }
             }
         },
-        "/api/InventorySystem/items/upload": {
+        "/api/Inventory/items/upload": {
             "post": {
                 "summary": "Create a new image",
                 "description": "add an image",
@@ -239,7 +239,7 @@
                     {
                         "in": "formData",
                         "name": "date_of_entry",
-                       "type":"Date",
+                       "type": "Date",
                         "required": true,
                         "description": "item object"
                     },
@@ -317,7 +317,7 @@
                 }
             }
         },
-        "/api/InventorySystem/items/getAll": {
+        "/api/Inventory/items/getAll": {
             "get": {
                 "summary": "Find all items",
                 "description": "Find all items",
@@ -334,7 +334,7 @@
                 }
             }
         },
-        "/api/InventorySystem/items/getById/{id}": {
+        "/api/Inventory/items/getById/{id}": {
             "get": {
                 "summary": "get an item by ID",
                 "description": "get a single item by ID",
@@ -360,7 +360,7 @@
                 }
             }
         },
-        "/api/InventorySystem/items/getByCategory/{category}": {
+        "/api/Inventory/items/getByCategory/{category}": {
             "get": {
                 "summary": "get a category by ID",
                 "description": "get a single category by ID",
@@ -386,7 +386,7 @@
                 }
             }
         },
-        "/api/InventorySystem/items/getByStatus/{status}": {
+        "/api/Inventory/items/getByStatus/{status}": {
             "get": {
                 "summary": "get an item by status",
                 "description": "get a single item by status",
@@ -412,7 +412,7 @@
                 }
             }
         },
-        "/api/InventorySystem/items/getByName/{name}": {
+        "/api/Inventory/items/getByName/{name}": {
             "get": {
                 "summary": "get an item by name",
                 "description": "get a single item by name",
@@ -438,7 +438,7 @@
                 }
             }
         },
-        "/api/InventorySystem/items/updateItem/{id}": {
+        "/api/Inventory/items/updateItem/{id}": {
             "put": {
                 "summary": "update items",
                 "description": "updating the items",
@@ -473,7 +473,7 @@
                 }
             }
         },
-        "/api/InventorySystem/items/deleteItem/{id}": {
+        "/api/Inventory/items/deleteItem/{id}": {
             "delete": {
                 "summary": "Delete an item by ID",
                 "description": "Delete an item by ID",
@@ -499,7 +499,7 @@
                 }
             }
         },
-        "/api/InventorySystem/requests/CreateReq": {
+        "/api/Inventory/requests/CreateReq": {
             "post": {
                 "summary": "Create a new request",
                 "description": "Create a request",
@@ -524,7 +524,7 @@
                 }
             }
         },
-        "/api/InventorySystem/requests/sendByEmail": {
+        "/api/Inventory/requests/sendByEmail": {
             "post": {
                 "summary": "send an email to the inventory system",
                 "description": "Create an email",
@@ -549,7 +549,7 @@
                 }
             }
         },
-        "/api/InventorySystem/requests/getAllReq": {
+        "/api/Inventory/requests/getAllReq": {
             "get": {
                 "summary": "Find all requests",
                 "description": "Find all requests",
@@ -566,7 +566,7 @@
                 }
             }
         },
-       "/api/InventorySystem/requests/getByIdReq/{id}": {
+       "/api/Inventory/requests/getByIdReq/{id}": {
             "get": {
                 "summary": "get a request by ID",
                 "description": "get a single request by ID",
@@ -592,7 +592,7 @@
                 }
             }
         },
-        "/api/InventorySystem/requests/getByNameReq/{item_name}": {
+        "/api/Inventory/requests/getByNameReq/{item_name}": {
             "get": {
                 "summary": "get a request by Name",
                 "description": "get a single request by Name",
@@ -618,7 +618,7 @@
                 }
             }
         },
-        "/api/InventorySystem/requests/getByCategoryReq/{item_category}": {
+        "/api/Inventory/requests/getByCategoryReq/{item_category}": {
             "get": {
                 "summary": "get a request by Category",
                 "description": "get a single request by Category",
@@ -644,7 +644,7 @@
                 }
             }
         },
-        "/api/InventorySystem/requests/updateReq/{id}": {
+        "/api/Inventory/requests/updateReq/{id}": {
             "put": {
                 "summary": "update requests",
                 "description": "updating the requests",
@@ -679,7 +679,7 @@
                 }
             }
         },
-        "/api/InventorySystem/requests/deleteReq/{id}": {
+        "/api/Inventory/requests/deleteReq/{id}": {
             "delete": {
                 "summary": "Delete a request by ID",
                 "description": "Delete a request by ID",
@@ -705,7 +705,7 @@
                 }
             }
         },
-        "/api/InventorySystem/approvals/CreateApp": {
+        "/api/Inventory/approvals/CreateApp": {
             "post": {
                 "summary": "Create a new approval",
                 "description": "Create an approval",
@@ -730,7 +730,7 @@
                 }
             }
         },
-        "/api/InventorySystem/approvals/readApp/{id}": {
+        "/api/Inventory/approvals/readApp/{id}": {
             "get": {
                 "summary": "get to read the approvals by ID",
                 "description": "read a single approval by ID",
@@ -756,7 +756,7 @@
                 }
             }
         },
-        "/api/InventorySystem/approvals/updateApp/{id}": {
+        "/api/Inventory/approvals/updateApp/{id}": {
             "put": {
                 "summary": "update approvals",
                 "description": "updating the approvals",
@@ -791,7 +791,7 @@
                 }
             }
         },
-        "/api/InventorySystem/approvals/deleteApp/{id}": {
+        "/api/Inventory/approvals/deleteApp/{id}": {
             "delete": {
                 "summary": "Delete an approval by ID",
                 "description": "Delete an approval by ID",
@@ -817,7 +817,7 @@
                 }
             }
         },
-        "/api/InventorySystem/payment/payments": {
+        "/api/Inventory/payment/payments": {
             "post": {
                 "summary": "Create a payment",
                 "description": "add a proof payment",
@@ -864,7 +864,7 @@
                 }
             }
         },
-        "/api/InventorySystem/payment/findPaymentId/{id}": {
+        "/api/Inventory/payment/findPaymentId/{id}": {
             "get": {
                 "summary": "get a payment by ID",
                 "description": "get a single payment by ID",
@@ -890,7 +890,7 @@
                 }
             }
         },
-        "/api/InventorySystem/finance/viewTransaction/{id}": {
+        "/api/Inventory/finance/viewTransaction/{id}": {
             "get": {
                 "summary": "get a transaction by ID",
                 "description": "get a single transaction by ID",
@@ -916,7 +916,7 @@
                 }
             }
         },
-        "/api/InventorySystem/finance/initiate": {
+        "/api/Inventory/finance/initiate": {
             "post": {
                 "summary": "Create a initiation ",
                 "description": "Create a initiation",
@@ -941,8 +941,273 @@
                 }
             }
         }
+    },
+    "definitions": {
+        "components": {
+            "securitySchemes": {
+              "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+              }
+            },
+            "schemas": {
+          "User-Auth": {
+            "name": {
+                "type": "String",
+                "required":true
+            },
+            "email":{
+                "type": "String",
+                "required":true
+            },
+            "password":{
+                "type": "String",
+                "required":true
+            },
+            "role":{
+                "type": "String",
+                "required":true
+            }
+        },
+        "required": [
+                "name",
+                "email",
+                "password",
+                "role"
+            ]
+        },
+        "Items": {
+            "type": "object",
+            "properties": {
+             "name": {
+                 "type": "String",
+                 "required": true
+                },
+             "serial_number": {
+                "type": "String",
+                "required": true
+            },
+            "category": {
+                "type": "String",
+                "required": true
+            },
+            "date_of_entry": {
+                "type": "Date",
+                "required": true
+            },
+            "brand": {
+                "type": "String",
+                "required": false
+            },
+            "weight": {
+                "type": "String",
+                "required": false
+            },
+            "warranty_expiration_date": {
+                "type": "Date",
+                "required": true
+            },
+            "image": {
+                "url":{
+                 "type": "String"
+                }
+             },
+             "location": {
+                "type": "String",
+                "required": true
+            },
+            "status": {
+                "type": "String",
+                "required": true
+            },
+            "color": {
+                "type": "String",
+                "required": true
+            },
+            "disposal_date": {
+                "type": "Date",
+                "required": true
+            },
+            "additional_specifications": {
+                "type": "String",
+                "required": false
+              }
+            },
+              "required": [
+                "name",
+                "serial_number",
+                "category",
+                "date_of_entry",
+                "brand",
+                "weight",
+                "warranty_expiration_date",
+                "image",
+                "location"
+            ]
+        },
+       "Payments": {
+            "type": "object",
+            "properties": {
+                "finance_id":{
+                    "type":"mongoose.Schema.Types.ObjectId",
+                    "ref": "finance",
+                    "required": true
+                 },  
+                 "request_id": {
+                    "type": "mongoose.Schema.Types.ObjectId",
+                    "ref": "Request",
+                    "required": true
+                },
+                "amount": {
+                    "type": "Number",
+                    "required": true
+                },
+                "payment_date":{
+                    "type": "Date",
+                    "default": "Date.now"
+                },
+              "proof_of_payment": {
+                "url":{
+                 "type": "String"
+                }
+             },
+             "payment_method": {
+                "type": "String",
+                "required": true
+            }
+            },
+        "required": [
+          "finance_id",
+          "request_id",
+          "amount",
+          "payment_date",
+          "proof_of_payment",
+          "payment_method"
+      ]
+  },
+  "Approvals": {
+            "type": "object",
+            "properties": {
+                "request_id": {
+                    "type": "Schema.Types.ObjectId",
+                    "ref": "request",
+                    "required": true
+                },  
+                "approved_by": {
+                    "type": "Schema.Types.ObjectId",
+                    "ref": "user",
+                    "required": true
+                },
+                "approval_date": {
+                    "type": "Date",
+                    "required": true
+                },
+                "status": {
+                    "type": "String",
+                    "required": true
+                }
+        },
+        "required": [
+            "request_id",
+            "approved_by",
+            "approval_date",
+            "unit_price",
+            "total_price",
+            "status"
+        ]
+    },
+    "Requests": {
+            "type": "object",
+            "properties": {
+                "requestedBy":{
+                    "type": "Schema.Types.ObjectId",
+                    "ref": "User",
+                    "required": true
+                },
+                "itemDescription":{
+                    "type": "String",
+                    "required": true
+                },
+                "itemCategory":{
+                    "type": "String",
+                    "required": true
+                },
+                "quantity": {
+                    "type": "Number",
+                    "required": true
+                },
+                "unitPrice":{
+                    "type": "Number",
+                    "required": true
+                },
+                "totalPrice":{
+                    "type": "Number",
+                    "required": true
+                },
+                "status":{
+                    "type": "String",
+                    "required": true
+                },
+                "requestDate": {
+                    "type": "Date",
+                    "default": "Date.now"
+                },
+                "approvedBy": {
+                    "type": "Schema.Types.ObjectId",
+                    "ref": "User",
+                    "required": true
+                },
+                "comments": {
+                    "type": "String",
+                    "required": true
+                }
+    },
+    "required": [
+        "requestedBy",
+        "itemDescription",
+        "itemCategory",
+        "quantity",
+        "unitPrice",
+        "totalPrice",
+        "status",
+        "requestDate",
+        "approvedBy",
+        "comments"
+    ]
+},
+"Finance": {
+    "type": "object",
+    "properties": {
+        "requestId": {
+            "type": "mongoose.Schema.Types.ObjectId", 
+            "required": true,
+            "ref": "Request" 
+        },
+        "amount": {
+            "type": "String",
+            "required": true
+        },
+        "date": {
+            "type": "Date",
+            "default": "Date.now"
+        },
+        "comment": {
+            "type": "String"
+        }
+     },
+     "required": [
+        "requestId",
+        "amount",
+        "date",
+        "comment"
+     ]
     }
 }
+    }
+}
+
+        
 
 
 

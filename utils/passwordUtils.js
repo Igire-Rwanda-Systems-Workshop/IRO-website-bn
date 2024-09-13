@@ -1,11 +1,17 @@
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 
 // Hash a password
-exports.hashPassword = async (password) => {
+const hashPassword = async (password) => {
   return await bcrypt.hash(password, 12);
 };
 
 // Compare passwords
-exports.comparePassword = async (inputPassword, hashedPassword) => {
+const comparePassword = async (inputPassword, hashedPassword) => {
   return await bcrypt.compare(inputPassword, hashedPassword);
 };
+
+const passwordUtils = {
+  hashPassword,
+  comparePassword,
+}
+export default passwordUtils;
