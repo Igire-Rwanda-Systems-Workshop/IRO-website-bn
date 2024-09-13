@@ -1,5 +1,6 @@
 // models/FinanceTransaction.js
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
+import {model,Schema} from 'mongoose';
 
 const FinanceTransactionSchema = new mongoose.Schema({
     requestId: {
@@ -11,16 +12,15 @@ const FinanceTransactionSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    // proofOfPayment: {
-    //     type: String, 
-    // },
+   
     date: {
         type: Date,
-        default: Date.now,
+        defaceult: Date.now,
     },
     comment: {
         type: String,
     },
 });
 
-module.exports = mongoose.model('FinanceTransaction', FinanceTransactionSchema);
+const financeModel = mongoose.model('finance', FinanceTransactionSchema);
+export default financeModel;
