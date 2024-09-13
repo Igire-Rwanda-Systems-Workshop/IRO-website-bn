@@ -6,7 +6,7 @@ import asyncWrapper from "../middleware/async.js";
 import { validationResult } from "express-validator";
 import notificationModel from "../models/notificationModel.js";
 import userModel from "../models/userModel.js";
-import  authMiddleware from "../middleware/authMiddleware.js";
+// import  authMiddleware from "../middleware/authMiddleware.js";
 
 
 const createRequest = asyncWrapper(async (req, res, next) => {
