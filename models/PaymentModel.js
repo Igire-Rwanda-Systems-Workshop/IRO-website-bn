@@ -3,7 +3,8 @@ import { model, Schema} from 'mongoose';
 
 const PaymentSchema = new mongoose.Schema({
     finance_id: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'finance',
         required: true
     },
     request_id: {

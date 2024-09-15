@@ -15,7 +15,7 @@ const FinanceTransactionSchema = new mongoose.Schema({
    
     date: {
         type: Date,
-        defaceult: Date.now,
+        default: Date.now,
     },
     comment: {
         type: String,
