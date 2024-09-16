@@ -38,10 +38,12 @@ const requestSchema = new mongoose.Schema({
     },
     approvedBy: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     comments: {
-        type: String
+        type: String,
+        required: true
     }
 });
 const requestModel = mongoose.model('request', requestSchema);

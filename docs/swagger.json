@@ -1,0 +1,1218 @@
+{
+    "swagger": "2.0",
+    "securityDefinitions": {
+        "Bearer": {
+          "type": "apiKey",
+          "name": "Authorization",
+          "in": "header",
+          "description": "Enter your bearer token in the format **Bearer <token>**"
+        }
+      },
+      "security": [{ "Bearer": [] }],
+    "info": {
+        "title": "Inventory Management-API",
+        "description": "API documentation for Inventory System",
+        "version": "1.0.0"
+    },
+    "host": "localhost:5000",
+    "basePath": "",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "paths": {
+        "api/Inventory/signup": {
+            "post": {
+                "summary": "Create an account",
+                "description": "To make an appointment first sign up",
+                "tags": [
+                    "User-Auth"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "signUp object"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": " user created"
+                    }
+                }
+            }
+        },
+        "api/Inventory/login": {
+            "post": {
+                "summary": "Login into your account",
+                "description": "To do something first login",
+                "tags": [
+                    "User-Auth"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "signIn object"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": " user logged in"
+                    }
+                }
+            }
+        },
+        "api/Inventory/verify-otp": {
+            "post": {
+                "summary": "verify your otp",
+                "description": "verify your account",
+                "tags": [
+                    "User-Auth"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "verify object"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Account verified"
+                    }
+                }
+            }
+        },
+        "api/Inventory/forgot-Password": {
+            "post": {
+                "summary": "incase you forgot your password",
+                "description": "if you forgot your password",
+                "tags": [
+                    "User-Auth"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "forgotPassword object"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Account click on forgotPassword"
+                    }
+                }
+            }
+        },
+        "api/Inventory/reset-Password": {
+            "post": {
+                "summary": "reset your password",
+                "description": "set another password incase you forgot your password",
+                "tags": [
+                    "User-Auth"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "verify object"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Account reset"
+                    }
+                }
+            }
+        },
+        "api/Inventory/update-user/{id}": {
+            "put": {
+                "summary": "updating a user",
+                "description": "updating the users",
+                "tags": [
+                    "User-Auth"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the user to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "Updated user object"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieved"
+                    },
+                    "404": {
+                        "description": "user not found"
+                    }
+                }
+            }
+        },
+        "api/Inventory/delete-user/{id}": {
+            "delete": {
+                "summary": "Delete a user by ID",
+                "description": "Delete a user by ID",
+                "tags": [
+                    "User-Auth"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the user to delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "user deleted"
+                    },
+                    "404": {
+                        "description": "user not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/items/upload": {
+            "post": {
+                "summary": "Create a new image",
+                "description": "add an image",
+                "tags": [
+                    "Items"
+                ],
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "name",
+                       "type":"string",
+                        "required": true,
+                        "description": "item object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "serial_number",
+                       "type":"string",
+                        "required": false,
+                        "description": "item object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "category",
+                       "type":"string",
+                        "required": true,
+                        "description": "item object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "date_of_entry",
+                       "type": "Date",
+                        "required": true,
+                        "description": "item object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "brand",
+                       "type":"string",
+                        "required": false,
+                        "description": "item object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "weight",
+                       "type":"string",
+                        "required": false,
+                        "description": "item object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "warranty_expiration_date",
+                       "type":"Date",
+                        "required": true,
+                        "description": "item object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "Image",
+                       "type":"file",
+                        "required": true,
+                        "description": "item object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "location",
+                       "type":"string",
+                        "required": true,
+                        "description": "item object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "status",
+                       "type":"string",
+                        "required": true,
+                        "description": "item object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "color",
+                       "type":"string",
+                        "required": true,
+                        "description": "item object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "disposal_date",
+                       "type":"Date",
+                        "required": false,
+                        "description": "item object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "additional_specifications",
+                       "type":"string",
+                        "required": false,
+                        "description": "item object"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": " item created  successfully"
+                    },
+                    "401":{
+                        "description":"Item not created"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/items/getAll": {
+            "get": {
+                "summary": "Find all items",
+                "description": "Find all items",
+                "tags": [
+                    "Items"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieved"
+                    },
+                    "404": {
+                        "description": "items not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/items/getById/{id}": {
+            "get": {
+                "summary": "get an item by ID",
+                "description": "get a single item by ID",
+                "tags": [
+                    "Items"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the items to get",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "single item got it!"
+                    },
+                    "404": {
+                        "description": "item not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/items/getByCategory/{category}": {
+            "get": {
+                "summary": "get a category by ID",
+                "description": "get a single category by ID",
+                "tags": [
+                    "Items"
+                ],
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "description": "ID of the category to get",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "single category got it!"
+                    },
+                    "404": {
+                        "description": "category not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/items/getByStatus/{status}": {
+            "get": {
+                "summary": "get an item by status",
+                "description": "get a single item by status",
+                "tags": [
+                    "Items"
+                ],
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "path",
+                        "description": "status of the items to get",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "single status got it!"
+                    },
+                    "404": {
+                        "description": "status not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/items/getByName/{name}": {
+            "get": {
+                "summary": "get an item by name",
+                "description": "get a single item by name",
+                "tags": [
+                    "Items"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name of the items to get",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "single name got it!"
+                    },
+                    "404": {
+                        "description": "name not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/items/updateItem/{id}": {
+            "put": {
+                "summary": "update items",
+                "description": "updating the items",
+                "tags": [
+                    "Items"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "Updated item object"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieved"
+                    },
+                    "404": {
+                        "description": "item not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/items/deleteItem/{id}": {
+            "delete": {
+                "summary": "Delete an item by ID",
+                "description": "Delete an item by ID",
+                "tags": [
+                    "Items"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item to delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "item deleted"
+                    },
+                    "404": {
+                        "description": "item not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/requests/CreateReq": {
+            "post": {
+                "summary": "Create a new request",
+                "description": "Create a request",
+                "tags": [
+                    "Requests"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "request object"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "request created"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/requests/sendByEmail": {
+            "post": {
+                "summary": "send an email to the inventory system",
+                "description": "Create an email",
+                "tags": [
+                    "Requests"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "request object"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "request created"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/requests/getAllReq": {
+            "get": {
+                "summary": "Find all requests",
+                "description": "Find all requests",
+                "tags": [
+                    "Requests"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieved"
+                    },
+                    "404": {
+                        "description": "requests not found"
+                    }
+                }
+            }
+        },
+       "/api/Inventory/requests/getByIdReq/{id}": {
+            "get": {
+                "summary": "get a request by ID",
+                "description": "get a single request by ID",
+                "tags": [ 
+                    "Requests"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the requests to get",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "single request got it!"
+                    },
+                    "404": {
+                        "description": "request not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/requests/getByNameReq/{item_name}": {
+            "get": {
+                "summary": "get a request by Name",
+                "description": "get a single request by Name",
+                "tags": [ 
+                    "Requests"
+                ],
+                "parameters": [
+                    {
+                        "name": "item_name",
+                        "in": "path",
+                        "description": "name of the requests to get",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "single request got it!"
+                    },
+                    "404": {
+                        "description": "request not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/requests/getByCategoryReq/{item_category}": {
+            "get": {
+                "summary": "get a request by Category",
+                "description": "get a single request by Category",
+                "tags": [ 
+                    "Requests"
+                ],
+                "parameters": [
+                    {
+                        "name": "item_category",
+                        "in": "path",
+                        "description": "Category of the requests to get",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "single category found!"
+                    },
+                    "404": {
+                        "description": "Category not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/requests/updateReq/{id}": {
+            "put": {
+                "summary": "update requests",
+                "description": "updating the requests",
+                "tags": [
+                    "Requests"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the request to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "Updated request object"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieved"
+                    },
+                    "404": {
+                        "description": "request not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/requests/deleteReq/{id}": {
+            "delete": {
+                "summary": "Delete a request by ID",
+                "description": "Delete a request by ID",
+                "tags": [
+                    "Requests"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the request to delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "request deleted"
+                    },
+                    "404": {
+                        "description": "request not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/approvals/CreateApp": {
+            "post": {
+                "summary": "Create a new approval",
+                "description": "Create an approval",
+                "tags": [
+                    "Approvals"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "approval object"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "approval created"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/approvals/readApp/{id}": {
+            "get": {
+                "summary": "get to read the approvals by ID",
+                "description": "read a single approval by ID",
+                "tags": [ 
+                    "Approvals"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the approval to get",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Approval has been read successfully"
+                    },
+                    "404": {
+                        "description": "approval not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/approvals/updateApp/{id}": {
+            "put": {
+                "summary": "update approvals",
+                "description": "updating the approvals",
+                "tags": [
+                    "Approvals"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the approval to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "Updated approval object"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieved"
+                    },
+                    "404": {
+                        "description": "approval not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/approvals/deleteApp/{id}": {
+            "delete": {
+                "summary": "Delete an approval by ID",
+                "description": "Delete an approval by ID",
+                "tags": [
+                    "Approvals"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the approval to delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "approval deleted"
+                    },
+                    "404": {
+                        "description": "approval  not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/payment/payments": {
+            "post": {
+                "summary": "Create a payment",
+                "description": "add a proof payment",
+                "tags": [
+                    "Payments"
+                ],
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "finance_id",
+                       "type":"string",
+                        "required": true,
+                        "description": "payment object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "request_id",
+                       "type":"string",
+                        "required": true,
+                        "description": "payment object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "amount",
+                       "type":"string",
+                        "required": true,
+                        "description": "payment object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "proof_of_payment",
+                       "type":"file",
+                        "required": true,
+                        "description": "payment object"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": " proof of payment created  successfully"
+                    },
+                    "401":{
+                        "description":"payment not created"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/payment/findPaymentId/{id}": {
+            "get": {
+                "summary": "get a payment by ID",
+                "description": "get a single payment by ID",
+                "tags": [ 
+                    "Payments"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the payment to get",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "single payment got it!"
+                    },
+                    "404": {
+                        "description": "payment not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/finance/viewTransaction/{id}": {
+            "get": {
+                "summary": "get a transaction by ID",
+                "description": "get a single transaction by ID",
+                "tags": [ 
+                    "Finance"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the transaction to get",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "single transaction got it!"
+                    },
+                    "404": {
+                        "description": " transaction not found"
+                    }
+                }
+            }
+        },
+        "/api/Inventory/finance/initiate": {
+            "post": {
+                "summary": "Create a initiation ",
+                "description": "Create a initiation",
+                "tags": [
+                    "Finance"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "finance object"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "finance created"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "components": {
+            "securitySchemes": {
+              "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+              }
+            },
+            "schemas": {
+          "User-Auth": {
+            "name": {
+                "type": "String",
+                "required":true
+            },
+            "email":{
+                "type": "String",
+                "required":true
+            },
+            "password":{
+                "type": "String",
+                "required":true
+            },
+            "role":{
+                "type": "String",
+                "required":true
+            }
+        },
+        "required": [
+                "name",
+                "email",
+                "password",
+                "role"
+            ]
+        },
+        "Items": {
+            "type": "object",
+            "properties": {
+             "name": {
+                 "type": "String",
+                 "required": true
+                },
+             "serial_number": {
+                "type": "String",
+                "required": true
+            },
+            "category": {
+                "type": "String",
+                "required": true
+            },
+            "date_of_entry": {
+                "type": "Date",
+                "required": true
+            },
+            "brand": {
+                "type": "String",
+                "required": false
+            },
+            "weight": {
+                "type": "String",
+                "required": false
+            },
+            "warranty_expiration_date": {
+                "type": "Date",
+                "required": true
+            },
+            "image": {
+                "url":{
+                 "type": "String"
+                }
+             },
+             "location": {
+                "type": "String",
+                "required": true
+            },
+            "status": {
+                "type": "String",
+                "required": true
+            },
+            "color": {
+                "type": "String",
+                "required": true
+            },
+            "disposal_date": {
+                "type": "Date",
+                "required": true
+            },
+            "additional_specifications": {
+                "type": "String",
+                "required": false
+              }
+            },
+              "required": [
+                "name",
+                "serial_number",
+                "category",
+                "date_of_entry",
+                "brand",
+                "weight",
+                "warranty_expiration_date",
+                "image",
+                "location"
+            ]
+        },
+       "Payments": {
+            "type": "object",
+            "properties": {
+                "finance_id":{
+                    "type":"mongoose.Schema.Types.ObjectId",
+                    "ref": "finance",
+                    "required": true
+                 },  
+                 "request_id": {
+                    "type": "mongoose.Schema.Types.ObjectId",
+                    "ref": "Request",
+                    "required": true
+                },
+                "amount": {
+                    "type": "Number",
+                    "required": true
+                },
+                "payment_date":{
+                    "type": "Date",
+                    "default": "Date.now"
+                },
+              "proof_of_payment": {
+                "url":{
+                 "type": "String"
+                }
+             },
+             "payment_method": {
+                "type": "String",
+                "required": true
+            }
+            },
+        "required": [
+          "finance_id",
+          "request_id",
+          "amount",
+          "payment_date",
+          "proof_of_payment",
+          "payment_method"
+      ]
+  },
+  "Approvals": {
+            "type": "object",
+            "properties": {
+                "request_id": {
+                    "type": "Schema.Types.ObjectId",
+                    "ref": "request",
+                    "required": true
+                },  
+                "approved_by": {
+                    "type": "Schema.Types.ObjectId",
+                    "ref": "user",
+                    "required": true
+                },
+                "approval_date": {
+                    "type": "Date",
+                    "required": true
+                },
+                "status": {
+                    "type": "String",
+                    "required": true
+                }
+        },
+        "required": [
+            "request_id",
+            "approved_by",
+            "approval_date",
+            "unit_price",
+            "total_price",
+            "status"
+        ]
+    },
+    "Requests": {
+            "type": "object",
+            "properties": {
+                "requestedBy":{
+                    "type": "Schema.Types.ObjectId",
+                    "ref": "User",
+                    "required": true
+                },
+                "itemDescription":{
+                    "type": "String",
+                    "required": true
+                },
+                "itemCategory":{
+                    "type": "String",
+                    "required": true
+                },
+                "quantity": {
+                    "type": "Number",
+                    "required": true
+                },
+                "unitPrice":{
+                    "type": "Number",
+                    "required": true
+                },
+                "totalPrice":{
+                    "type": "Number",
+                    "required": true
+                },
+                "status":{
+                    "type": "String",
+                    "required": true
+                },
+                "requestDate": {
+                    "type": "Date",
+                    "default": "Date.now"
+                },
+                "approvedBy": {
+                    "type": "Schema.Types.ObjectId",
+                    "ref": "User",
+                    "required": true
+                },
+                "comments": {
+                    "type": "String",
+                    "required": true
+                }
+    },
+    "required": [
+        "requestedBy",
+        "itemDescription",
+        "itemCategory",
+        "quantity",
+        "unitPrice",
+        "totalPrice",
+        "status",
+        "requestDate",
+        "approvedBy",
+        "comments"
+    ]
+},
+"Finance": {
+    "type": "object",
+    "properties": {
+        "requestId": {
+            "type": "mongoose.Schema.Types.ObjectId", 
+            "required": true,
+            "ref": "Request" 
+        },
+        "amount": {
+            "type": "String",
+            "required": true
+        },
+        "date": {
+            "type": "Date",
+            "default": "Date.now"
+        },
+        "comment": {
+            "type": "String"
+        }
+     },
+     "required": [
+        "requestId",
+        "amount",
+        "date",
+        "comment"
+     ]
+    }
+}
+    }
+}
+
+        
+
+
+
+
+
+
+
+

@@ -7,7 +7,7 @@ import asyncWrapper from "../middleware/async.js";
 import { validationResult } from "express-validator";
 import notificationModel from "../models/notificationModel.js";
 import userModel from "../models/userModel.js";
-// import { socketIo } from '../server.js';
+import  authMiddleware from "../middleware/authMiddleware.js";
 
 // Create a new purchase request
 const createRequest = asyncWrapper(async (req, res, next) => {

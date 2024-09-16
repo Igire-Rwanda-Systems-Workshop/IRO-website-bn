@@ -14,7 +14,7 @@ const createItem = asyncWrapper(async(req, res, next) =>{
         if(!errors.isEmpty()){
             return next(new BadRequestError(errors.array()[0].msg));
         }
-        const { name, serial_number, category, date_of_entry, brand, weight, warranty_expiration_date, location, state, status, color, disposal_date, additional_specifications } = req.body;
+        const { name, serial_number, category, date_of_entry, brand, weight, warranty_expiration_date, location, status, color, disposal_date, additional_specifications } = req.body;
         const newImage = new itemModel({
             name,
             serial_number,
@@ -30,7 +30,6 @@ const createItem = asyncWrapper(async(req, res, next) =>{
                 size: file.size,
               },
             location,
-            state,
             status,
             color,
             disposal_date,

@@ -13,7 +13,11 @@ const FinanceTransactionSchema = new Schema({
     },
     date: {
         type: Date,
+<<<<<<< HEAD
         default: Date.now,  
+=======
+        default: Date.now,
+>>>>>>> 8aa3dc27e265d2faac9b36a5ba7cea2592a7b709
     },
     comment: {
         type: String,

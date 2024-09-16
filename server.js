@@ -1,51 +1,36 @@
-import express from "express";
-import cors from "cors";
-import mongoose from "mongoose";
 import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from "url";
-import Router from "./routes/index.js";
-import http from 'http';
-import { Server } from 'socket.io'; 
-
 dotenv.config();
+import express from 'express';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import Router from './routes/index.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
+import Router2 from './Employee/Routes/index.js';
+import swaggerUi from 'swagger-ui-express';
+import swagger from './docs/swagger.json' assert {type:"json"}
 
-const app = express(); // Initialize app here, before using it
+// Initialize express app
+const app = express();
 
-// Create the HTTP server
-const server = http.createServer(app);
+const  corsOptions = {
+    allowedHeaders: ["Authorization", "Content-Type" ],
+    methods: ["GET", "POST", "PUT", "UPDATE", "DELETE"],
+    origin: "*",
+};
 
-// Initialize socket.io with the server
-const io = new Server(server);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Middleware setup
+// Middleware
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); 
+app.use('/api/Inventory', Router);
+app.use('/api/Employee', Router2);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 
-// Setup WebSocket connection
-io.on('connection', (socket) => {
-    console.log('New user connected');
-    
-    // Emit message from server to user
-    socket.emit('newMessage', {
-        from: "jen@mds",
-        text: "hello",
-        createdAt: new Date().getTime()
-    });
-
-    // Listen for message from user
-    socket.on('createMessage', (newMessage) => {
-        console.log('New Message', newMessage);
-    });
-
-    // Handle user disconnection
-    socket.on('disconnect', () => {
-        console.log('User disconnected');
-    });
-});
-
-// MongoDB connection
+// Connect to MongoDB
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
@@ -62,8 +47,6 @@ app.get("/", (req, res) => {
     res.sendFile(__dirname + "/client-index.html");
 });
 
-// Use API routes
-app.use('/api/system', Router);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
