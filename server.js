@@ -1,65 +1,80 @@
 import express from "express";
-import cors  from "cors";
-import  mongoose from "mongoose";
-import dotenv  from 'dotenv';
-dotenv.config();
-import  path from 'path';
-import  url from 'url' ;
-import Router from "./routes/index.js";
+import cors from "cors";
+import mongoose from "mongoose";
+import dotenv from 'dotenv';
+import path from 'path';
 import { fileURLToPath } from "url";
+import Router from "./routes/index.js";
+import http from 'http';
+import { Server } from 'socket.io'; 
 
+dotenv.config();
 
+const app = express(); // Initialize app here, before using it
 
-// Initialize express app
-const app = express();
+// Create the HTTP server
+const server = http.createServer(app);
 
-const  corsOptions = {
-    allowedHeaders: ["Authorization", "Content-Type" ],
-    methods: ["GET", "POST", "PUT", "UPDATE", "DELETE"],
-    origin: "*",
-};
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename); 
+// Initialize socket.io with the server
+const io = new Server(server);
 
-
-// Middleware
+// Middleware setup
 app.use(cors());
-app.use(express.json()); 
-app.use(express.urlencoded({ extended: true })); 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+// Setup WebSocket connection
+io.on('connection', (socket) => {
+    console.log('New user connected');
+    
+    // Emit message from server to user
+    socket.emit('newMessage', {
+        from: "jen@mds",
+        text: "hello",
+        createdAt: new Date().getTime()
+    });
 
-// Connect to MongoDB
+    // Listen for message from user
+    socket.on('createMessage', (newMessage) => {
+        console.log('New Message', newMessage);
+    });
+
+    // Handle user disconnection
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+
+// MongoDB connection
 const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("\x1b[32m%s\x1b[0m", "MongoDB connected successfully");
-  } catch (error) {
-    console.error(
-      "\x1b[31m%s\x1b[0m",
-      `MongoDB connection failed: ${error.message}`
-    );
-    process.exit(1);
-  }
+    try {
+        await mongoose.connect(process.env.MONGO_URI);
+        console.log("\x1b[32m%s\x1b[0m", "MongoDB connected successfully");
+    } catch (error) {
+        console.error("\x1b[31m%s\x1b[0m", `MongoDB connection failed: ${error.message}`);
+        process.exit(1);
+    }
 };
 connectDB();
 
-
+// Serve static files or a home route
 app.get("/", (req, res) => {
-  res.send("Welcome to the Node.js API!");
+    res.sendFile(__dirname + "/client-index.html");
 });
 
-
-// Routes
-app.use ('/api/system', Router);
+// Use API routes
+app.use('/api/system', Router);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
+    console.error(err.stack);
+    res.status(500).json({ message: 'Something went wrong!' });
 });
 
-// Start the server
-const  PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log("\x1b[36m%s\x1b[0m", `Server running on port ${PORT}`);
+// Start server
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
+
+export default { io };

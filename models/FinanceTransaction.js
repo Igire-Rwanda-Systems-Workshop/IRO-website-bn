@@ -1,26 +1,30 @@
-// models/FinanceTransaction.js
 import mongoose from "mongoose";
-import {model,Schema} from 'mongoose';
+const { Schema } = mongoose;
 
-const FinanceTransactionSchema = new mongoose.Schema({
+const FinanceTransactionSchema = new Schema({
     requestId: {
         type: mongoose.Schema.Types.ObjectId, 
         required: true,
-        ref: 'Request', 
+        ref: 'Request',  
     },
     amount: {
         type: String,
         required: true,
     },
-   
     date: {
         type: Date,
-        defaceult: Date.now,
+        default: Date.now,  
     },
     comment: {
         type: String,
     },
+    status: {  
+        type: String,
+        enum: ['initiated', 'completed', 'pending', 'failed'],  
+        default: 'pending',  
+    },
 });
 
-const financeModel = mongoose.model('finance', FinanceTransactionSchema);
-export default financeModel;
+// Export the model with a proper name
+const FinanceTransaction = mongoose.model('FinanceTransaction', FinanceTransactionSchema);
+export default FinanceTransaction;

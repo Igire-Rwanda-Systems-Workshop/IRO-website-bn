@@ -9,8 +9,11 @@ const authMiddleware = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET); // If Bearer prefix exists
+        const decoded = jwt.verify (token.replace('Bearer ', ''), process.env.JWT_SECRET); 
         req.user = decoded;
+
+        console.log(decoded);
+        
 
         if (!req.user.name) {
             return res.status(400).json({ msg: 'Invalid token payload: missing name' });

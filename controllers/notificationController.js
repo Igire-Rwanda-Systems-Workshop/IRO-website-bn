@@ -1,4 +1,4 @@
-import  notificationModel from '../models/notificationModel.js';
+import notificationModel from '../models/notificationModel.js';
 import UserModel from '../models/userModel.js';
 import mongoose from 'mongoose';
 
@@ -7,10 +7,14 @@ import mongoose from 'mongoose';
 // Create a new notification
 const createNotification = async (req, res) => {
   try {
-    const { message, recipient, status, type } = req.body;
+    const { email ,message, recipient, status, type } = req.body;
 
-    // Use 'new' when creating an ObjectId
-    const user = await UserModel.findById(new mongoose.Types.ObjectId(recipient));
+    // Validate recipient ID
+    if (!mongoose.Types.ObjectId.isValid(recipient)) {
+      return res.status(400).json({ msg: 'Invalid recipient ID' });
+    }
+
+    const user = await UserModel.findById(recipient);
 
     if (!user) {
       return res.status(404).json({ msg: `Recipient with ID ${recipient} not found` });
@@ -18,10 +22,12 @@ const createNotification = async (req, res) => {
 
     // Create the notification
     const newNotification = new notificationModel({
+      email,
       message,
-      recipient: user._id, // Use the user's ID
+      recipient,
       status,
       type,
+
     });
 
     await newNotification.save();
@@ -33,95 +39,120 @@ const createNotification = async (req, res) => {
   }
 };
 
-
 // Fetch Notifications for a Specific User
 const getNotificationsByUser = async (req, res) => {
-    try {
-        const userId = req.user.id; // Assuming your JWT contains a user object with an id
-        const notifications = await notificationModel.find({ recipient: userId }).sort({ timestamp: -1 });
-        
-        res.status(200).json({
-            success: true,
-            notifications,
-        });
-    } catch (err) {
-        res.status(500).json({ message: 'Error fetching notifications', error: err.message });
-    }
-};
+  try {
+    const userId = req.user.id; 
+    const notifications = await notificationModel.find({ recipientId: userId }).sort({ timestamp: -1 });
 
+    res.status(200).json({
+      success: true,
+      notifications,
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching notifications', error: err.message });
+  }
+};
 
 // Mark Notification as Read
 const markNotificationAsRead = async (req, res) => {
-    try {
-        const notificationId = req.params.id;
-        const notification = await notificationModel.findById(notificationId);
+  try {
+    const notificationId = req.params.id;
+    const notification = await notificationModel.findById(notificationId);
 
-        if (!notification) {
-            return res.status(404).json({ message: 'Notification not found' });
-        }
-
-        notification.status = 'read';
-        await notification.save();
-
-        res.status(200).json({ message: 'Notification marked as read' });
-    } catch (err) {
-        res.status(500).json({ message: 'Error marking notification as read', error: err.message });
+    if (!notification) {
+      return res.status(404).json({ message: 'Notification not found' });
     }
+
+    notification.status = 'read';
+    await notification.save();
+
+    res.status(200).json({ message: 'Notification marked as read' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error marking notification as read', error: err.message });
+  }
 };
 
-// Create and Trigger Notifications from Other Controllers (Example Function)
+// / Create and Trigger Notifications from Other Controllers (Example Functions)
 const triggerAdminSignupNotification = async (userId) => {
-    try {
-        // You can modify this function to accept relevant parameters
-        const message = 'Your account has been created successfully!';
-        await createNotification(message, userId, 'Account Creation');
-    } catch (error) {
-        console.error('Error sending notification:', error);
+  try {
+    // Validate if the userId is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      throw new Error('Invalid recipient ID');
     }
+
+    // Convert the userId to a Mongoose ObjectId
+    const recipientId = new mongoose.Types.ObjectId(userId);
+
+    const message = 'Your account has been created successfully!';
+    
+    // Create the notification
+    await createNotification({ 
+      message, 
+      recipient: recipientId,  // Use the valid and converted ObjectId
+      status: 'unread', 
+      type: 'Account Creation' 
+    });
+
+    console.log('Admin signup notification sent.');
+  } catch (error) {
+    console.error('Error sending notification:', error.message || error);
+  }
 };
 
-// Use in other controllers, e.g.:
+
+// triggerPaymentNotification
+
 const triggerPaymentNotification = async (userId, amount) => {
-    try {
-        const message = `Your payment of ${amount} has been initiated.`;
-        await createNotification(message, userId, 'Payment Initiated');
-    } catch (error) {
-        console.error('Error sending payment notification:', error);
-    }
+  try {
+    const recipientId = mongoose.Types.ObjectId.isValid(userId);
+    const message = `Your payment of ${amount} has been initiated.`;
+    await createNotification({ message, recipient:recipientId, status: 'unread', type: 'Payment Initiated' });
+  } catch (error) {
+    console.error('Error sending payment notification:', error);
+  }
 };
 
-// delete notifaction by id
 
-const deleteNotifactionById = async (req,res)=>{
-    const {notificationId} = req.params.id;
-    const deleteNotifactionById = await notificationModel.findByIdAndDelete(notificationId);
-    if (!deleteNotifactionById) return res.status(404).json({ message: 'User not found' });
+const deletedNotification = async (req, res) => {
+    const notificationId  = req.params.id;
+    
+    const deletedNotification = await notificationModel.findByIdAndDelete(notificationId);
+   
 
-    res.json({ message: 'notification deleted successfully' });
-};
- 
+    if (!deletedNotification) 
+        return res.status(404).json({ message: 'Notification not found' });
+
+    res.json({ message: 'Notification deleted successfully' });
+
+    };
+
+   
 
 
-// Fetch all notifications for admin or users
+// Fetch all notifications
 const getAllNotifications = async (req, res) => {
-    try {
-        const notifications = await notificationModel.find().sort({ timestamp: -1 });
+  try {
+    const notifications = await notificationModel.find({}).sort({ timestamp: -1 });
 
-        res.status(200).json({
-            success: true,
-            notifications,
-        });
-    } catch (err) {
-        res.status(500).json({ message: 'Error fetching all notifications', error: err.message });
-    }
+    res.status(200).json({
+      success: true,
+      notifications,
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching all notifications', error: err.message });
+  }
 };
- const notificationControllers = {
+
+const notificationControllers = {
     createNotification,
     getNotificationsByUser,
     markNotificationAsRead,
     triggerAdminSignupNotification,
     triggerPaymentNotification,
     getAllNotifications,
-    deleteNotifactionById,
- }
- export default notificationControllers;
+    deletedNotification, 
+};
+
+export default notificationControllers;
+
