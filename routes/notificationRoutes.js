@@ -1,16 +1,15 @@
-import notificationController from '../controllers/notificationController.js'
 import express from 'express';
-const notificationRouter = express.Router();
+import notificationControllers from '../controllers/notificationController.js'; 
 
-// Create a notification
-notificationRouter.post('/create', notificationController.createNotification);
 
-// Mark a notification as read
-notificationRouter.patch('/:id/read', notificationController.markNotificationAsRead);
+const router = express.Router();
 
-// Get notifications by user
-notificationRouter.get('/user/:userId', notificationController.getNotificationsByUser);
+// Define routes
+router.post('/create', notificationControllers.createNotification);
+router.get('/user', notificationControllers.getNotificationsByUser);
+router.put('/read/:id', notificationControllers.markNotificationAsRead);
+router.get('/allNotifications', notificationControllers.getAllNotifications);
+router.delete('/deleteNotification/:id', notificationControllers.deletedNotification);
 
-notificationRouter.delete('/:id/deleteNotifficationById', notificationController.deleteNotifactionById)
 
-export default notificationRouter;
+export default router;
