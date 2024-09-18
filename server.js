@@ -10,6 +10,9 @@ import mongoose from 'mongoose';
 import Router2 from './Employee/Routes/index.js';
 import swaggerUi from 'swagger-ui-express';
 import swagger from './docs/swagger.json' assert {type:"json"}
+import swagger2 from './docs/swagger2.json'assert{type:"json"}
+// import socketIO from './src/socket/socketClient.js';
+// var io = socketIO(server);
 
 // Initialize express app
 const app = express();
@@ -29,6 +32,7 @@ app.use(express.json());
 app.use('/api/Inventory', Router);
 app.use('/api/Employee', Router2);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger2));
 
 // Connect to MongoDB
 const connectDB = async () => {
@@ -55,9 +59,9 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
-export default { io };
+// export default { io };
