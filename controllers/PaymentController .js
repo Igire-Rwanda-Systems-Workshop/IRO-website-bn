@@ -33,10 +33,10 @@ const recordPayment = asyncWrapper(async (req, res) => {
         });
 
         const savedPayment = await payment.save();
-
+        // Notify the Operations Manager and Project Director about the payment
         // Notify Operations Manager and Project Director
         const operationsManager = await userModel.findById(finance_id); // Assuming finance_id is the Operations Manager's id
-        const projectDirector = await userModel.findOne({ role: 'projectDirector' });
+
 
         if (operationsManager) {
             await notificationModel.create({
