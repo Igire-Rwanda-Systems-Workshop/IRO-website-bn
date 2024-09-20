@@ -1,0 +1,391 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "User Management API",
+      "version": "1.0.0",
+      "description": "API documentation for user management including authentication, OTP validation, password reset, and more."
+    },
+    "servers": [
+      {
+        "url": "http://localhost:5000",
+        "description": "Local server"
+      }
+    ],
+    "paths": {
+      "/api/Employee/Emply-users/signup": {
+        "post": {
+          "summary": "Create a new user account",
+          "tags": ["User"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSignupRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "User created successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request"
+            }
+          }
+        }
+      },
+      "/api/Employee/Emply-users/verify": {
+        "post": {
+          "summary": "Validate OTP for user account",
+          "tags": ["User"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateOtpRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "User verified successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid OTP"
+            }
+          }
+        }
+      },
+      "/api/Employee/Emply-users/signIn": {
+        "post": {
+          "summary": "Sign in a user",
+          "tags": ["User"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSigninRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "User signed in successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/SigninResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid email or password"
+            }
+          }
+        }
+      },
+      "/api/Employee/Emply-users/forgotPassword": {
+        "post": {
+          "summary": "Send password reset link",
+          "tags": ["User"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Password reset link sent",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GeneralResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid email address"
+            }
+          }
+        }
+      },
+      "/api/Employee/Emply-users/resetPassword": {
+        "post": {
+          "summary": "Reset user password",
+          "tags": ["User"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Password reset successfully",
+              "content": {
+                "application/json": {
+                  "$ref": "#/components/schemas/GeneralResponse"
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid token or expired"
+            }
+          }
+        }
+      },
+      "/api/Employee/Emply-users/delete/{id}": {
+        "delete": {
+          "summary": "Delete a user account",
+          "tags": ["User"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID of the user to delete"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User deleted successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GeneralResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      },
+
+      "/api/Employee/tokens/addToken": {
+        "post": {
+          "summary": "Add a token",
+          "tags": ["Token"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Token added successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/TokenResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request"
+            }
+          }
+        }
+      },
+
+      "/api/Employee/tokens/findByUser/":{
+    "get":{
+        "summary": "findByUser",
+          "tags": ["Token"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenRequest"
+                }
+            }
+        },
+
+        "responses":{
+            "201": {
+              "description": "user found sucessfully  ",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/TokenResponse"
+                  }
+                }
+              }
+            },
+
+            "400": {
+              "description": "Bad request"
+            }
+          }
+        }
+    }
+        },
+
+      "/api/Employee/tokens/delete/{id}": {
+        "delete": {
+          "summary": "Delete a token",
+          "tags": ["Token"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID of the token to delete"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Token deleted successfully",
+              "content": {
+                "application/json": {
+                  "$ref": "#/components/schemas/GeneralResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "UserSignupRequest": {
+          "type": "object",
+          "properties": {
+            "firstName": { "type": "string" },
+            "lastName": { "type": "string" },
+            "email": { "type": "string", "format": "email" },
+            "password": { "type": "string", "format": "password" },
+            "role": { "type": "string", "enum": ["CEO", "HR"] }
+          },
+          "required": ["firstName", "lastName", "email", "password", "role"]
+        },
+        "ValidateOtpRequest": {
+          "type": "object",
+          "properties": {
+            "otp": { "type": "integer" }
+          },
+          "required": ["otp"]
+        },
+        "UserSigninRequest": {
+          "type": "object",
+          "properties": {
+            "email": { "type": "string", "format": "email" },
+            "password": { "type": "string", "format": "password" }
+          },
+          "required": ["email", "password"]
+        },
+        "ForgotPasswordRequest": {
+          "type": "object",
+          "properties": {
+            "email": { "type": "string", "format": "email" }
+          },
+          "required": ["email"]
+        },
+        "ResetPasswordRequest": {
+          "type": "object",
+          "properties": {
+            "token": { "type": "string" },
+            "id": { "type": "string" },
+            "password": { "type": "string", "format": "password" }
+          },
+          "required": ["token", "id", "password"]
+        },
+        "GeneralResponse": {
+          "type": "object",
+          "properties": {
+            "message": { "type": "string" }
+          }
+        },
+        "UserResponse": {
+          "type": "object",
+          "properties": {
+            "message": { "type": "string" },
+            "user": { "$ref": "#/components/schemas/User" }
+          }
+        },
+        "SigninResponse": {
+          "type": "object",
+          "properties": {
+            "message": { "type": "string" },
+            "token": { "type": "string" },
+            "user": { "$ref": "#/components/schemas/User" }
+          }
+        },
+        "User": {
+          "type": "object",
+          "properties": {
+            "firstName": { "type": "string" },
+            "lastName": { "type": "string" },
+            "email": { "type": "string" },
+            "role": { "type": "string" },
+            "verified": { "type": "boolean" }
+          }
+        },
+        "TokenRequest": {
+          "type": "object",
+          "properties": {
+            "token": { "type": "string" },
+            "user": { "type": "string", "description": "User ID" },
+            "expirationDate": { "type": "string", "format": "date-time" }
+          },
+          "required": ["token", "user", "expirationDate"]
+        },
+        "TokenResponse": {
+          "type": "object",
+          "properties": {
+            "message": { "type": "string" },
+            "token": { "$ref": "#/components/schemas/Token" }
+          }
+        },
+        "Token": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "token": { "type": "string" },
+            "user": { "type": "string" },
+            "expirationDate": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    }
+  }
+  

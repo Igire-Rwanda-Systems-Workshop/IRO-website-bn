@@ -5,12 +5,9 @@ import crypto from 'crypto';
 import emailServices  from '../utils/emailService.js'
 import sendEmail from '../utils/emailUtils.js';
 import otpService  from '../utils/otpService.js';
-// import passwordUtils  from '../utils/passwordUtils.js';
-import notificationControllers from './notificationController.js';
-// import { error, log } from "console";
-import notificationModel from "../models/notificationModel.js";
 import userModel from "../models/userModel.js";
-import tokenModel from '../models/Token.js'
+import tokenModel from "../models/Token.js";
+
 
 let otpStorage = {}; 
 
@@ -80,7 +77,7 @@ const login = async (req, res) => {
 
         // Generate JWT token for successful login
         const token = jwt.sign(
-            { id: user._id, role: user.role },
+            { id: user._id, role: user.role , name: user.name},
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );

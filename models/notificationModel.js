@@ -2,6 +2,13 @@ import mongoose from 'mongoose';
 import { model, Schema} from 'mongoose';
 
 const notificationSchema = new mongoose.Schema({
+   email:{
+     type: String,
+     required: true,
+     unique: true,
+     match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+   },
+
     message: {
         type: String,
         required: true,
