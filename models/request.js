@@ -42,7 +42,7 @@ const requestSchema = new mongoose.Schema({
     date_requested: {
         type: Date,
         default: Date.now
-    },
-    });
+    }
+});
 const requestModel = mongoose.model('request', requestSchema);
 export default requestModel;

@@ -217,95 +217,109 @@
                 "tags": [
                     "Items"
                 ],
+                "consumes": [
+                    "multipart/form-data"
+                  ],
                 "parameters": [
                     {
                         "in": "formData",
                         "name": "name",
-                       "type":"string",
-                        "required": true,
+                       "type":"String",
+                        "required": false,
                         "description": "item object"
                     },
                     {
                         "in": "formData",
                         "name": "serial_number",
-                       "type":"string",
+                       "type":"String",
                         "required": false,
                         "description": "item object"
                     },
                     {
                         "in": "formData",
                         "name": "category",
-                       "type":"string",
-                        "required": true,
+                       "type":"String",
+                        "required": false,
                         "description": "item object"
                     },
                     {
                         "in": "formData",
                         "name": "date_of_entry",
-                       "type": "Date",
-                        "required": true,
+                       "type": "String",
+                       "format": "yyyy-MM-dd",
+                        "required": false,
                         "description": "item object"
                     },
                     {
                         "in": "formData",
                         "name": "brand",
-                       "type":"string",
+                       "type":"String",
                         "required": false,
                         "description": "item object"
                     },
                     {
                         "in": "formData",
                         "name": "weight",
-                       "type":"string",
+                       "type":"String",
                         "required": false,
                         "description": "item object"
                     },
                     {
                         "in": "formData",
                         "name": "warranty_expiration_date",
-                       "type":"Date",
-                        "required": true,
+                       "type":"String",
+                       "format": "yyyy-MM-dd",
+                        "required": false,
                         "description": "item object"
                     },
                     {
                         "in": "formData",
-                        "name": "Image",
+                        "name": "image",
                        "type":"file",
-                        "required": true,
-                        "description": "item object"
-                    },
+                       "description": "item object",
+                        "public_id": {
+                          "type": "String"
+                        },
+                        "asset_id":{
+                          "type": "String"
+                        },
+                        "url":{
+                          "type": "String"
+                        }
+                      },
                     {
                         "in": "formData",
                         "name": "location",
-                       "type":"string",
-                        "required": true,
+                       "type":"String",
+                        "required": false,
                         "description": "item object"
                     },
                     {
                         "in": "formData",
                         "name": "status",
-                       "type":"string",
-                        "required": true,
+                       "type":"String",
+                        "required": false,
                         "description": "item object"
                     },
                     {
                         "in": "formData",
                         "name": "color",
-                       "type":"string",
-                        "required": true,
+                       "type":"String",
+                       "required": false,
                         "description": "item object"
                     },
                     {
                         "in": "formData",
                         "name": "disposal_date",
-                       "type":"Date",
+                       "type":"String",
+                       "format": "yyyy-MM-dd",
                         "required": false,
                         "description": "item object"
                     },
                     {
                         "in": "formData",
                         "name": "additional_specifications",
-                       "type":"string",
+                       "type":"String",
                         "required": false,
                         "description": "item object"
                     }
@@ -454,7 +468,7 @@
                         "in": "path",
                         "description": "ID of the item to update",
                         "required": true,
-                        "type": "string"
+                        "type": "String"
                     },
                     {
                         "in": "body",
@@ -855,6 +869,13 @@
                        "type":"file",
                         "required": true,
                         "description": "payment object"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "payment_method",
+                       "type":"String",
+                        "required": false,
+                        "description": "payment object"
                     }
                 ],
                 "responses": {
@@ -989,19 +1010,19 @@
             "properties": {
              "name": {
                  "type": "String",
-                 "required": true
+                 "required": false
                 },
              "serial_number": {
                 "type": "String",
-                "required": true
+                "required": false
             },
             "category": {
                 "type": "String",
-                "required": true
+                "required": false
             },
             "date_of_entry": {
                 "type": "Date",
-                "required": true
+                "required": false
             },
             "brand": {
                 "type": "String",
@@ -1013,7 +1034,7 @@
             },
             "warranty_expiration_date": {
                 "type": "Date",
-                "required": true
+                "required": false
             },
             "image": {
                 "url":{
@@ -1022,19 +1043,19 @@
              },
              "location": {
                 "type": "String",
-                "required": true
+                "required": false
             },
             "status": {
                 "type": "String",
-                "required": true
+                "required": false
             },
             "color": {
                 "type": "String",
-                "required": true
+                "required": false
             },
             "disposal_date": {
                 "type": "Date",
-                "required": true
+                "required": false
             },
             "additional_specifications": {
                 "type": "String",
@@ -1050,7 +1071,11 @@
                 "weight",
                 "warranty_expiration_date",
                 "image",
-                "location"
+                "location",
+                "status",
+                "color",
+                "disposal_date",
+                "additional_specifications"
             ]
         },
        "Payments": {
@@ -1081,8 +1106,8 @@
              },
              "payment_method": {
                 "type": "String",
-                "required": true
-            }
+                "required": false
+             }
             },
         "required": [
           "finance_id",
