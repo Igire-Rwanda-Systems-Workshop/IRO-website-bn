@@ -33,7 +33,8 @@ const requestSchema = new mongoose.Schema({
         enum: {
             values: ['in progress', 'approved', 'denied'],
             message: '{VALUE} is not a valid status. Choose either "in progress", "approved", or "denied".'
-    },
+    }
+},
     requestedBy:{
         type:String,
         required: true
@@ -41,7 +42,7 @@ const requestSchema = new mongoose.Schema({
     date_requested: {
         type: Date,
         default: Date.now
-    },
+    }
 });
 const requestModel = mongoose.model('request', requestSchema);
 export default requestModel;
