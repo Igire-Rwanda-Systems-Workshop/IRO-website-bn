@@ -7,6 +7,6 @@ import paymentController from '../controllers/PaymentController .js';
 paymentRouter.post('/create', upload.single('proof_of_payment'), paymentController.recordPayment);
 
 // View a specific payment
-paymentRouter.get('/findPaymentId/:id', paymentController.viewPayment);  // Will handle both fetching by ID and fetching all payments
+// paymentRouter.get('/findPaymentId/:id', paymentController.viewPayment);  
 
 export default paymentRouter;
