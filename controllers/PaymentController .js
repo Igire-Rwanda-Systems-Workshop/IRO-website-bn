@@ -35,7 +35,7 @@ const recordPayment = async (req, res) => {
 
         // Notify the Operations Manager and Project Director about the payment
         const operationsManager = await userModel.findById(payment.finance_id); // Assuming finance_id is the Operations Manager's id
-        const projectDirector = await User.findOne({ role: 'projectDirector' });
+        const projectDirector = await userModel.findOne({ role: 'projectDirector' });
 
         if (operationsManager) {
             await notificationModel.createNotification(
