@@ -1,9 +1,8 @@
 import paymentModel from '../models/PaymentModel.js';
-import notificationModel from '../models/notificationModel.js';
+import notificationModel from '../models/notificationModel.js'; // Updated import
 import userModel from '../models/userModel.js'; 
 import asyncWrapper from '../middleware/async.js';
 
-// Record Payment
 const recordPayment = asyncWrapper(async (req, res) => {
     const { finance_id, request_id, amount, payment_method } = req.body;
     const file = req.file;
@@ -25,62 +24,69 @@ const recordPayment = asyncWrapper(async (req, res) => {
             amount,
             payment_method,
             proof_of_payment: {
-                filename: file.filename, 
-                path: file.path,         
-                mimetype: file.mimetype, 
-                size: file.size          
+                filename: file.filename,
+                path: file.path,
+                mimetype: file.mimetype,
+                size: file.size
             }
         });
 
         const savedPayment = await payment.save();
         // Notify the Operations Manager and Project Director about the payment
         // Notify Operations Manager and Project Director
-        const operationsManager = await userModel.findById(finance_id); // Assuming finance_id is the Operations Manager's id
+        // const operationsManager = await userModel.findById(finance_id); 
 
+
+        // Notify Operations Manager, Project Director, and Finance Manager
+        const operationsManager = await userModel.findOne({ role: 'Operations Manager' });
+        const projectDirector = await userModel.findOne({ role: 'project Director' });
+        const financeManager = await userModel.findOne({ role: 'Finance Manager' });
+        
+
+        // Log to verify notifications are created
+        console.log(`Operations Manager: ${operationsManager}`);
+        console.log(`Project Director: ${projectDirector}`);
+        console.log(`Finance Manager: ${financeManager}`);
 
         if (operationsManager) {
-            await notificationModel.create({
-                email: operationsManager.email,
-                name: req.user.name,
+            const notification = await notificationModel.create({
                 message: `A payment of ${amount} has been recorded for request ${request_id}`,
-                recipient: operationsManager._id,
-                status: 'unread',
-                type: 'Payment Update'
-            });
-
-            // Emit WebSocket event for Operations Manager
-            io.emit('notification', {
                 userId: operationsManager._id,
-                message: `A payment of ${amount} has been recorded for request ${request_id}`,
-                type: 'Payment Update'
+                role: 'operationsManager',
+                status: 'unread',
+                // type: 'initiated'
             });
 
-            console.log(`Notification sent to Operations Manager (ID: ${operationsManager._id})`);
+            console.log('Notification created for Operations Manager:', notification);
         }
 
         if (projectDirector) {
-            await notificationModel.create({
-                email: projectDirector.email,
-                name: req.user.name,
-                message: `A payment of ${amount} has been made for request ${request_id}`,
-                recipient: projectDirector._id,
-                status: 'unread',
-                type: 'Payment Update'
-            });
-
-            // Emit WebSocket event for Project Director
-            io.emit('notification', {
+            const notification = await notificationModel.create({
+                message: `A payment of ${amount} has been recorded for request ${request_id}`,
                 userId: projectDirector._id,
-                message: `A payment of ${amount} has been made for request ${request_id}`,
-                type: 'Payment Update'
+                role: 'projectDirector',
+                status: 'unread',
+                // type: 'initiated'
             });
 
-            console.log(`Notification sent to Project Director (ID: ${projectDirector._id})`);
+            console.log('Notification created for Project Director:', notification);
         }
 
-        return res.status(201).json({ 
-            message: "Payment recorded successfully", 
-            payment: savedPayment 
+        if (financeManager) {
+            const notification = await notificationModel.create({
+                message: `A payment of ${amount} has been recorded for request ${request_id}`,
+                userId: financeManager._id,
+                role: 'financeManager',
+                status: 'unread'
+             
+            });
+
+            console.log('Notification created for Finance Manager:', notification);
+        }
+
+        return res.status(201).json({
+            message: "Payment recorded successfully",
+            payment: savedPayment
         });
     } catch (error) {
         console.error("Error recording payment:", error);
@@ -88,62 +94,6 @@ const recordPayment = asyncWrapper(async (req, res) => {
     }
 });
 
-
-// Fetch Payment by ID or Fetch All Payments
-const viewPayment = asyncWrapper(async (req, res) => {
-    const paymentId = req.params.id;
-
-    try {
-        // If the id is "all", fetch all payments
-        if (paymentId === "all") {
-            const payments = await paymentModel.find();
-            return res.status(200).json({
-                message: "All payments retrieved successfully",
-                payments
-            });
-        }
-
-        // Otherwise, find payment by ID
-        const payment = await paymentModel.findById(paymentId);
-
-        // Check if payment exists
-        if (!payment) {
-            return res.status(404).json({ message: "Payment not found" });
-        }
-
-        // Return payment details
-        return res.status(200).json({
-            message: "Payment retrieved successfully",
-            payment
-        });
-    } catch (error) {
-        console.error("Error retrieving payment:", error);
-        return res.status(500).json({ message: "Server error", error });
-    }
-});
-
-// Fetch all payments
-const getAllPayments = asyncWrapper(async (req, res) => {
-    try {
-        // Fetch all payments from the database
-        const payments = await paymentModel.find();
-        
-        // Return all payment details
-        return res.status(200).json({
-            message: "Payments retrieved successfully",
-            payments
-        });
-    } catch (error) {
-        console.error("Error retrieving payments:", error);
-        return res.status(500).json({ message: "Server error", error });
-    }
-});
-
-// Export payment controllers
-const paymentController = {
+export default {
     recordPayment,
-    viewPayment,
-    getAllPayments
 };
-
-export default paymentController;

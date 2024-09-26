@@ -7,7 +7,7 @@ import asyncWrapper from "../middleware/async.js";
 import { validationResult } from "express-validator";
 import notificationModel from "../models/notificationModel.js";
 import userModel from "../models/userModel.js";
-import  authMiddleware from "../middleware/authMiddleware.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 // Create a new purchase request
 const createRequest = asyncWrapper(async (req, res, next) => {
@@ -15,7 +15,11 @@ const createRequest = asyncWrapper(async (req, res, next) => {
     if (!errors.isEmpty()) {
         throw new BadRequestError('Validation failed', errors.array());
     }
-    const newRequest = await requestModel.create(req.body);
+    
+    const newRequest = await requestModel.create({
+        ...req.body,
+        createdBy: req.user._id  // Assuming req.user is populated by auth middleware
+    });
 
     // Notify the Project Director (CEO) about the new request
     const director = await userModel.findOne({ role: 'project Director' });
@@ -97,7 +101,7 @@ const updateRequestStatus = asyncWrapper(async (req, res) => {
             if (operationsManager) {
                 await notificationModel.create({
                     email: operationsManager.email,
-                    name: req.user.name, // Assuming req.user contains the Project Director's info
+                    name: req.user.name,  // Assuming req.user contains the Project Director's info
                     message: `Your purchase request has been ${status}`,
                     recipient: operationsManager._id,
                     status: 'unread',

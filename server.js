@@ -11,8 +11,7 @@ import Router2 from './Employee/Routes/index.js';
 import swaggerUi from 'swagger-ui-express';
 import swagger from './docs/swagger.json' assert {type:"json"}
 import swagger2 from './docs/swagger2.json'assert{type:"json"}
-// import socketIO from './src/socket/socketClient.js';
-// var io = socketIO(server);
+
 
 // Initialize express app
 const app = express();
