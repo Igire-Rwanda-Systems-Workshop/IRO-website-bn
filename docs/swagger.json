@@ -20,6 +20,7 @@
         "http",
         "https"
     ],
+    
     "paths": {
         "api/Inventory/signup": {
             "post": {
@@ -46,6 +47,7 @@
                 }
             }
         },
+
         "api/Inventory/login": {
             "post": {
                 "summary": "Login into your account",
@@ -71,6 +73,7 @@
                 }
             }
         },
+
         "api/Inventory/verify-otp": {
             "post": {
                 "summary": "verify your otp",
@@ -913,6 +916,7 @@
                 }
             }
         },
+
         "/api/Inventory/finance/initiate": {
             "post": {
                 "summary": "Create a initiation ",
@@ -931,6 +935,7 @@
                         "description": "finance object"
                     }
                 ],
+
                 "responses": {
                     "201": {
                         "description": "finance created"
@@ -940,6 +945,7 @@
         }
     },
 
+    
     "definitions": {
         "components": {
             "securitySchemes": {
@@ -1208,6 +1214,12 @@
          }
     }
 }
+
+
+
+
+
+
 
         
 
