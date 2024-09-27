@@ -18,7 +18,8 @@ const viewTransaction = async (req, res) => {
         res.status(500).json({ msg: 'Server error' });
     }
 };
-//Send Email
+
+// Send Email
 const sendEmail = async (email, subject, text) => {
     try {
         let transporter = nodemailer.createTransport({
@@ -43,8 +44,6 @@ const sendEmail = async (email, subject, text) => {
     }
 };
 
-
-
 // Initiate Payment
 const initiatePayment = async (req, res) => {
     try {
@@ -62,7 +61,7 @@ const initiatePayment = async (req, res) => {
         await newTransaction.save();
 
         // Send email notification to the user who initiated the request
-        const user = await User.findById(requestId); 
+        const user = await User.findById(requestId);
         const subject = 'Payment Initiated';
         const text = `Your payment of ${amount} has been initiated for request ${requestId}.`;
         await sendEmail(user.email, subject, text);
@@ -74,28 +73,40 @@ const initiatePayment = async (req, res) => {
 
         // Notify Finance Manager
         if (financeManager) {
-            await notificationController.create({
-                message: `A payment of ${amount} has been initiated for request ${requestId}.`,
-                recipient: financeManager._id,
-                type: 'Payment Initiated',
+            await notificationController.createNotification({
+                body: {
+                    message: `A payment of ${amount} has been initiated for request ${requestId}.`,
+                    recipient: financeManager._id,
+                    type: 'Payment Initiated',
+                    status: 'unread',
+                },
+                res
             });
         }
 
         // Notify Operations Manager
         if (operationsManager) {
-            await notificationController.create({
-                message: `A payment of ${amount} has been initiated for your request ${requestId}.`,
-                recipient: operationsManager._id,
-                type: 'Payment Initiated',
+            await notificationController.createNotification({
+                body: {
+                    message: `A payment of ${amount} has been initiated for your request ${requestId}.`,
+                    recipient: operationsManager._id,
+                    type: 'Payment Initiated',
+                    status: 'unread',
+                },
+                res
             });
         }
 
         // Notify Project Director
         if (projectDirector) {
-            await notificationController.create({
-                message: `A payment of ${amount} has been initiated for request ${requestId}.`,
-                recipient: projectDirector._id,
-                type: 'Payment Initiated',
+            await notificationController.createNotification({
+                body: {
+                    message: `A payment of ${amount} has been initiated for request ${requestId}.`,
+                    recipient: projectDirector._id,
+                    type: 'Payment Initiated',
+                    status: 'unread',
+                },
+                res
             });
         }
 
@@ -104,17 +115,6 @@ const initiatePayment = async (req, res) => {
 
     } catch (err) {
         console.error('Error initiating payment:', err.message);
-        res.status(500).json({ msg: 'Server error' });
-    }
-};
-
-// Get All Payments
-const getAllPayment = async (req, res) => {
-    try {
-        const transactions = await FinanceTransaction.find();
-        res.status(200).json(transactions);
-    } catch (err) {
-        console.error(err.message);
         res.status(500).json({ msg: 'Server error' });
     }
 };
@@ -135,23 +135,42 @@ const uploadProofOfPayment = async (req, res) => {
         const projectDirector = await User.findOne({ role: 'projectDirector' });
 
         if (operationsManager) {
-            await notificationController.create({
-                message: `Proof of payment has been uploaded for request ${transaction.requestId}.`,
-                recipient: operationsManager._id,
-                type: 'Payment Update',
+            await notificationController.createNotification({
+                body: {
+                    message: `Proof of payment has been uploaded for request ${transaction.requestId}.`,
+                    recipient: operationsManager._id,
+                    type: 'Payment Update',
+                    status: 'unread',
+                },
+                res
             });
         }
 
         if (projectDirector) {
-            await notificationController.create({
-                message: `Proof of payment has been uploaded for request ${transaction.requestId}.`,
-                recipient: projectDirector._id,
-                type: 'Payment Update',
+            await notificationController.createNotification({
+                body: {
+                    message: `Proof of payment has been uploaded for request ${transaction.requestId}.`,
+                    recipient: projectDirector._id,
+                    type: 'Payment Update',
+                    status: 'unread',
+                },
+                res
             });
         }
 
         res.status(200).json({ msg: 'Proof of payment uploaded successfully', transaction });
 
+    } catch (err) {
+        console.error('Error uploading proof of payment:', err.message);
+        res.status(500).json({ msg: 'Server error' });
+    }
+};
+
+// Get All Payments
+const getAllPayment = async (req, res) => {
+    try {
+        const transactions = await FinanceTransaction.find();
+        res.status(200).json(transactions);
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ msg: 'Server error' });

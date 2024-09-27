@@ -9,7 +9,7 @@ router.post('/create', notificationControllers.createNotification);
 router.get('/user', notificationControllers.getNotificationsByUser);
 router.put('/read/:id', notificationControllers.markNotificationAsRead);
 router.get('/allNotifications', notificationControllers.getAllNotifications);
-router.delete('/deleteNotification/:id', notificationControllers.deletedNotification);
+router.delete('/deleteNotification/:id', notificationControllers.deleteNotification);
 
 
 export default router;
