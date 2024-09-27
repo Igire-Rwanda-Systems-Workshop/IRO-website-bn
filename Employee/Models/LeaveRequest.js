@@ -62,8 +62,8 @@ const leaveRequestSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'approved', 'denied'],
-        default: 'pending'
+        enum: ['pending', 'approved', 'denied'],    
+        default: `pending`   
     },
     file_document: {
         filename: String,

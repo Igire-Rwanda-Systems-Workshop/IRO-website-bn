@@ -453,41 +453,41 @@
             }
         },
         "/api/Inventory/items/updateItem/{id}": {
-            "put": {
-                "summary": "update items",
-                "description": "updating the items",
-                "tags": [
-                    "Items"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the item to update",
-                        "required": true,
-                        "type": "String"
+        "put": {
+            "summary": "update items",
+            "description": "updating the items",
+            "tags": [
+                "Items"
+            ],
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of the item to update",
+                    "required": false,
+                    "type": "String"
+                },
+                {
+                    "in": "body",
+                    "name": "body",
+                    "schema": {
+                        "$ref": "#/definitions"
                     },
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "schema": {
-                            "$ref": "#/definitions"
-                        },
-                        "required": true,
-                        "description": "Updated item object"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful retrieved"
-                    },
-                    "404": {
-                        "description": "item not found"
-                    }
+                    "required": true,
+                    "description": "Updated item object"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Successful retrieved"
+                },
+                "404": {
+                    "description": "item not found"
                 }
             }
-        },
-        "/api/Inventory/items/deleteItem/{id}": {
+        }
+    },
+    "/api/Inventory/items/deleteItem/{id}": {
             "delete": {
                 "summary": "Delete an item by ID",
                 "description": "Delete an item by ID",
@@ -513,31 +513,7 @@
                 }
             }
         },
-        "/api/Inventory/requests/CreateReq": {
-            "post": {
-                "summary": "Create a new request",
-                "description": "Create a request",
-                "tags": [
-                    "Requests"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "schema": {
-                            "$ref": "#/definitions"
-                        },
-                        "required": true,
-                        "description": "request object"
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "request created"
-                    }
-                }
-            }
-        },
+        
         "/api/Inventory/requests/sendByEmail": {
             "post": {
                 "summary": "send an email to the inventory system",
@@ -911,7 +887,7 @@
                 }
             }
         },
-        "/api/Inventory/finance/viewTransaction/{id}": {
+        "/api/Inventory/finance/{id}": {
             "get": {
                 "summary": "get a transaction by ID",
                 "description": "get a single transaction by ID",
@@ -963,6 +939,7 @@
             }
         }
     },
+
     "definitions": {
         "components": {
             "securitySchemes": {
@@ -1226,9 +1203,9 @@
         "amount",
         "date",
         "comment"
-     ]
-    }
-}
+                ]
+             }
+         }
     }
 }
 
