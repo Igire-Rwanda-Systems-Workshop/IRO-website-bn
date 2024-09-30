@@ -10,7 +10,7 @@ import mongoose from 'mongoose';
 import Router2 from './Employee/Routes/index.js';
 import swaggerUi from 'swagger-ui-express';
 import swagger from './docs/swagger.json' assert {type:"json"}
-import swagger2 from './docs/swagger2.json'assert{type:"json"}
+// import swagger2 from './docs/swagger2.json'assert{type:"json"}
 
 
 // Initialize express app
@@ -31,19 +31,30 @@ app.use(express.json());
 app.use('/api/Inventory', Router);
 app.use('/api/Employee', Router2);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger2));
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger2));
 
 // Connect to MongoDB
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI);
-        console.log("\x1b[32m%s\x1b[0m", "MongoDB connected successfully");
+        // Check if MONGO_URI is defined
+        if (!process.env.MONGO_URI) {
+            throw new Error(`MONGO_URI environment variable is not defined`);
+        }
+
+        // Attempt to connect to MongoDB
+        await mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log(`\x1b[32m%s\x1b[0m`, `MongoDB connected successfully`);
     } catch (error) {
-        console.error("\x1b[31m%s\x1b[0m", `MongoDB connection failed: ${error.message}`);
-        process.exit(1);
+        console.error(`\x1b[31m%s\x1b[0m`, `MongoDB connection failed: ${error.message}`);
+        process.exit(1); // Exit with failure code
     }
 };
+
 connectDB();
+
 
 // Serve static files or a home route
 app.get("/", (req, res) => {
