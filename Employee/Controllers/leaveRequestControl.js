@@ -9,49 +9,40 @@ import sendEmail from "../../utils/sendEmail.js";
 import nodemailer from 'nodemailer';
 
 const createLeaveRequest = asyncWrapper(async (req, res, next) => {
-try {
-    const file = req.file;
-
-    // Validate request
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return next(new BadRequestError(errors.array()[0].msg));
+    try{
+        const file = req.file;
+        if(!file){
+            return res.status(400).send('No file uploaded!')
+        }
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return next(new BadRequestError(errors.array()[0].msg));
+        }
+        const { employeeId, names, category,  type, startDate, endDate, date, reason, status, email, createdAt} = req.body;
+        const newImage = new leaveRequestModel({
+            employeeId,
+            names,
+            category,
+            type,
+            startDate,
+            endDate,
+            date,
+            reason,
+            status,
+            file_document: {
+                filename: file.filename,
+                path: file.path,
+                mimetype: file.mimetype,
+                size: file.size,
+              },
+            email,
+            createdAt
+        });
+        await newImage.save();
+        res.status(201).json(newImage);
+    } catch (error){
+        res.status(500).json({message: 'failed to add image'});
     }
-
-    // Destructure request body
-    const { employeeId, names, category, type, startDate, endDate, date, reason, status, email, createdAt } = req.body;
-
-    // Create new leave request document
-    const newDocument = new leaveRequestModel({
-        employeeId,
-        names,
-        category,
-        type,
-        startDate,
-        endDate,
-        date,
-        reason,
-        status,
-        email,
-        createdAt,
-    });
-
-    // Add file information only if a file was uploaded
-    if (file) {
-        newDocument.file_document = {
-            filename: file.filename,
-            path: file.path,
-            mimetype: file.mimetype,
-            size: file.size,
-        };
-    }
-
-    // Save document to the database
-    await newDocument.save();
-    res.status(201).json(newDocument);
-} catch (error) {
-    res.status(404).json({ message: 'Failed to upload document' });
-}
 });
 
 const sendByEmail = asyncWrapper(async (req, res, next) => {

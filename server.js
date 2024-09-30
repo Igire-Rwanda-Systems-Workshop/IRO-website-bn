@@ -10,7 +10,7 @@ import mongoose from 'mongoose';
 import Router2 from './Employee/Routes/index.js';
 import swaggerUi from 'swagger-ui-express';
 import swagger from './docs/swagger.json' assert {type:"json"}
-import swagger2 from './docs/swagger2.json'assert{type:"json"}
+// import swagger2 from './docs/swagger2.json'assert{type:"json"}
 
 
 // Initialize express app
@@ -31,7 +31,7 @@ app.use(express.json());
 app.use('/api/Inventory', Router);
 app.use('/api/Employee', Router2);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger2));
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger2));
 
 // Connect to MongoDB
 const connectDB = async () => {

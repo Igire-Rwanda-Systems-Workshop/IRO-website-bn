@@ -10,7 +10,7 @@
       },
       "security": [{ "Bearer": [] }],
     "info": {
-        "title": "Inventory Management-API",
+        "title": "Inventory Management & Employee Management APIs",
         "description": "API documentation for Inventory System",
         "version": "1.0.0"
     },
@@ -22,7 +22,7 @@
     ],
     
     "paths": {
-        "api/Inventory/signup": {
+        "api/Inventory/users/signup": {
             "post": {
                 "summary": "Create an account",
                 "description": "To make an appointment first sign up",
@@ -48,7 +48,7 @@
             }
         },
 
-        "api/Inventory/login": {
+        "api/Inventory/users/login": {
             "post": {
                 "summary": "Login into your account",
                 "description": "To do something first login",
@@ -74,7 +74,7 @@
             }
         },
 
-        "api/Inventory/verify-otp": {
+        "api/Inventory/users/verify-otp": {
             "post": {
                 "summary": "verify your otp",
                 "description": "verify your account",
@@ -99,7 +99,7 @@
                 }
             }
         },
-        "api/Inventory/forgot-Password": {
+        "api/Inventory/users/forgot-Password": {
             "post": {
                 "summary": "incase you forgot your password",
                 "description": "if you forgot your password",
@@ -124,7 +124,7 @@
                 }
             }
         },
-        "api/Inventory/reset-Password": {
+        "api/Inventory/users/reset-Password": {
             "post": {
                 "summary": "reset your password",
                 "description": "set another password incase you forgot your password",
@@ -149,7 +149,7 @@
                 }
             }
         },
-        "api/Inventory/update-user/{id}": {
+        "api/Inventory/users/update-user/{id}": {
             "put": {
                 "summary": "updating a user",
                 "description": "updating the users",
@@ -184,7 +184,7 @@
                 }
             }
         },
-        "api/Inventory/delete-user/{id}": {
+        "api/Inventory/users/delete-user/{id}": {
             "delete": {
                 "summary": "Delete a user by ID",
                 "description": "Delete a user by ID",
@@ -516,7 +516,31 @@
                 }
             }
         },
-        
+        "/api/Inventory/requests/createReq": {
+        "post": {
+            "summary": "Create a new requests",
+            "description": "Create a new requests",
+            "tags": [
+                "Requests"
+            ],
+            "parameters": [
+                {
+                    "in": "body",
+                    "name": "body",
+                    "schema": {
+                        "$ref": "#/definitions"
+                    },
+                    "required": true,
+                    "description": "request object"
+                }
+            ],
+            "responses": {
+                "201": {
+                    "description": "request created"
+                }
+            }
+        }
+    }, 
         "/api/Inventory/requests/sendByEmail": {
             "post": {
                 "summary": "send an email to the inventory system",
@@ -942,10 +966,702 @@
                     }
                 }
             }
+        },
+        "/api/Employee/Emply-users/signup": {
+            "post": {
+              "summary": "Create a new user account",
+              "tags": ["Employee-Auth"],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/definitions"
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "201": {
+                  "description": "User created successfully",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/definitions"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Bad Request"
+                }
+              }
+            }
+          },
+          "/api/Employee/Emply-users/signIn": {
+      "post": {
+        "summary": "Sign in a user",
+        "tags": ["Employee-Auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User signed in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid email or password"
+          }
+        }
+      }
+    },
+    "/api/Employee/Emply-users/verify": {
+      "post": {
+        "summary": "Validate OTP for user account",
+        "tags": ["Employee-Auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User verified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid OTP"
+          }
+        }
+      }
+    },
+    "/api/Employee/Emply-users/forgotPassword": {
+      "post": {
+        "summary": "Send password reset link",
+        "tags": ["Employee-Auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset link sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid email address"
+          }
+        }
+      }
+    },
+    "/api/Employee/Emply-users/resetPassword": {
+      "post": {
+        "summary": "Reset user password",
+        "tags": ["Employee-Auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully",
+            "content": {
+              "application/json": {
+                "$ref": "#/definitions"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid token or expired"
+          }
+        }
+      }
+    },
+    "/api/Employee/Emply-users/delete/{id}": {
+      "delete": {
+        "summary": "Delete a user account",
+        "tags": ["Employee-Auth"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the user to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully",
+            "content": {
+              "application/json": {
+                "$ref": "#/definitions"
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/Employee/tokens/addToken": {
+      "post": {
+        "summary": "Add a token",
+        "tags": ["Token"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Token added successfully",
+            "content": {
+              "application/json": {
+                "$ref": "#/definitions"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/api/Employee/tokens/delete/{id}": {
+      "delete": {
+        "summary": "Delete a token",
+        "tags": ["Token"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the token to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token deleted successfully",
+            "content": {
+              "application/json": {
+                "$ref": "#/definitions"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Employee/employees/addEmployee": {
+        "post": {
+            "summary": "Create a new employee",
+            "description": "Create a new employee",
+            "tags": [
+                "Employee"
+            ],
+            "parameters": [
+                {
+                    "in": "body",
+                    "name": "body",
+                    "schema": {
+                        "$ref": "#/definitions"
+                    },
+                    "required": true,
+                    "description": "employee object"
+                }
+            ],
+            "responses": {
+                "201": {
+                    "description": "employee created"
+                }
+            }
         }
     },
+      "/api/Employee/employees/getEmployee/{id}": {
+      "get": {
+        "summary": "Get employee by ID",
+        "tags": ["Employee"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Employee ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employee found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Employee not found"
+          }
+        }
+      }
+    },
+    "/api/Employee/employees/getAllEmployees": {
+      "get": {
+        "summary": "Get all employees",
+        "tags": ["Employee"],
+        "responses": {
+          "200": {
+            "description": "List of all employees",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No employees found"
+          }
+        }
+      }
+    },
+    "/api/Employee/employees/updateEmployee/{id}": {
+      "put": {
+        "summary": "Update an employee",
+        "tags": ["Employee"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Employee ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Employee updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Employee not found"
+          }
+        }
+      }
+    },
+    "/api/Employee/employees/getEmployeeByEmail/{email}": {
+      "get": {
+        "summary": "Get employee by email",
+        "tags": ["Employee"],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Employee email"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employee found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Employee not found"
+          }
+        }
+      }
+  },
+  "/api/Employee/employees/deleteEmployee/{id}": {
+      "delete": {
+        "summary": "Delete an employee",
+        "tags": ["Employee"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Employee ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employee deleted successfully",
+            "content": {
+              "application/json": {
+                "$ref": "#/definitions"
+              }
+            }
+        }
+    }
+}
+  },
+   "/api/Employee/leaveRequests/upload": {
+    "post": {
+        "summary": "Create a new image",
+        "description": "add an image",
+        "tags": [
+            "Leave Requests"
+        ],
+        "consumes": [
+            "multipart/form-data"
+          ],
+        "parameters": [
+            {
+                "in": "formData",
+                "name": "employeeId",
+               "type":"mongoose.Schema.Types.ObjectId",
+               "ref": "employee",
+                "required": false,
+                "description": "leave object"
+            },
+            {
+                "in": "formData",
+                "name": "names",
+               "type":"String",
+                "required": false,
+                "description": "leave object"
+            }, {
+                "in": "formData",
+                "name": "category",
+               "type":"String",
+                "required": false,
+                "description": "leave object"
+            },
+            {
+                "in": "formData",
+                "name": "type",
+               "type":"String",
+                "required": false,
+                "description": "leave object"
+            },
+            {
+                "in": "formData",
+                "name": "startDate",
+               "type": "Date",
+               "format": "yyyy-MM-dd",
+                "required": false,
+                "description": "leave object"
+            },    {
+                "in": "formData",
+                "name": "endDate",
+               "type": "Date",
+               "format": "yyyy-MM-dd",
+                "required": false,
+                "description": "leave object"
+            },
+            {
+                "in": "formData",
+                "name": "date",
+               "type": "Date",
+               "format": "yyyy-MM-dd",
+                "required": false,
+                "description": "leave object"
+            },
+            {
+                "in": "formData",
+                "name": "reason",
+               "type": "String",
+                "required": false,
+                "description": "leave object"
+            },
+            {
+                "in": "formData",
+                "name": "status",
+               "type":"String",
+                "required": false,
+                "description": "leave object"
+            },
+            {
+                "in": "formData",
+                "name": "file_document",
+               "type":"file",
+               "description": "leave object",
+                "public_id": {
+                  "type": "String"
+                },
+                "asset_id":{
+                  "type": "String"
+                },
+                "url":{
+                  "type": "String"
+                }
+              },
+              {
+                "in": "formData",
+                "name": "email",
+                "type":"String",
+                "required": false,
+                "unique": true,
+                "description": "leave object"
+            },
+            {
+                "in": "formData",
+                "name": "createdAt",
+                "type":"Date",
+                "required": false,
+                "default": "Date.now",
+                "description": "leave object"
+            }
+        ],
+     "responses": {
+          "201": {
+            "description": "Leave request created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions"
+                },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+    }
+}
+     }
+    }
+},
+ "/api/Employee/leaveRequests/getAllLeaves": {
+    "get": {
+        "summary": "Find all requests",
+        "description": "Find all requests",
+        "tags": [
+            "Leave Requests"
+        ],
+        "responses": {
+            "200": {
+                "description": "Successful retrieved"
+            },
+            "404": {
+                "description": "requests not found"
+            }
+        }
+    }
+},
+ "/api/Employee/leaveRequests/getLeavesById/{id}": {
+    "get": {
+        "summary": "get a request by ID",
+        "description": "get a single request by ID",
+        "tags": [ 
+            "Leave Requests"
+        ],
+        "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "description": "ID of the requests to get",
+                "required": true,
+                "type": "string"
+            }
+        ],
+        "responses": {
+            "201": {
+                "description": "single request got it!"
+            },
+            "404": {
+                "description": "request not found"
+            }
+        }
+    }
+},
+    "/api/Employee/leaveRequests/updateLeaves/{id}": {
+      "put": {
+                "summary": "update leaves",
+                "description": "updating the leaves",
+                "tags": [
+                    "Leave Requests"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the request to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions"
+                        },
+                        "required": true,
+                        "description": "Updated request object"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieved"
+                    },
+                    "404": {
+                        "description": "request not found"
+                    }
+                }
+            }
+        },
+ "/api/Employee/leaveRequests/deleteLeaves/{id}": {
+    "delete": {
+        "summary": "Delete a leave by ID",
+        "description": "Delete a leave by ID",
+        "tags": [
+            "Leave Requests"
+        ],
+        "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "description": "ID of the leave to delete",
+                "required": true,
+                "type": "string"
+            }
+        ],
+        "responses": {
+            "204": {
+                "description": "leave request deleted"
+            },
+            "404": {
+                "description": "leave request not found"
+            }
+        }
+    }
+},
 
-    
+  "/api/Employee/leaveRequests/sendByEmail/{id}": {
+    "get": {
+    "summary": "get an email",
+    "description": "get a single email sent.",
+    "tags": [
+        "Leave Requests"
+    ],
+    "parameters": [
+        {
+            "name": "name",
+            "in": "path",
+            "description": "ID of the email to get",
+            "required": true,
+            "schema": {
+                "type": "string"
+            }
+        }
+    ],
+    "requestBody": {
+        "description": "Email content",
+        "required": true,
+        "content": {
+            "application/json": {
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "subject": {
+                            "type": "string",
+                            "description": "Subject of the email"
+                        },
+                        "message": {
+                            "type": "string",
+                            "description": "Content of the email"
+                        }
+                    },
+                    "required": ["subject", "message"]
+                }
+            }
+        }
+    },
+    "responses": {
+        "201": {
+            "description": "single email sent!"
+        },
+        "404": {
+            "description": "email not found"
+        }
+    }
+}
+  },
     "definitions": {
         "components": {
             "securitySchemes": {
@@ -1210,10 +1926,85 @@
         "date",
         "comment"
                 ]
-             }
-         }
+             },
+     "Leave Requests": {
+            "type": "object",
+            "properties": {
+             "employeeId": {
+                 "type": "mongoose.Schema.Types.ObjectId",
+                "ref": "employee",
+                 "required": false
+                },
+             "names": {
+                "type": "String",
+                "required": false
+            },
+            "category": {
+                "type": "String",
+                "required": false,
+                "enum": "['leave', 'permission']"
+            },
+            "type": {
+                "type": "String",
+                "required": false
+            },
+            "startDate": {
+                "type": "Date",
+                "required": false
+            },
+            "endDate": {
+                "type": "Date",
+                "required": false
+            },
+            "date": {
+                "type": "Date",
+                "required": false
+            },
+            "reason": {
+                "type": "String",
+                "required": false
+            },
+            "status": {
+                "type": "string",
+                "enum": "['pending', 'approved', 'denied']",
+                "required": false,
+                "default": "pending"
+            },
+            "file_document": {
+                "url":{
+                 "type": "String"
+                }
+             },
+             "email": {
+                "type": "String",
+                "required": false,
+                "unique": true
+            },
+            "createdAt": {
+                "type": "Date",
+                "required": false
+            }
+            },
+              "required": [
+                "employeeId",
+                "names",
+                "category",
+                "type",
+                "startDate",
+                "endDate",
+                "date",
+                "reason",
+                "status",
+                "file_document",
+                "email",
+                "createdAt"
+            ]
+          }
+        }
     }
 }
+}
+      
 
 
 
