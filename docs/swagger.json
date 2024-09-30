@@ -540,7 +540,8 @@
                 }
             }
         }
-    }, 
+},
+  
         "/api/Inventory/requests/sendByEmail": {
             "post": {
                 "summary": "send an email to the inventory system",
@@ -2002,7 +2003,6 @@
           }
         }
     }
-}
 }
       
 
