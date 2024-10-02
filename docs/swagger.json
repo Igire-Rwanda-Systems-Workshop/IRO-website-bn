@@ -1613,56 +1613,31 @@
     }
 },
 
-  "/api/Employee/leaveRequests/sendByEmail/{id}": {
-    "get": {
-    "summary": "get an email",
-    "description": "get a single email sent.",
-    "tags": [
-        "Leave Requests"
-    ],
-    "parameters": [
-        {
-            "name": "name",
-            "in": "path",
-            "description": "ID of the email to get",
-            "required": true,
-            "schema": {
-                "type": "string"
-            }
-        }
-    ],
-    "requestBody": {
-        "description": "Email content",
-        "required": true,
-        "content": {
-            "application/json": {
+  "/api/Employee/leaveRequests/sendByEmail": {
+    "post": {
+        "summary": "send an email to the Employee system",
+        "description": "Create an email",
+        "tags": [
+            "Leave Requests"
+        ],
+        "parameters": [
+            {
+                "in": "body",
+                "name": "body",
                 "schema": {
-                    "type": "object",
-                    "properties": {
-                        "subject": {
-                            "type": "string",
-                            "description": "Subject of the email"
-                        },
-                        "message": {
-                            "type": "string",
-                            "description": "Content of the email"
-                        }
-                    },
-                    "required": ["subject", "message"]
-                }
+                    "$ref": "#/definitions"
+                },
+                "required": true,
+                "description": "request object"
             }
-        }
-    },
-    "responses": {
-        "201": {
-            "description": "single email sent!"
-        },
-        "404": {
-            "description": "email not found"
+        ],
+        "responses": {
+            "201": {
+                "description": "request created"
+            }
         }
     }
-}
-  },
+},
     "definitions": {
         "components": {
             "securitySchemes": {

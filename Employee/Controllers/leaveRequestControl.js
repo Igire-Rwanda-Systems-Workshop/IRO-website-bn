@@ -44,73 +44,69 @@ const createLeaveRequest = asyncWrapper(async (req, res, next) => {
         res.status(500).json({message: 'failed to add image'});
     }
 });
-
 const sendByEmail = asyncWrapper(async (req, res, next) => {
-    try {
-        const requestId = req.params.id;
-        const request = await leaveRequestModel.findById(requestId);
-
-        if (!request) {
-            return res.status(404).json({ message: 'No request found' });
+        try {
+            // Get the leave request ID from the request body (as it's a POST API)
+            // const requestId = req.body.requestId;
+            // const request = await leaveRequestModel.findById(requestId);
+    
+            // if (!request) {
+            //     return res.status(404).json({ message: 'No request found' });
+            // }
+    
+            // Destructure fields from the request
+            const { email, employeeId, names, category, type, startDate, endDate, date, reason, file_document} = req.body;
+    
+            const ceoEmail = process.env.EMAIL_USER;  // CEO's email from environment variables
+            const ceoName = process.env.EMAIL_NAME;  // CEO's name from environment variables
+    
+            // Construct a simple email body for the leave request
+            const emailBody = `
+                Dear ${names},
+                
+                We have received your leave request from ${startDate} to ${endDate}.
+                
+                The request details are as follows:
+                - Type: ${type}
+                - Reason: ${reason}
+                - Start Date: ${startDate}
+                - End Date: ${endDate}
+                
+                We will process your request and notify you of our decision shortly.
+                
+                Best regards,
+                ${ceoName}
+                CEO, Leave Management System
+            `;
+    
+            // Create a transporter using your email service (e.g., Gmail)
+            let transporter = nodemailer.createTransport({
+                service: 'Gmail',  // You can use other email services if needed
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASSWORD,  // CEO's email password from environment variables
+                },
+            });
+    
+            // Define the email options
+            let mailOptions = {
+                from: `${ceoName} <${ceoEmail}>`,  // CEO's name and email
+                to: email,  // Send to employee's email
+                subject: `Leave Request Received`,  // Subject of the email
+                text: emailBody  // Email content
+            };
+    
+            // Send the email
+            let info = await transporter.sendMail(mailOptions);
+    
+            // Success response
+            res.status(200).json({ message: 'Leave request email sent successfully', info });
+        } catch (error) {
+            console.error('Error sending email:', error);
+            res.status(500).json({ message: 'Failed to send email', error });
         }
-
-        // Destructure fields from the request and req.body (for status updates)
-        const { employeeId, names, category, type, startDate, endDate, date, reason, file_document, email } = request;
-        const { status } = req.body;  // Get the status update (approved or rejected) from req.body
-
-        // Ensure the status is either "approved" or "rejected"
-        if (!['pending', 'approved', 'denied'].includes(status)) {
-            return res.status(400).json({ message: 'Invalid status provided.' });
-        }
-
-        // Update the request status dynamically based on the input (approved or rejected)
-        request.status = status;
-        await request.save();
-
-        const ceoEmail = process.env.EMAIL_USER;  // CEO's email from environment variables
-        const ceoName = process.env.EMAIL_NAME;  // CEO's name from environment variables
-
-        // Construct the email body based on the status
-        const emailBody = `
-            Dear ${names},
-            
-            Your leave request from ${startDate} to ${endDate} has been ${status} by the CEO.
-            
-            ${status === 'approved' ? 'Please ensure that you plan your leave accordingly.' : 'We regret to inform you that your leave request has been denied.'}
-            
-            Best regards,
-            ${ceoName}
-            CEO, Leave Management System
-        `;
-
-        // Create a transporter using your email service (e.g., Gmail)
-        let transporter = nodemailer.createTransport({
-            service: 'Gmail',  // You can use other email services if needed
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASSWORD,  // CEO's email password from environment variables
-            },
-        });
-
-        // Define the email options
-        let mailOptions = {
-            from: `${ceoName} <${ceoEmail}>`,  // CEO's name and email
-            to: email,  // Send to employee's email
-            subject: `Leave Request ${status.charAt(0).toUpperCase() + status.slice(1)}`,  // Subject of the email
-            text: emailBody  // Email content
-        };
-
-        // Send the email
-        let info = await transporter.sendMail(mailOptions);
-
-        // Success response
-        res.status(200).json({ message: `Leave request ${status} email sent successfully`, info });
-    } catch (error) {
-        console.error('Error sending email:', error);
-        res.status(500).json({ message: 'Failed to send email', error });
-    }
-});
-
+    });
+    
 const getAllLeaveRequests = asyncWrapper(async (req, res, next) =>{
     const leaveRequests = await leaveRequestModel.find({})
     if(leaveRequests){
