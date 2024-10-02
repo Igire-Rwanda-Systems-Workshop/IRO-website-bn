@@ -76,8 +76,7 @@ const sendByEmail = asyncWrapper(async (req, res, next) => {
                 
                 Best regards,
                 ${ceoName}
-                CEO, Leave Management System
-            `;
+                CEO, Leave Management System`;
     
             // Create a transporter using your email service (e.g., Gmail)
             let transporter = nodemailer.createTransport({
