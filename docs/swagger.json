@@ -1637,8 +1637,9 @@
             }
         }
     }
-},
-    "definitions": {
+}
+    },
+ "definitions": {
         "components": {
             "securitySchemes": {
               "bearerAuth": {
@@ -1979,7 +1980,7 @@
         }
     }
 }
-}
+
       
 
 
