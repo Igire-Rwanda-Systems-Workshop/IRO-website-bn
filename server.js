@@ -13,6 +13,9 @@ import swagger from './docs/swagger.json' assert {type:"json"}
 // import swagger2 from './docs/swagger2.json'assert{type:"json"}
 
 
+
+
+
 // Initialize express app
 const app = express();
 
@@ -24,6 +27,8 @@ const  corsOptions = {
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+console.log(path.resolve(__dirname, 'client-index.html'));
 
 // Middleware
 app.use(cors());
