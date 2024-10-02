@@ -175,8 +175,6 @@ const getAllNotifications = async (req, res) => {
   }
 };
 
-
-
 // Function to check notifications for a specific user
 const checkNotifications = async (userId) => {
     try {
@@ -186,9 +184,6 @@ const checkNotifications = async (userId) => {
         console.error("Error fetching notifications:", error);
     }
 };
-
-checkNotifications('projectDirectorId');
-
 
 // Exporting notification controller methods
 const notificationControllers = {

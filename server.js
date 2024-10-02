@@ -41,11 +41,8 @@ const connectDB = async () => {
             throw new Error(`MONGO_URI environment variable is not defined`);
         }
 
-        // Attempt to connect to MongoDB
-        await mongoose.connect(process.env.MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        // Attempt to connect to MongoDB without deprecated options
+        await mongoose.connect(process.env.MONGO_URI);
         console.log(`\x1b[32m%s\x1b[0m`, `MongoDB connected successfully`);
     } catch (error) {
         console.error(`\x1b[31m%s\x1b[0m`, `MongoDB connection failed: ${error.message}`);
@@ -54,7 +51,6 @@ const connectDB = async () => {
 };
 
 connectDB();
-
 
 // Serve static files or a home route
 app.get("/", (req, res) => {
