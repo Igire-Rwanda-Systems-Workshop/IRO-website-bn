@@ -33,7 +33,7 @@ const filePath = path.join('C:', 'Users', 'lenovo', 'Documents', 'IRO-website-bn
 console.log(filePath);
 
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json()); 
 app.use('/api/Inventory', Router);
 app.use('/api/Employee', Router2);
