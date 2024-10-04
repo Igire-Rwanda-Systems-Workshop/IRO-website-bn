@@ -13,11 +13,12 @@ let otpStorage = {};
 
 // Admin Signup
 const adminSignup = async (req, res) => {
+    
     const { name, email, password } = req.body;
   
     // Generate OTP and store in otpStorage
-    const otp = otpService.generateOTP();
-    otpStorage[email] = otp;
+    // const otp = otpService.generateOTP();
+    // otpStorage[email] = otp;
   
     // Create new admin user
     const newAdmin = new userModel({ name, email, password, role: 'admin' });
@@ -27,7 +28,7 @@ const adminSignup = async (req, res) => {
         await newAdmin.save();
   
         // Send OTP to email
-        await emailServices.sendOTP(email, otp);
+        // await emailServices.sendOTP(email, otp);
 
     
   
@@ -71,7 +72,7 @@ const login = async (req, res) => {
         }
 
         // Check if user is verified (for admin)
-        if (user.role === 'admin' && !user.isVerified) {
+        if (user.role === 'admin' && user.isVerified) {
             return res.status(403).json({ message: 'Admin must verify the account before login' });
         }
 

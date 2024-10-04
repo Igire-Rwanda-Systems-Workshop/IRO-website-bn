@@ -200,5 +200,4 @@ const notificationControllers = {
   getAllNotifications,
   deleteNotification,
 };
-
 export default notificationControllers;
