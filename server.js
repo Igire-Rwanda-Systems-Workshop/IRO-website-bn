@@ -28,8 +28,6 @@ const  corsOptions = {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
-
 // Middleware
 app.use(cors( corsOptions));
 app.use(express.json()); 
@@ -58,9 +56,9 @@ const connectDB = async () => {
 connectDB();
 
 // Serve static files or a home route
-app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/client-index.html");
-});
+// app.get("/", (req, res) => {
+//     res.sendFile(__dirname + "/client-index.html");
+// });
 
 
 // Error handling middleware
