@@ -28,12 +28,8 @@ const  corsOptions = {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// const filePath = path.join('C:', 'Users', 'lenovo', 'Documents', 'IRO-website-bn', 'client-index.html');
-// console.log(path.resolve(__dirname, 'client-index.html'));
-// console.log(filePath);
-
 // Middleware
-app.use(cors());
+app.use(cors( corsOptions));
 app.use(express.json()); 
 app.use('/api/Inventory', Router);
 app.use('/api/Employee', Router2);
