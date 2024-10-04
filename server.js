@@ -10,7 +10,6 @@ import mongoose from 'mongoose';
 import Router2 from './Employee/Routes/index.js';
 import swaggerUi from 'swagger-ui-express';
 import swagger from './docs/swagger.json' assert {type:"json"}
-import swagger2 from './docs/swagger2.json'assert{type:"json"}
 import heroRoutes from '../IRO-website-bn/contentManagementSystem/routes/heroRoutes.js';
 import contentRoutes from '../IRO-website-bn/contentManagementSystem/routes/contentRoutes.js'
 import bodyParser from 'body-parser';
@@ -37,7 +36,7 @@ app.use('/api/Employee', Router2);
 app.use('/api/website-content',heroRoutes);
 app.use('/api/website', contentRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger2));
+
 
 // Connect to MongoDB
 const connectDB = async () => {
