@@ -22,7 +22,7 @@
     ],
     
     "paths": {
-        "api/Inventory/users/signup": {
+        "/api/Inventory/users/signup": {
             "post": {
                 "summary": "Create an account",
                 "description": "To make an appointment first sign up",
@@ -48,7 +48,7 @@
             }
         },
 
-        "api/Inventory/users/login": {
+        "/api/Inventory/users/login": {
             "post": {
                 "summary": "Login into your account",
                 "description": "To do something first login",
@@ -74,7 +74,7 @@
             }
         },
 
-        "api/Inventory/users/verify-otp": {
+        "/api/Inventory/users/verify-otp": {
             "post": {
                 "summary": "verify your otp",
                 "description": "verify your account",
@@ -99,7 +99,7 @@
                 }
             }
         },
-        "api/Inventory/users/forgot-Password": {
+        "/api/Inventory/users/forgot-Password": {
             "post": {
                 "summary": "incase you forgot your password",
                 "description": "if you forgot your password",
@@ -124,7 +124,7 @@
                 }
             }
         },
-        "api/Inventory/users/reset-Password": {
+        "/api/Inventory/users/reset-Password": {
             "post": {
                 "summary": "reset your password",
                 "description": "set another password incase you forgot your password",
@@ -149,7 +149,7 @@
                 }
             }
         },
-        "api/Inventory/users/update-user/{id}": {
+        "/api/Inventory/users/update-user/{id}": {
             "put": {
                 "summary": "updating a user",
                 "description": "updating the users",
@@ -184,7 +184,7 @@
                 }
             }
         },
-        "api/Inventory/users/delete-user/{id}": {
+        "/api/Inventory/users/delete-user/{id}": {
             "delete": {
                 "summary": "Delete a user by ID",
                 "description": "Delete a user by ID",
