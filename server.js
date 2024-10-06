@@ -10,10 +10,11 @@ import mongoose from 'mongoose';
 import Router2 from './Employee/Routes/index.js';
 import swaggerUi from 'swagger-ui-express';
 import swagger from './docs/swagger.json' assert {type:"json"}
-// import swagger2 from './docs/swagger2.json'assert{type:"json"}
+import heroRoutes from './contentManagementSystem/routes/contentRoutes.js';
+import contentRoutes from './contentManagementSystem/routes/contentRoutes.js'
+import bodyParser from 'body-parser';
 
-
-
+// import swagger2 from './docs/swagger2.json'assert{type:
 
 
 // Initialize express app
@@ -31,8 +32,11 @@ const __dirname = path.dirname(__filename);
 // Middleware
 app.use(cors( corsOptions));
 app.use(express.json()); 
+app.use(bodyParser.json()); // To parse JSON bodies
 app.use('/api/Inventory', Router);
 app.use('/api/Employee', Router2);
+app.use('/api/website-content',heroRoutes);
+app.use('/api/website', contentRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 // app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger2));
 
@@ -72,5 +76,3 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-
-// export default { io };
