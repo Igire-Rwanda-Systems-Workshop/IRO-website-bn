@@ -30,7 +30,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middleware
-app.use(cors( corsOptions));
+app.use(cors(corsOptions));
 app.use(express.json()); 
 app.use(bodyParser.json()); // To parse JSON bodies
 app.use('/api/Inventory', Router);

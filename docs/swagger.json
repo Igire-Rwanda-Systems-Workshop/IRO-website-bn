@@ -25,7 +25,7 @@
         "/api/Inventory/users/signup": {
             "post": {
                 "summary": "Create an account",
-                "description": "To make an appointment first sign up",
+                "description": "To make the  first sign up",
                 "tags": [
                     "User-Auth"
                 ],
