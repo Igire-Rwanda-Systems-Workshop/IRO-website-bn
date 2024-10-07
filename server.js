@@ -8,6 +8,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 import Router2 from './Employee/Routes/index.js';
+import Router3 from './contentManagementSystem/routes/index.js';
 import swaggerUi from 'swagger-ui-express';
 import swagger from './docs/swagger.json' assert {type:"json"}
 import heroRoutes from './contentManagementSystem/routes/contentRoutes.js';
@@ -30,13 +31,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middleware
-app.use(cors( corsOptions));
+app.use(cors(corsOptions));
 app.use(express.json()); 
 app.use(bodyParser.json()); // To parse JSON bodies
 app.use('/api/Inventory', Router);
 app.use('/api/Employee', Router2);
 app.use('/api/website-content',heroRoutes);
 app.use('/api/website', contentRoutes);
+app.use('/api/website1', Router3);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 // app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger2));
 
