@@ -3,48 +3,96 @@ const router = express.Router();
 // Importing the required model
 import Content from '../models/contentModel.js';
 
-// Create new content
- const createContent = async (req, res) => {
+// Create Content (POST)
+const createContent = async (req, res) => {
   try {
-    const content = new Content(req.body);
-    await content.save();
-    res.status(201).json(content);
+    const newContent = new Content({
+      ourStory: {
+        title: req.body.storyTitle,
+        description: req.body.storyDescription,
+        backgroundImage: req.body.storyBackgroundImage
+      },
+      responsibilities: req.body.responsibilities,
+      vision: {
+        title: req.body.visionTitle,
+        content: req.body.visionContent,
+        icon: req.body.visionIcon
+      },
+      mission: {
+        title: req.body.missionTitle,
+        content: req.body.missionContent,
+        icon: req.body.missionIcon
+      },
+      founders: req.body.founders,
+    });
+
+    const savedContent = await newContent.save();
+    res.status(201).json(savedContent);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
-// Get all content
-const getContent = async (req, res) => {
+
+// Get Content (GET)
+export const getContent = async (req, res) => {
   try {
-    const content = await Content.find();
+    const content = await Content.findOne({});
+    if (!content) {
+      return res.status(404).json({ message: "Content not found" });
+    }
     res.status(200).json(content);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
-// Update content by ID
- const updateContent = async (req, res) => {
+
+// Update Content (PUT)
+export const updateContent = async (req, res) => {
   try {
-    const { id } = req.params;
-    const updatedContent = await Content.findByIdAndUpdate(id, req.body, { new: true });
+    const updatedContent = await Content.findOneAndUpdate(
+      {},
+      {
+        ourStory: {
+          title: req.body.storyTitle,
+          description: req.body.storyDescription,
+          backgroundImage: req.body.storyBackgroundImage
+        },
+        responsibilities: req.body.responsibilities,
+        vision: {
+          title: req.body.visionTitle,
+          content: req.body.visionContent,
+          icon: req.body.visionIcon
+        },
+        mission: {
+          title: req.body.missionTitle,
+          content: req.body.missionContent,
+          icon: req.body.missionIcon
+        },
+        founders: req.body.founders
+      },
+      { new: true }
+    );
     res.status(200).json(updatedContent);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
-// Delete content by ID
- const deleteContent = async (req, res) => {
+// Delete Content (DELETE)
+export const deleteContent = async (req, res) => {
   try {
-    const { id } = req.params;
-    await Content.findByIdAndDelete(id);
-    res.status(204).send();
+    const deletedContent = await Content.findOneAndDelete({});
+    if (!deletedContent) {
+      return res.status(404).json({ message: "Content not found" });
+    }
+    res.status(200).json({ message: "Content deleted", deletedContent });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
+
 
 const contentControllers={
     createContent,

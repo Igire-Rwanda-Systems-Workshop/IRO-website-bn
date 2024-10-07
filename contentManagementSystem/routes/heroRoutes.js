@@ -4,43 +4,32 @@ const router = express.Router();
 import heroControllers from'../controllers/heroControllers.js';
 
 
-
+// create websiteContent
+router.post('/create', heroControllers.createWebsiteContent);
 // GET website content
 router.get('/getAll',heroControllers.getWebsiteContent);
-
 // PUT to update the hero section
-router.put('/hero', heroControllers.updateHeroSection);
+router.put('/update-hero', heroControllers.updateHeroSection);
 
-router.post('/create', heroControllers.createWebsiteContent);
 
 // PUT to update the about section
-router.put('/about', heroControllers.updateAboutSection);
+router.put('/update-about', heroControllers.updateAboutSection);
+
 
 // POST to add a new program
-router.post('/programs', heroControllers.addProgram);
-
+router.post('/add-programs', heroControllers.addProgram);
 // PUT to update an existing program
-router.put('/programs/:id', heroControllers.updateProgram);
-
+router.put('/update-programs', heroControllers.updateProgram);
 // DELETE to remove a program
-router.delete('/programs/:id', heroControllers.deleteProgram);
+router.delete('/delete-program/:id', heroControllers.deleteProgram);
 
 
 // POST to add a new partner
-router.post('/partners', heroControllers.addPartner);
-
+router.post('/addPattern', heroControllers.addPartner);
 // PUT to update an existing partner
-router.put('/partners/:id', heroControllers.updatePartner);
-
+router.put('/update-partners', heroControllers.updatePartner);
 // DELETE to remove a partner
-router.delete('/partners/:id', heroControllers.deletePartner);
-
-// PUT to update the footer (text and links)
-router.put('/footer', heroControllers.updateFooter);
-
-// POST to add a new footer link
-router.post('/footer/links', heroControllers.addFooterLink);
-
+router.delete('/delete/:id', heroControllers.deletePartner);
 
 export default router;
 

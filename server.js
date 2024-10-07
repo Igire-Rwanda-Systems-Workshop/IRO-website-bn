@@ -15,9 +15,6 @@ import heroRoutes from './contentManagementSystem/routes/contentRoutes.js';
 import contentRoutes from './contentManagementSystem/routes/contentRoutes.js'
 import bodyParser from 'body-parser';
 
-// import swagger2 from './docs/swagger2.json'assert{type:
-
-
 // Initialize express app
 const app = express();
 
