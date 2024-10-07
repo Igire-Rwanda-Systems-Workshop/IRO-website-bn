@@ -14,7 +14,16 @@
         "description": "API documentation for Inventory System",
         "version": "1.0.0"
     },
-    "host": "localhost:5000",
+   "servers": [
+        {
+            "url": "http://localhost:5000",
+            "description": "Local server"
+        },
+        {
+            "url": "https://iro-website-bn.onrender.com/",
+            "description": "Production server"
+        }
+    ],
     "basePath": "",
     "schemes": [
         "http",
