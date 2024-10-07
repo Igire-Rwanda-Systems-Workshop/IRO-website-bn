@@ -19,7 +19,7 @@ import bodyParser from 'body-parser';
 const app = express();
 
 const corsOptions = {
-    origin: ['http://localhost:3000'], // Frontend URL
+    origin: ['http://localhost:3000', 'https://iro-website-bn.onrender.com'], // Frontend URL
     credentials: true, // Allow credentials like cookies
     allowedHeaders: ['Authorization', 'Content-Type'],
     methods: ['GET', 'POST', 'PUT', 'UPDATE', 'DELETE'],

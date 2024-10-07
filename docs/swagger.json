@@ -14,7 +14,7 @@
         "description": "API documentation for Inventory System",
         "version": "1.0.0"
     },
-    "host": "localhost:5000",
+    "host": "iro-website-bn.onrender.com",
     "basePath": "",
     "schemes": [
         "http",
