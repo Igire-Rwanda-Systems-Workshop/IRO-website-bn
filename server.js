@@ -21,11 +21,13 @@ import bodyParser from 'body-parser';
 // Initialize express app
 const app = express();
 
-const  corsOptions = {
-    allowedHeaders: ["Authorization", "Content-Type" ],
-    methods: ["GET", "POST", "PUT", "UPDATE", "DELETE"],
-    origin: "*",
+const corsOptions = {
+    origin: ['http://localhost:3000'], // Frontend URL
+    credentials: true, // Allow credentials like cookies
+    allowedHeaders: ['Authorization', 'Content-Type'],
+    methods: ['GET', 'POST', 'PUT', 'UPDATE', 'DELETE'],
 };
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

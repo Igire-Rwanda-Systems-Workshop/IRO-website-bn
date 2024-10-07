@@ -2,14 +2,14 @@ import mongoose from "mongoose";
 import {model, Schema} from 'mongoose';
 
 const contactSchema = new mongoose.Schema({
-    bannerData1: {
-        backgroundImage:{
-            filename: String, 
-            path: String, 
-            mimetype: String, 
-            size: Number 
-        }, 
-        },
+    // bannerData1: {
+    //     backgroundImage:{
+    //         filename: String, 
+    //         path: String, 
+    //         mimetype: String, 
+    //         size: Number 
+    //     }, 
+    //     },
         bannerData2: {
         title: {
             type: String,
