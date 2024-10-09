@@ -32,9 +32,11 @@ import contentRoutes from './contentManagementSystem/routes/contentRoutes.js';
 import bodyParser from 'body-parser';
 >>>>>>> 147558016a71395dabc08340bef758ffa075a190
 
+
 // Initialize express app
 const app = express();
 
+<<<<<<< HEAD
 // CORS Configuration
 const corsOptions = {
 <<<<<<< HEAD
@@ -53,6 +55,18 @@ const corsOptions = {
 // Middleware
 app.use(cors(corsOptions)); // Apply CORS with the configured options
 app.use(express.json());
+=======
+// const corsOptions = {
+//     origin: ['http://localhost:5000', 'https://iro-website-bn.onrender.com'], // Add your deployed URL
+//     credentials: true, // Allow credentials like cookies
+//     allowedHeaders: ['Authorization', 'Content-Type'],
+//     methods: ['GET', 'POST', 'PUT', 'UPDATE', 'DELETE'],
+// };
+
+// Middleware
+app.use(cors());
+app.use(express.json()); 
+>>>>>>> 9c5b390 (fixed swagger)
 app.use(bodyParser.json()); // To parse JSON bodies
 app.use(cookieParser()); // Enable cookie parsing
 

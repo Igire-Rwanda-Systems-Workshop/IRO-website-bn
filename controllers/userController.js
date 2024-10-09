@@ -24,19 +24,19 @@ const adminSignup = async (req, res) => {
         // Save new admin user
         await newAdmin.save();
 
-<<<<<<< HEAD
     
   
         res.status(201).json({ message: 'Signup successful' });
-=======
         // Send OTP to email
         await emailServices.sendOTP(email, otp);
 
         res.status(201).json({ message: 'Signup successful, check your email for OTP' });
->>>>>>> 147558016a71395dabc08340bef758ffa075a190
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Signup failed' });
+        res.status(500).json({ message: 'Signup failed', error: error.message });
+        console.log(error);
+        
     }
 };
 

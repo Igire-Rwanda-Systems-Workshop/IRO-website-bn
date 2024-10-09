@@ -9,23 +9,19 @@
     }
   },
   "security": [{ "Bearer": [] }],
+  
   "info": {
+    
     "title": "Inventory Management & Employee Management APIs",
     "description": "API documentation for Inventory System",
     "version": "1.0.0"
+    
   },
-  "servers": [
-    {
-      "url": "http://localhost:5000",
-      "description": "Local server"
-    },
-    {
-      "url": "https://iro-website-bn.onrender.com/",
-      "description": "Production server"
-    }
-  ],
-  "basePath": "",
+  
+  "host":"iro-website-bn.onrender.com",
+  "basePath": "/api",
   "schemes": ["http", "https"],
+  
 
   "paths": {
     "/api/Inventory/users/signup": {
@@ -40,6 +36,8 @@
             "schema": {
               "$ref": "#/definitions"
             },
+            
+            
             "required": true,
             "description": "signUp object"
           }
