@@ -20,7 +20,7 @@
             "description": "Local server"
         },
         {
-            "url": "https://iro-website-bn.onrender.com/",
+            "url": "https://iro-website-bn.onrender.com",
             "description": "Production server"
         }
     ],

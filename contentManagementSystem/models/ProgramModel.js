@@ -8,54 +8,55 @@ const ProgramPageDataSchema = new mongoose.Schema({
         required: true, 
         trim: true 
     },
-    subTitle1: { 
+    sheCanCodeProgram: { 
         type: String,
          required: true,
          trim: true 
     },
-    backgroundImage1: {
+    sheCanCodeImage: {
         filename: String, 
         path: String, 
         mimetype: String, 
         size: Number 
       },
-    paragraph1: {
+    sheCanCodeParagraph: {
         type: String, 
         required: true, 
         trim: true 
     },
-    subTitle2:{
+    sheCanCodeGallery:{
         type: String,
         required: true,
         trim: true
     },
-    backgroundImage2: {
+    GalleryImage: {
         filename: String, 
         path: String, 
         mimetype: String, 
         size: Number 
       },
-    subTitle3:{
+      AWEProgram:{
         type: String,
         required: true,
         trim: true
     },
-    paragraph2: {
+    AWEProgramImage: {
+        filename: String, 
+        path: String, 
+        mimetype: String, 
+        size: Number  
+    },
+    AWEProgramParagraph: {
         type: String, 
         required: true, 
         trim: true 
     },
-    subTitle4:{
-        type: String,
-        required: true,
-        trim: true
-    },
-    backgroundImage3: {
+    AWEGalleryImage:{
         filename: String, 
         path: String, 
         mimetype: String, 
         size: Number 
-      },
+    },
     });
 // });
 
