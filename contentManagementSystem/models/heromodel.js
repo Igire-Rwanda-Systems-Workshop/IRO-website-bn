@@ -1,94 +1,97 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const ProgramSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   image: {
     type: String,
-    required: true
+    required: true,
   },
   link: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const PartnerSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   logo: {
     type: String,
-    required: true
+    required: true,
   },
   link: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
-const WebsiteContentSchema = new mongoose.Schema({
-  hero: {
-    title: {
-      type: String,
-      required: true
-    },
-    subtitle: {
-      type: String,
-      required: true
-    },
-    buttonText: {
-      type: String,
-      required: true
-    },
-    buttonLink: {
-      type: String,
-      required: true
-    },
-    backgroundImage: {
-      type: String,
-      required: true
-    }
-  },
-  about: {
-    vision: {
+const WebsiteContentSchema = new mongoose.Schema(
+  {
+    hero: {
       title: {
         type: String,
-        required: true
+        required: true,
       },
-      description: {
+      subtitle: {
         type: String,
-        required: true
+        required: true,
       },
-      icon: {
-        type: String // Optional icon field
-      }
+      buttonText: {
+        type: String,
+        required: true,
+      },
+      buttonLink: {
+        type: String,
+        required: true,
+      },
+      backgroundImage: {
+        type: String,
+        required: true,
+      },
     },
-    mission: {
-      title: {
-        type: String,
-        required: true
+    about: {
+      vision: {
+        title: {
+          type: String,
+          required: true,
+        },
+        description: {
+          type: String,
+          required: true,
+        },
+        icon: {
+          type: String, // Optional icon field
+        },
       },
-      description: {
-        type: String,
-        required: true
+      mission: {
+        title: {
+          type: String,
+          required: true,
+        },
+        description: {
+          type: String,
+          required: true,
+        },
+        icon: {
+          type: String, // Optional icon field
+        },
       },
-      icon: {
-        type: String // Optional icon field
-      }
-    }
+    },
+    programs: [ProgramSchema],
+    partners: [PartnerSchema],
   },
-  programs: [ProgramSchema], // Using the Program schema
-  partners: [PartnerSchema], // Using the Partner schema
-}, { timestamps: true }); // Automatically creates createdAt and updatedAt fields
+  { timestamps: true }
+);
 
-const WebsiteContent = mongoose.model('WebsiteContent', WebsiteContentSchema);
+const WebsiteContent = mongoose.model("WebsiteContent", WebsiteContentSchema);
 
 export default WebsiteContent;
