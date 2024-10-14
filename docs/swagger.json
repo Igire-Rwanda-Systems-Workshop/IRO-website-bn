@@ -1565,8 +1565,464 @@
           }
         }
       }
+    },
+ 
+
+    "/api/website-content/create": {
+      "post": {
+      "tags": ["Website Content"],
+      "summary": "Create new website content",
+     "parameters": [
+    {
+      "in": "body",
+      "name": "body",
+      "schema": {
+        "$ref": "#/definitions"
+      },
+      "required": true,
+      "description": "content object"
     }
+  ]
+      },
+      "responses": {
+        "201": {
+          "description": "Content created successfully"
+        },
+        "400": {
+          "description": "Invalid request data"
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+      }
+    },     "/api/website-content/update-partners": {
+      "put": {
+        "tags": ["Website Content"],
+        "summary": "Update partners section",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PartnerList"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Partners updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "partners": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Partner"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/website-content/update-programs": {
+            "put": {
+              "tags": ["Website Content"],
+              "summary": "Update programs section",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/ProgramList"
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {
+                  "description": "Programs updated successfully",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          },
+                          "programs": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/Program"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }},
+        "/api/website-content/update-hero": {
+          "put": {
+            "tags": ["Website Content"],
+            "summary": "Update Hero Section",
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HeroSection"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "Hero section updated successfully",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/HeroSection"
+                    }
+                  }
+                }
+              },
+              "404": {
+                "description": "Content not found"
+              },
+              "500": {
+                "description": "Internal server error"
+              }
+            }
+          }
+        },
+        "api/website-content/update-about": {
+          "put": {
+            "tags": ["Website Content"],
+            "summary": "Update About Section",
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AboutSection"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "About section updated successfully"
+              },
+              "404": {
+                "description": "Content not found"
+              },
+              "500": {
+                "description": "Internal server error"
+              }
+            }
+          }
+        },
+        "/api/website-content/add-programs": {
+          "post": {
+            "tags": ["Website Content"],
+            "summary": "Add a new program",
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Program"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "201": {
+                "description": "Program added successfully"
+              },
+              "500": {
+                "description": "Internal server error"
+              }
+            }
+          }
+
+          },
+            
+        "/api/website-content/delete-program/:{id}": {
+          "delete": {
+            "tags": ["Website Content"],
+            "summary": "Delete a program",
+            "parameters": [
+              {
+                "in": "path",
+                "name": "id",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Program ID"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Program deleted successfully"
+              },
+              "404": {
+                "description": "Program not found"
+              },
+              "500": {
+                "description": "Internal server error"
+              }
+            }
+          }
+        },
+
+        "/api/website-content/addPattern": {
+          "post": {
+            "tags": ["Website Content"],
+            "summary": "Add a new partner",
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Partner"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "201": {
+                "description": "Partner added successfully"
+              },
+              "500": {
+                "description": "Internal server error"
+              }
+            }
+          }
   },
+        "/api/website-content/delete/:{id}": {
+          "delete": {
+            "tags": ["Website Content"],
+            "summary": "Delete a partner",
+            "parameters": [
+              {
+                "in": "path",
+                "name": "id",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Partner ID"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Partner deleted successfully"
+              },
+              "404": {
+                "description": "Partner not found"
+              },
+              "500": {
+                "description": "Internal server error"
+              }
+            }
+          }
+        }, 
+        "/api/website-content/getAll": {
+          "get": {
+            "tags": ["Website Content"],
+            "summary": "Get all website content",
+            "responses": {
+              "200": {
+                "description": "Successful operation",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/WebsiteContent"
+                    }
+                  }
+                }
+              },
+              "500": {
+                "description": "Internal server error"
+              }
+            }
+          }
+        },
+
+   "/api/website/ourHist_create": {
+        "post": {
+              "summary": "Create Content",
+              "tags": ["Content"],
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/contents"
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "201": {
+                  "description": "Content created successfully.",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/contents"
+                      }
+                    }
+                  }
+                },
+                "500": {
+                  "description": "Internal Server Error",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+    "/api/website/get": {
+            "get": {
+              "summary": "Get Content",
+              "tags": ["Content"],
+              "responses": {
+                "200": {
+                  "description": "Content retrieved successfully.",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/contents"
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "Content not found.",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "500": {
+                  "description": "Internal Server Error",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+    "/api/website/update/{id}": {
+            "put": {
+              "summary": "Update Content",
+              "tags": ["Content"],
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/contents"
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {
+                  "description": "Content updated successfully.",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/contents"
+                      }
+                    }
+                  }
+                },
+                "500": {
+                  "description": "Internal Server Error",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+     "/api/website/delete/{id}": {
+            "delete": {
+              "summary": "Delete Content",
+              "tags": ["Content"],
+              "responses": {
+                "200": {
+                  "description": "Content deleted successfully.",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string",
+                            "example": "Content deleted successfully."
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "Content not found.",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "500": {
+                  "description": "Internal Server Error",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        
+
   "components": {
     "securitySchemes": {
       "bearerAuth": {
@@ -1809,6 +2265,61 @@
         "email": { "type": "string", "required": false, "unique": true },
         "createdAt": { "type": "string", "format": "date", "required": false }
       },
+
+        "Program": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "image": { "type": "string" },
+            "link": { "type": "string" }
+          },
+          "required": ["title", "description", "image", "link"]
+        },
+        "Partner": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "logo": { "type": "string" },
+            "link": { "type": "string" }
+          },
+          "required": ["name", "logo", "link"]
+        },
+        
+        "WebsiteContent": {
+          "type": "object",
+          "properties": {
+            "hero": {
+              "type": "object",
+              "properties": {
+                "title": { "type": "string" },
+                "subtitle": { "type": "string" },
+                "image": { "type": "string" },
+                "buttonText": { "type": "string" }
+              },
+              "required": ["title", "subtitle", "image", "buttonText"]
+            },
+            "programs": {
+              "type": "array",
+              "items": { "$ref": "#/components/schemas/Program" }
+            },
+            "partners": {
+              "type": "array",
+              "items": { "$ref": "#/components/schemas/Partner" }
+            }
+          },
+          "required": ["hero", "programs", "partners"]
+        },
+        "Error": {
+          "type": "object",
+          "properties": {
+            "message": { "type": "string" },
+            "status": { "type": "integer" }
+          }
+        }
+      }
+    },
+  
       "required": [
         "employeeId",
         "names",
@@ -1823,5 +2334,5 @@
         "createdAt"
       ]
     }
-  }
-}
+  
+
