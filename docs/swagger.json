@@ -1,34 +1,18 @@
 {
   "swagger": "2.0",
-  "securityDefinitions": {
-    "Bearer": {
-      "type": "apiKey",
-      "name": "Authorization",
-      "in": "header",
-      "description": "Enter your bearer token in the format **Bearer <token>**"
-    }
-  },
-  "security": [{ "Bearer": [] }],
   "info": {
     "title": "Inventory Management & Employee Management APIs",
     "description": "API documentation for Inventory System",
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "http://localhost:5000",
-      "description": "Local server"
-    },
-    {
-      "url": "https://iro-website-bn.onrender.com/",
-      "description": "Production server"
-    }
-  ],
-  "basePath": "",
-  "schemes": ["http", "https"],
+  
+ "host":"iro-website-bn.onrender.com",
+ "basePath":"/api",
+ "schemes": ["http","https"],
+  
 
   "paths": {
-    "/api/Inventory/users/signup": {
+    "/Inventory/users/signup": {
       "post": {
         "summary": "Create an account",
         "description": "To make an appointment first sign up",
@@ -38,7 +22,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/User-Auth"
             },
             "required": true,
             "description": "signUp object"
@@ -62,7 +46,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/User-Auth"
             },
             "required": true,
             "description": "signIn object"
@@ -86,7 +70,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/User-Auth"
             },
             "required": true,
             "description": "verify object"
@@ -109,7 +93,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/User-Auth"
             },
             "required": true,
             "description": "forgotPassword object"
@@ -132,7 +116,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/User-Auth"
             },
             "required": true,
             "description": "verify object"
@@ -162,7 +146,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/User-Auth"
             },
             "required": true,
             "description": "Updated user object"
@@ -213,6 +197,9 @@
             "in": "formData",
             "name": "name",
             "type": "String",
+            "schema": {
+              "$ref": "#/definitions/Items"
+            },
             "required": false,
             "description": "item object"
           },
@@ -220,6 +207,9 @@
             "in": "formData",
             "name": "serial_number",
             "type": "String",
+            "schema": {
+              "$ref": "#/definitions/Items"
+            },
             "required": false,
             "description": "item object"
           },
@@ -227,6 +217,9 @@
             "in": "formData",
             "name": "category",
             "type": "String",
+            "schema": {
+              "$ref": "#/definitions/Items"
+            },
             "required": false,
             "description": "item object"
           },
@@ -234,6 +227,9 @@
             "in": "formData",
             "name": "date_of_entry",
             "type": "String",
+            "schema": {
+              "$ref": "#/definitions/Items"
+            },
             "format": "yyyy-MM-dd",
             "required": false,
             "description": "item object"
@@ -242,6 +238,9 @@
             "in": "formData",
             "name": "brand",
             "type": "String",
+            "schema": {
+              "$ref": "#/definitions/Items"
+            },
             "required": false,
             "description": "item object"
           },
@@ -249,6 +248,9 @@
             "in": "formData",
             "name": "weight",
             "type": "String",
+            "schema": {
+              "$ref": "#/definitions/Items"
+            },
             "required": false,
             "description": "item object"
           },
@@ -256,6 +258,9 @@
             "in": "formData",
             "name": "warranty_expiration_date",
             "type": "String",
+            "schema": {
+              "$ref": "#/definitions/Items"
+            },
             "format": "yyyy-MM-dd",
             "required": false,
             "description": "item object"
@@ -264,6 +269,9 @@
             "in": "formData",
             "name": "image",
             "type": "file",
+            "schema": {
+              "$ref": "#/definitions/Items"
+            },
             "description": "item object",
             "public_id": {
               "type": "String"
@@ -279,6 +287,9 @@
             "in": "formData",
             "name": "location",
             "type": "String",
+            "schema": {
+              "$ref": "#/definitions/Items"
+            },
             "required": false,
             "description": "item object"
           },
@@ -286,6 +297,9 @@
             "in": "formData",
             "name": "status",
             "type": "String",
+            "schema": {
+              "$ref": "#/definitions/Items"
+            },
             "required": false,
             "description": "item object"
           },
@@ -293,6 +307,9 @@
             "in": "formData",
             "name": "color",
             "type": "String",
+            "schema": {
+              "$ref": "#/definitions/Items"
+            },
             "required": false,
             "description": "item object"
           },
@@ -301,6 +318,9 @@
             "name": "disposal_date",
             "type": "String",
             "format": "yyyy-MM-dd",
+            "schema": {
+              "$ref": "#/definitions/Items"
+            },
             "required": false,
             "description": "item object"
           },
@@ -308,6 +328,9 @@
             "in": "formData",
             "name": "additional_specifications",
             "type": "String",
+            "schema": {
+              "$ref": "#/definitions/Items"
+            },
             "required": false,
             "description": "item object"
           }
@@ -450,7 +473,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/Items"
             },
             "required": true,
             "description": "Updated item object"
@@ -475,6 +498,9 @@
           {
             "name": "id",
             "in": "path",
+            "schema": {
+              "$ref": "#/definitions/Items"
+            },
             "description": "ID of the item to delete",
             "required": true,
             "type": "string"
@@ -500,7 +526,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/Requests"
             },
             "required": true,
             "description": "request object"
@@ -524,7 +550,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/Requests"
             },
             "required": true,
             "description": "request object"
@@ -641,7 +667,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/Requests"
             },
             "required": true,
             "description": "Updated request object"
@@ -667,6 +693,9 @@
             "name": "id",
             "in": "path",
             "description": "ID of the request to delete",
+            "schema": {
+              "$ref": "#/definitions/Requests"
+            },
             "required": true,
             "type": "string"
           }
@@ -691,7 +720,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/Approvals"
             },
             "required": true,
             "description": "approval object"
@@ -745,7 +774,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/Approvals"
             },
             "required": true,
             "description": "Updated approval object"
@@ -771,6 +800,9 @@
             "name": "id",
             "in": "path",
             "description": "ID of the approval to delete",
+            "schema": {
+              "$ref": "#/definitions/Approvals"
+            },
             "required": true,
             "type": "string"
           }
@@ -795,12 +827,18 @@
             "in": "formData",
             "name": "finance_id",
             "type": "string",
+            "schema": {
+              "$ref": "#/definitions/Payments"
+            },
             "required": true,
             "description": "payment object"
           },
           {
             "in": "formData",
             "name": "request_id",
+            "schema": {
+              "$ref": "#/definitions/Payments"
+            },
             "type": "string",
             "required": true,
             "description": "payment object"
@@ -809,6 +847,9 @@
             "in": "formData",
             "name": "amount",
             "type": "string",
+            "schema": {
+              "$ref": "#/definitions/Payments"
+            },
             "required": true,
             "description": "payment object"
           },
@@ -816,6 +857,9 @@
             "in": "formData",
             "name": "proof_of_payment",
             "type": "file",
+            "schema": {
+              "$ref": "#/definitions/Payments"
+            },
             "required": true,
             "description": "payment object"
           },
@@ -823,6 +867,9 @@
             "in": "formData",
             "name": "payment_method",
             "type": "String",
+            "schema": {
+              "$ref": "#/definitions/Payments"
+            },
             "required": false,
             "description": "payment object"
           }
@@ -896,7 +943,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/Finance"
             },
             "required": true,
             "description": "finance object"
@@ -918,7 +965,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/definitions"
+                "$ref": "#/definitions/Employee-Auth"
               }
             }
           }
@@ -929,7 +976,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions"
+                  "$ref": "#/definitions/Employee-Auth"
                 }
               }
             }
@@ -948,7 +995,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/definitions"
+                "$ref": "#/definitions/Employee-Auth"
               }
             }
           }
@@ -978,7 +1025,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/definitions"
+                "$ref": "#/definitions/Employee-Auth"
               }
             }
           }
@@ -1008,7 +1055,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/definitions"
+                "$ref": "#/definitions/Employee-Auth"
               }
             }
           }
@@ -1038,7 +1085,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/definitions"
+                "$ref": "#/definitions/Employee-Auth"
               }
             }
           }
@@ -1068,7 +1115,9 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "$ref": "#/definitions/Employee-Auth"
+
             },
             "description": "ID of the user to delete"
           }
@@ -1096,7 +1145,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/definitions"
+                "$ref": "#/definitions/Token"
               }
             }
           }
@@ -1126,7 +1175,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "$ref": "#/definitions/Token"
             },
             "description": "ID of the token to delete"
           }
@@ -1153,7 +1203,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/Employee"
             },
             "required": true,
             "description": "employee object"
@@ -1232,7 +1282,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "$ref": "#/definitions/Employee"
             },
             "description": "Employee ID"
           }
@@ -1306,7 +1357,9 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "$ref": "#/definitions/Employee"
+              
             },
             "description": "Employee ID"
           }
@@ -1334,6 +1387,9 @@
             "in": "formData",
             "name": "employeeId",
             "type": "mongoose.Schema.Types.ObjectId",
+            "schema": {
+              "$ref": "#/definitions/Leave Requests"
+            },
             "ref": "employee",
             "required": false,
             "description": "leave object"
@@ -1502,7 +1558,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/Leave Requests"
             },
             "required": true,
             "description": "Updated request object"
@@ -1527,6 +1583,9 @@
           {
             "name": "id",
             "in": "path",
+            "schema": {
+              "$ref": "#/definitions/Leave Requests"
+            },
             "description": "ID of the leave to delete",
             "required": true,
             "type": "string"
@@ -1553,7 +1612,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions"
+              "$ref": "#/definitions/Leave Requests"
             },
             "required": true,
             "description": "request object"
