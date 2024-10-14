@@ -13,11 +13,19 @@ import swaggerUi from "swagger-ui-express";
 import swagger from "./docs/swagger.json" assert { type: "json" };
 import heroRoutes from "./contentManagementSystem/routes/heroRoutes.js";
 import contentRoutes from "./contentManagementSystem/routes/contentRoutes.js";
+import jobPostRoutes from "./Jobs/routes/jobPostRoutes.js";
 import bodyParser from "body-parser";
-
 
 // Initialize express app
 const app = express();
+
+// CORS Configuration
+const corsOptions = {
+  origin: ["http://localhost:3000", "https://iro-website-bn.onrender.com"], // Add your deployed URL
+  credentials: true, // Allow credentials like cookies
+  allowedHeaders: ["Authorization", "Content-Type"],
+  methods: ["GET", "POST", "PUT", "UPDATE", "DELETE", "OPTIONS"], // Added OPTIONS for pre-flight requests
+};
 
 
 // Middleware
@@ -31,6 +39,7 @@ app.use("/api/Inventory", Router);
 app.use("/api/Employee", Router2);
 app.use("/api/website-content", heroRoutes);
 app.use("/api/website", contentRoutes);
+app.use("/api/jobs", jobPostRoutes);
 app.use("/api/website1", Router3);
 
 // Swagger Documentation
