@@ -11,7 +11,33 @@ import tokenModel from "../models/Token.js";
 let otpStorage = {};
 
 const adminSignup = async (req, res) => {
-  const { name, email, password } = req.body;
+    const { name, email, password } = req.body;
+
+    // Generate OTP and store in otpStorage
+    const otp = otpService.generateOTP();
+    otpStorage[email] = otp;
+
+    const newAdmin = new userModel({ name, email, password, role: 'admin' });
+
+    try {
+        // Save new admin user
+        await newAdmin.save();
+
+    
+  
+        res.status(201).json({ message: 'Signup successful' });
+        // Send OTP to email
+        await emailServices.sendOTP(email, otp);
+
+        res.status(201).json({ message: 'Signup successful, check your email for OTP' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Signup failed' });
+        res.status(500).json({ message: 'Signup failed', error: error.message });
+        console.log(error);
+        
+    }
+};
 
   // Generate OTP and store in otpStorage
   const otp = otpService.generateOTP();

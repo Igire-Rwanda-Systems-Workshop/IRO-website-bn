@@ -27,9 +27,10 @@ const corsOptions = {
   methods: ["GET", "POST", "PUT", "UPDATE", "DELETE", "OPTIONS"], // Added OPTIONS for pre-flight requests
 };
 
+
 // Middleware
-app.use(cors(corsOptions)); // Apply CORS with the configured options
-app.use(express.json());
+app.use(cors()); // Apply CORS with the configured options
+app.use(express.json()); 
 app.use(bodyParser.json()); // To parse JSON bodies
 app.use(cookieParser()); // Enable cookie parsing
 
@@ -46,23 +47,22 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 
 // Connect to MongoDB
 const connectDB = async () => {
-  try {
-    // Check if MONGO_URI is defined
-    if (!process.env.MONGO_URI) {
-      throw new Error("MONGO_URI environment variable is not defined");
+    try {
+        // Check if MONGO_URI is defined
+        if (!process.env.MONGO_URI) {
+            throw new Error('MONGO_URI environment variable is not defined');
+        }
+
+        // Attempt to connect to MongoDB without deprecated options
+        await mongoose.connect(process.env.MONGO_URI);
+        console.log('\x1b[32m%s\x1b[0m', 'MongoDB connected successfully');
+    } catch (error) {
+        console.error('\x1b[31m%s\x1b[0m', `MongoDB connection failed: ${error.message}`);
+        process.exit(1); // Exit with failure code
     }
 
-    // Attempt to connect to MongoDB without deprecated options
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("\x1b[32m%s\x1b[0m", "MongoDB connected successfully");
-  } catch (error) {
-    console.error(
-      "\x1b[31m%s\x1b[0m",
-      `MongoDB connection failed: ${error.message}`
-    );
-    process.exit(1); // Exit with failure code
   }
-};
+;
 
 connectDB();
 
