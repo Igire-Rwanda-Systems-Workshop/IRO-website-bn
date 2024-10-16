@@ -33,6 +33,8 @@ const jobPostSchema = new mongoose.Schema( {
     type: Date,
     required: true,
   },
+  
+  
 });
 
 const JobPost = mongoose.model("JobPost", jobPostSchema);
