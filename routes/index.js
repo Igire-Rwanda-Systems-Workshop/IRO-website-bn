@@ -7,6 +7,7 @@ import paymentRouter from './paymentRoutes.js';
 import financeRouter from './financeTransactionRoutes.js';
 import requestRouter from './request.js';
 import approvalRouter from './approval.js';
+import jobRouter from '../Jobs/routes/jobPostRoutes.js';
 
 
 Router.use('/purchases', requestRouter);

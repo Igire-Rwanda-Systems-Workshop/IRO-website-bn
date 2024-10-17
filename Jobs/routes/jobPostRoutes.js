@@ -1,5 +1,6 @@
 import express from "express";
 import jobPostControllers from "../controllers/jobPostController.js";
+import { upload } from '../../middleware/multer.js'; 
 
 const router = express.Router();
 
@@ -17,5 +18,6 @@ router.put("/update/job/:id", jobPostControllers.updateJobPost);
 
 // Delete a job post by ID
 router.delete("/delete/job/:id", jobPostControllers.deleteJobPost);
+router.post('/jobs/:id/apply', upload.single('resume'), jobPostControllers.applyToJob);
 
 export default router;
