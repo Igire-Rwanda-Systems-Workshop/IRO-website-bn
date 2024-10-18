@@ -7,12 +7,11 @@
   },
   
  "host":"iro-website-bn-vx04.onrender.com",
- "basePath":"/api",
  "schemes": ["http","https"],
   
 
   "paths": {
-    "/Inventory/users/signup": {
+    "/api/Inventory/users/signup": {
       "post": {
         "summary": "Create  admin  account",
         "description": "To make an appointment first sign up",

@@ -241,6 +241,7 @@ const userController = {
   deleteUser,
   forgotPassword,
   resetPassword,
+  getAllUsers
 };
 
 export default userController;
