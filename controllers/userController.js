@@ -98,6 +98,27 @@ const login = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    // Fetch all users from the database
+    const users = await userModel.find({});
+
+    // Check if users are found
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users found" });
+    }
+
+    // Send a success response with the list of users
+    return res.status(200).json({ message: "Users retrieved successfully", users });
+  } catch (error) {
+    console.error(error);
+
+    // Send error response
+    return res.status(500).json({ message: "Failed to retrieve users", error: error.message });
+  }
+};
+
+
 // Create User (by Admin)
 const createUser = async (req, res) => {
   const { name, email, role } = req.body;
@@ -214,6 +235,7 @@ const userController = {
   deleteUser,
   forgotPassword,
   resetPassword,
+  getAllUsers
 };
 
 export default userController;
