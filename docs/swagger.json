@@ -6,7 +6,7 @@
     "version": "1.0.0"
   },
   
- "host":"iro-website-bn.onrender.com",
+ "host":"iro-website-bn-vx04.onrender.com",
  "basePath":"/api",
  "schemes": ["http","https"],
   
@@ -1625,8 +1625,6 @@
         }
       }
     },
- 
-
     "/api/website-content/create": {
       "post": {
       "tags": ["Website Content"],
@@ -2027,7 +2025,7 @@
                   "content": {
                     "application/json": {
                       "schema": {
-                        "$ref": "#/components/schemas/Error"
+                        "$ref": "#/components/schemas/Content"
                       }
                     }
                   }
@@ -2079,8 +2077,65 @@
               }
             }
           }
-        },
-        
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   "components": {
     "securitySchemes": {
@@ -2358,59 +2413,6 @@
         "email": { "type": "string", "required": false, "unique": true },
         "createdAt": { "type": "string", "format": "date", "required": false }
       },
-
-        "Program": {
-          "type": "object",
-          "properties": {
-            "title": { "type": "string" },
-            "description": { "type": "string" },
-            "image": { "type": "string" },
-            "link": { "type": "string" }
-          },
-          "required": ["title", "description", "image", "link"]
-        },
-        "Partner": {
-          "type": "object",
-          "properties": {
-            "name": { "type": "string" },
-            "logo": { "type": "string" },
-            "link": { "type": "string" }
-          },
-          "required": ["name", "logo", "link"]
-        },
-        
-        "WebsiteContent": {
-          "type": "object",
-          "properties": {
-            "hero": {
-              "type": "object",
-              "properties": {
-                "title": { "type": "string" },
-                "subtitle": { "type": "string" },
-                "image": { "type": "string" },
-                "buttonText": { "type": "string" }
-              },
-              "required": ["title", "subtitle", "image", "buttonText"]
-            },
-            "programs": {
-              "type": "array",
-              "items": { "$ref": "#/components/schemas/Program" }
-            },
-            "partners": {
-              "type": "array",
-              "items": { "$ref": "#/components/schemas/Partner" }
-            }
-          },
-          "required": ["hero", "programs", "partners"]
-        },
-        "Error": {
-          "type": "object",
-          "properties": {
-            "message": { "type": "string" },
-            "status": { "type": "integer" }
-          }
-        }
-      },
       "required": [
         "employeeId",
         "names",
@@ -2425,4 +2427,4 @@
         "createdAt"
       ]
     }
-  
+  }

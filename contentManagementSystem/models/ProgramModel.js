@@ -3,58 +3,52 @@ import mongoose from 'mongoose';
 
 const ProgramPageDataSchema = new mongoose.Schema({
 //   bannerData: {
-    title: { 
+programs: { 
         type: String, 
         required: true, 
         trim: true 
     },
-    subTitle1: { 
+    sheCanCodeProgram: { 
         type: String,
          required: true,
          trim: true 
     },
-    backgroundImage1: {
-        filename: String, 
-        path: String, 
-        mimetype: String, 
-        size: Number 
+    image1: {
+      type: String,
+      required: true,
       },
     paragraph1: {
         type: String, 
         required: true, 
         trim: true 
     },
-    subTitle2:{
+    sheCanCodeGallery:{
         type: String,
         required: true,
         trim: true
     },
-    backgroundImage2: {
-        filename: String, 
-        path: String, 
-        mimetype: String, 
-        size: Number 
+    image2: {
+      type: String,
+      required: true,
       },
-    subTitle3:{
+    AWEPrograms:{
         type: String,
         required: true,
         trim: true
     },
+    image3: {
+      type: String,
+      required: true,
+      },
     paragraph2: {
         type: String, 
         required: true, 
         trim: true 
     },
-    subTitle4:{
-        type: String,
-        required: true,
-        trim: true
-    },
-    backgroundImage3: {
-        filename: String, 
-        path: String, 
-        mimetype: String, 
-        size: Number 
+    AWEGallery: {
+      type: String,
+      required: true,
+      trim: true 
       },
     });
 // });
