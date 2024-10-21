@@ -2102,6 +2102,8 @@
           }
   },
 
+
+
   "components": {
     "securitySchemes": {
       "bearerAuth": {
@@ -2293,15 +2295,16 @@
     "Requests": {
       "type": "object",
       "properties": {
-        "requestedBy": {
+        "item_name":{
+          "type": "string",
+          "required": true
+
+        },
+        "item_description": {
           "type": "string",
           "required": true
         },
-        "itemDescription": {
-          "type": "string",
-          "required": true
-        },
-        "itemCategory": {
+        "item_category": {
           "type": "string",
           "required": true
         },
@@ -2309,42 +2312,30 @@
           "type": "number",
           "required": true
         },
-        "unitPrice": {
+        "unit_price": {
           "type": "number",
           "required": true
         },
-        "totalPrice": {
-          "type": "number",
-          "required": true
-        },
-        "status": {
+        "product_status": {
           "type": "string",
           "required": true
         },
-        "requestDate": {
+        "requested_date": {
           "type": "string",
           "format": "date",
-          "required": false
-        },
-        "approvedBy": {
-          "type": "string",
-          "required": true
-        },
-        "comments": {
-          "type": "string",
           "required": true
         }
+
+       
       },
       "required": [
-        "requestedBy",
-        "itemDescription",
-        "itemCategory",
+        "item_name",
+        "item_description",
+        "item_category",
+        "product_status",
         "quantity",
-        "unitPrice",
-        "totalPrice",
-        "status",
-        "approvedBy",
-        "comments"
+        "unit_price"
+        
       ]
     },
     "Finance": {

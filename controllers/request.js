@@ -6,14 +6,30 @@ import asyncWrapper from "../middleware/async.js";
 import sendEmail from "../utils/sendEmail.js";
 import nodemailer from 'nodemailer';
 
-const createRequest = asyncWrapper(async(req, res, next)=>{
+const createRequest = asyncWrapper(async (req, res, next) => {
+    // Validate request body
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return next(new BadRequestError(errors.array()[0].msg));
+    if (!errors.isEmpty()) {
+        return next(new BadRequestError(errors.array()[0].msg)); // Send the first validation error message
     }
-    const newRequest = await requestModel.create(req.body);
-    return res.status(201).json(newRequest);
+    const { quantity, unit_price } = req.body;
+    const total_price = quantity * unit_price;
+
+    
+
+    // Create the request with requestModel
+    const newRequest = await requestModel.create({
+        ...req.body,
+         total_price,
+    });
+
+    // Send response
+    return res.status(201).json({
+        message:"Request successfully created",
+        data: newRequest
+    });
 });
+
 
 const getAllRequests = asyncWrapper(async(req, res, next)=>{
     const requests = await requestModel.find({})
