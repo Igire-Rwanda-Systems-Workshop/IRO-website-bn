@@ -2114,6 +2114,40 @@
       },
       "required": ["name", "email", "password", "role"]
     },
+    "Content":{
+      "type":{
+       "ourStory": {
+          "title": "String",
+          "description":" String",
+          "backgroundImage": "String" 
+        },
+        "responsibilities": [
+          {
+            "title": "String",
+            "content": "String"
+          }
+        ],
+        "vision": {
+          "title": "String",    
+          "content": "String",  
+          "icon": "String"      
+        },
+        "mission":"String",
+          "title": "String",   
+          "content": "String", 
+          "icon": "String"    
+        },
+        "founders": [
+          {
+            "name": "String",
+            "role": "String",
+            "image": "String "
+          }
+        ]
+        }
+
+      },
+
     "Items": {
       "type": "object",
       "properties": {
@@ -2376,9 +2410,7 @@
             "status": { "type": "integer" }
           }
         }
-      }
-    },
-  
+      },
       "required": [
         "employeeId",
         "names",
@@ -2393,5 +2425,4 @@
         "createdAt"
       ]
     }
-  }
-}
+  

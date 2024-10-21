@@ -39,28 +39,6 @@ const adminSignup = async (req, res) => {
     }
 };
 
-  // Generate OTP and store in otpStorage
-  const otp = otpService.generateOTP();
-  otpStorage[email] = otp;
-
-  const newAdmin = new userModel({ name, email, password, role: "admin" });
-
-  try {
-    // Save new admin user
-    await newAdmin.save();
-
-    // Send OTP to email
-    await emailServices.sendOTP(email, otp);
-
-    res
-      .status(201)
-      .json({ message: "Signup successful, check your email for OTP" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Signup failed" });
-  }
-};
-
 const verifyOTP = async (req, res) => {
   const { email, otp } = req.body;
   const storedOTP = otpStorage[email];
