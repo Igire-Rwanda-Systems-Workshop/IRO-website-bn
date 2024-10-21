@@ -14,7 +14,7 @@
   "paths": {
     "/Inventory/users/signup": {
       "post": {
-        "summary": "Create an account",
+        "summary": "Create  admin  account",
         "description": "To make an appointment first sign up",
         "tags": ["User-Auth"],
         "parameters": [
@@ -33,6 +33,30 @@
             "description": " user created"
           }
         }
+      }
+    },
+    "/api/Inventory/users/create-user":{
+      "post":{
+        "summary": "Create a  regular users",
+        "description": "To make an appointment first sign up",
+        "tags":["User-Auth"],
+        "parameters": [
+          { 
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/create regular users"
+            },
+            "required": true,
+            "description": "user object"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": " user created"
+          }
+        }
+
       }
     },
 
@@ -2079,64 +2103,6 @@
           }
   },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   "components": {
     "securitySchemes": {
       "bearerAuth": {
@@ -2169,6 +2135,59 @@
       },
       "required": ["name", "email", "password", "role"]
     },
+    "create regular users": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "email": {
+          "type": "string",
+          "required": true
+        },
+        "role": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "required": ["name", "email","role"]
+    },
+
+    "Content":{
+      "type":{
+       "ourStory": {
+          "title": "String",
+          "description":" String",
+          "backgroundImage": "String" 
+        },
+        "responsibilities": [
+          {
+            "title": "String",
+            "content": "String"
+          }
+        ],
+        "vision": {
+          "title": "String",    
+          "content": "String",  
+          "icon": "String"      
+        },
+        "mission":"String",
+          "title": "String",   
+          "content": "String", 
+          "icon": "String"    
+        },
+        "founders": [
+          {
+            "name": "String",
+            "role": "String",
+            "image": "String "
+          }
+        ]
+        }
+
+      },
+
     "Items": {
       "type": "object",
       "properties": {
@@ -2394,4 +2413,3 @@
       ]
     }
   }
-}

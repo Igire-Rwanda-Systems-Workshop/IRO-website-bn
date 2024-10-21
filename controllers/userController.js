@@ -7,108 +7,135 @@ import sendEmail from "../utils/emailUtils.js";
 import otpService from "../utils/otpService.js";
 import userModel from "../models/userModel.js";
 import tokenModel from "../models/Token.js";
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 let otpStorage = {};
 
 const adminSignup = async (req, res) => {
   const { name, email, password } = req.body;
 
-  // Generate OTP and store in otpStorage
+  // Generate OTP
   const otp = otpService.generateOTP();
-  otpStorage[email] = otp;
+
+  // Store OTP in otpStorage
+  otpStorage[email] = { otp, otpExpiry: Date.now() + 10 * 60 * 1000 }; // OTP valid for 10 minutes
+
+  console.log("Generated OTP:", otp); // For debugging
+  console.log("OTP Storage after signup:", otpStorage); // For debugging
+
+  const newAdmin = new userModel({ name, email, password, role: 'admin' });
 
   try {
-    // Check if the email already exists in the database
-    const existingUser = await userModel.findOne({ email });
-    if (existingUser) {
-      // If user already exists, send an error response
-      return res.status(409).json({ message: 'Email already exists' }); // 409 Conflict
-    }
+      // Save the new admin user
+      await newAdmin.save();
 
-    // Create a new admin user
-    const newAdmin = new userModel({ name, email, password, role: 'admin' });
+      // Send OTP to email
+      await emailServices.sendOTP(email, otp);
 
-    // Save the new admin user to the database
-    await newAdmin.save();
-
-    // Send OTP to email
-    await emailServices.sendOTP(email, otp);
-
-    // Send success response
-    return res.status(201).json({ message: 'Signup successful, check your email for OTP' });
+      res.status(201).json({ message: 'Signup successful, check your email for OTP' });
   } catch (error) {
-    console.error(error);
-
-    // Send error response
-    return res.status(500).json({ message: 'Signup failed', error: error.message });
+      console.error(error);
+      res.status(500).json({ message: 'Signup failed' });
   }
 };
 
+//  verify otp for all users admin and regular users
 
 const verifyOTP = async (req, res) => {
   const { email, otp } = req.body;
-  const storedOTP = otpStorage[email];
+  const storedOTPData = otpStorage[email];
+
+  if (!storedOTPData) {
+      return res.status(400).json({ message: "OTP not found" });
+  }
+
+  const { otp: storedOTP, otpExpiry } = storedOTPData;
+
+  if (Date.now() > otpExpiry) {
+      return res.status(400).json({ message: "OTP expired" });
+  }
 
   if (otpService.verifyOTP(otp, storedOTP)) {
-    await userModel.findOneAndUpdate({ email }, { isVerified: true });
-    delete otpStorage[email];
-    res.json({ message: "Account verified successfully" });
+      // Mark the user as verified
+      await userModel.findOneAndUpdate({ email }, { isVerified: true });
+      delete otpStorage[email];
+      res.json({ message: "Account verified successfully" });
   } else {
-    res.status(400).json({ message: "Invalid OTP" });
+      res.status(400).json({ message: "Invalid OTP" });
   }
 };
+
 
 const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await userModel.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
+      const user = await userModel.findOne({ email });
+      if (!user) {
+          return res.status(400).json({ message: "Invalid email or password" });
+      }
 
-    const isPasswordCorrect = await user.comparePassword(password);
-    if (!isPasswordCorrect) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
+      const isPasswordCorrect = await user.comparePassword(password);
+      if (!isPasswordCorrect) {
+          return res.status(400).json({ message: "Invalid email or password" });
+      }
 
-    if (user.role === "admin" && !user.isVerified) {
-      return res
-        .status(403)
-        .json({ message: "Admin must verify the account before login" });
-    }
+      if (!user.isVerified) {
+          return res.status(403).json({ message: "Please verify your account before logging in" });
+      }
 
-    const token = jwt.sign(
-      { id: user._id, role: user.role, name: user.name },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
+      const token = jwt.sign(
+          { id: user._id, role: user.role, name: user.name },
+          process.env.JWT_SECRET,
+          { expiresIn: "1d" }
+      );
 
-    const expirationDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
-    const newToken = new tokenModel({ token, user: user._id, expirationDate });
-    await newToken.save();
+      const expirationDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      const newToken = new tokenModel({ token, user: user._id, expirationDate });
+      await newToken.save();
 
-    return res
-      .status(200)
-      .json({ message: "Login successful", token, role: user.role });
+      return res.status(200).json({ message: "Login successful", token, role: user.role });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Login failed" });
+      console.error(error);
+      return res.status(500).json({ message: "Login failed" });
   }
 };
 
+
 // Create User (by Admin)
-const createUser = async (req, res) => {
+const userSignup = async (req, res) => {
   const { name, email, role } = req.body;
-  const password = Math.random().toString(36).slice(-8); // Generate random password
 
-  const newUser = new userModel({ name, email, password, role });
-  await newUser.save();
+  // Generate OTP and random password
+  const otp = otpService.generateOTP();
+  const randomPassword = Math.random().toString(36).slice(-8); // Generate random password
 
-  await emailServices.sendCredentials(email, password, role);
-  res.status(201).json({ message: "User created and credentials sent" });
+  // Store OTP in otpStorage
+  otpStorage[email] = { otp, otpExpiry: Date.now() + 10 * 60 * 1000 }; // OTP valid for 10 minutes
+
+  console.log("Generated OTP:", otp); // For debugging
+  console.log("OTP Storage after signup:", otpStorage); // For debugging
+
+  const newUser = new userModel({ name, email, password: randomPassword, role, isVerified: false });
+
+  try {
+      // Save the new user
+      await newUser.save();
+
+      // Send OTP and random password to email
+    await emailServices.sendOTP( email, otp ); // Sends OTP
+      // Send email with OTP and credentials
+      await emailServices.sendCredentials(email, randomPassword, role,otp); 
+
+    res.status( 201 ).json( {
+      message: 'Signup successful, check your email for OTP and password' ,
+      data: newUser  
+      });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Signup failed' });
+  }
 };
+
 
 // Update User (by Admin)
 const updateUser = async (req, res) => {
@@ -209,7 +236,7 @@ const userController = {
   adminSignup,
   verifyOTP,
   login,
-  createUser,
+  userSignup,
   updateUser,
   deleteUser,
   forgotPassword,
