@@ -163,7 +163,15 @@ const deleteUser = async (req, res) => {
 
   res.json({ message: "User deleted successfully" });
 };
+
+// get all users
 const getAllUsers = async (req, res) => {
+
+  const users = await userModel.find({});
+  res.json({
+    
+    data:users
+  });
 };
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
@@ -244,7 +252,8 @@ const userController = {
   deleteUser,
   forgotPassword,
   resetPassword,
-  getAllUsers
+  getAllUsers,
+  
 };
 
 export default userController;

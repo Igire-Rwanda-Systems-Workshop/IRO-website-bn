@@ -100,9 +100,6 @@ const applyToJob = async (req, res) => {
   }
 };
 
-
-
-
 const jobPostControllers = {
   createJobPost,
   getAllJobPosts,
