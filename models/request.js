@@ -23,10 +23,6 @@ const requestSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    total_price: {
-        type: Number,
-        required: true
-    },
     product_status: {
         type: String,
         required: true,
@@ -44,6 +40,19 @@ const requestSchema = new mongoose.Schema({
   date_requested: {
         type: Date,
         default: Date.now
+    }
+});
+
+requestSchema.pre('save', function (next) {
+    if (this.quantity && this.unit_price) {
+        this.total_price = this.quantity * this.unit_price;
+    }
+    next();
+});
+requestSchema.set('toJSON', {
+    transform: function (doc, ret) {
+        ret.total_price = doc.total_price; 
+        return ret;
     }
 });
 const requestModel = mongoose.model('request', requestSchema);

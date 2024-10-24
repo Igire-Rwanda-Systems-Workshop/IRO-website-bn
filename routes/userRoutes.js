@@ -6,6 +6,7 @@ const  userRouter = express.Router();
 userRouter.post('/signup', userController.adminSignup,
 );
 userRouter.post('/verify-otp', userController.verifyOTP);
+userRouter.get('/allUsers', userController.getAllUsers)
 
 // Login for both admin and users
 userRouter.post('/login', userController.login);
