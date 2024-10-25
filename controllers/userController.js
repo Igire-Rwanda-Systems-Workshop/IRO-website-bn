@@ -129,11 +129,11 @@ const userSignup = async (req, res) => {
       await emailServices.sendCredentials(email, randomPassword, role,otp); 
 
     res.status( 201 ).json( {
-      message: 'Signup successful, check your email for OTP and password' ,
+      message: 'User created successfully, check your email for OTP and password' ,
       data: newUser  
       });
   } catch (error) {
-      console.error(error);
+      console.log(error);
       res.status(500).json({ message: 'Signup failed' });
   }
 };
