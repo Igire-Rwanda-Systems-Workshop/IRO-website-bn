@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 const sendOTP = (email, otp) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: "angeiracyadukunda@gmail.com", // Use the recipient's email
+    to: "igirerwandaorganization1@gmail.com", // Use the recipient's email
     subject: 'Verify Your Account',
     text: `Your OTP for verification is: ${otp}. Please enter this OTP to verify your account.`,
   };
@@ -32,7 +32,7 @@ const sendCredentials = async ( email, password, role, otp ) =>
   
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: "angeiracyadukunda@gmail.com", 
+    to: "igirerwandaorganization1@gmail.com", 
     subject: 'Your Login Credentials and OTP for Verification',
     text: `You have been assigned the role of ${role}. Your login password is: ${password}. To verify your account, use the following OTP: ${otp}.`,
   };
@@ -50,7 +50,7 @@ const sendCredentials = async ( email, password, role, otp ) =>
 const sendResetToken = (email, token) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: "angeiracyadukunda@gmail.com", 
+    to: "igirerwandaorganization1@gmail.com", 
     subject: 'Password Reset Request',
     text: `Here is your password reset token: ${token}. Please use this token to reset your password.`,
   };

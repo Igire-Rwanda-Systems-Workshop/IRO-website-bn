@@ -6,8 +6,8 @@
     "version": "1.0.0"
   },
   
- "host":"iro-website-bn-vx04.onrender.com",
- "schemes": ["http","https"],
+ "host":"https://iro-website-bn-5wyx.onrender.com",
+ "schemes": ["https"],
   
 
   "paths": {
