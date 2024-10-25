@@ -39,6 +39,7 @@ const createItem = asyncWrapper(async(req, res, next) =>{
         await newImage.save();
         res.status(201).json(newImage);
     } catch (error){
+        console.log(error)
         res.status(500).json({message: 'failed to add image'});
     }
 });
