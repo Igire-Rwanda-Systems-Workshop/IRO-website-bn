@@ -1,0 +1,13 @@
+output:
+{
+  dayofweek: 1
+  borrowed: 3,
+  stolen: 4,
+  damaged: 5,
+  available: 6,
+
+}
+
+input
+year:2024
+month:10
