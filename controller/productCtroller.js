@@ -226,6 +226,7 @@ export default class ProductController {
             },
             // Only consider damaged and stolen statuses
             status: { $in: ['stolen', 'damaged'] }
+            
           }
         },
         {
