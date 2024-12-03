@@ -168,31 +168,37 @@ const sendRequest = async (req, res) => {
  * @returns
  */
 const confirmRequest = async (req, res) => {
-  try {
+  try
+  {
     const { id } = req.params;
 
-    const leaveRequest = await Leave.findOne({ _id: id }).populate({
+    const leaveRequest = await Leave.findOne( { _id: id } ).populate( {
       path: "userId",
-      select: "lastName email",});
-    if (!leaveRequest) {
-      return res.status(404).json({ message: "No request found" });
+      select: "lastName email",
+    } );
+    if ( !leaveRequest )
+    {
+      return res.status( 404 ).json( { message: "No request found" } );
     }
-    if(leaveRequest.status === "Denied"){
-      return res.send({message:"Already Denied"})
+    if ( leaveRequest.status === "Denied" )
+    {
+      return res.send( { message: "Already Denied" } )
     }
 
     // Extract token from headersuserId
-    const token = req.headers.authorization.split(" ")[1];
-    const decoded = await Token.decodeToken(token);
+    const token = req.headers.authorization.split( " " )[ 1 ];
+    const decoded = await Token.decodeToken( token );
 
     if(decoded.role === "Employee"){
       return res.send({message:"You're not allowed to confirm request"})
     }
 
-    decoded.role === "Admin"
+   
+    decoded.role === "Supervisor"
       ? leaveRequest.hrStatus = "Approved"
       : leaveRequest.supervisorStatus === "Approved";
-    decoded.role === "Supervisor"
+    
+      decoded.role === "Admin"
       ? leaveRequest.hrStatus = "Approved"
       : leaveRequest.supervisorStatus === "Approved";
 
