@@ -1,23 +1,12 @@
-import { Schema, model } from "mongoose";
+import { Schema,model } from "mongoose";
 
-const LeaveTypeSchema = new Schema(
-  {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    leaveType: {
-      type: String,
-      unique: true,
-    },
-    description: {
-      type: String,
-    },
-  },
-  { timestamps: true }
-);
 
-const LeaveType = model("LeaveType", LeaveTypeSchema);
+const leaveTypeSchema = Schema({
+    leaveType:{type:String, required: true},
+    description:{type:String, required: true},
+})
 
-export default LeaveType;
+
+const LeaveType = model("LeaveType", leaveTypeSchema)
+
+export default LeaveType

@@ -1,5 +1,5 @@
 import LeaveType from "../../schemas/leaveType.js";
-import { v4 as uuidv4 } from "uuid"; 
+
 
 /**
  * Function to add New Leave type
@@ -10,57 +10,22 @@ import { v4 as uuidv4 } from "uuid";
 
 
 const addLeaveType = async (req, res) => {
-  try {
-    const { id } = req.body;
 
-    // Validate inputs
-    if (!id) {
-      return res.status(400).json({
-        message: "Leave type and description are required",
-        status: "Fail",
-      });
-    }
+  try{
+      const {leaveType, description} = req.body
+      const insertLeaveType = await LeaveType.create({leaveType, description})
 
-    // Generate or use provided ID
-    const uniqueId = id || uuidv4();
+      // if(!insertLeaveType){
+      //     return res.status(300).json({message:"Leave Type not added"})
+      // }
+      return res.status(200).json({message:"leave type added success", status:"Success"})
 
-    // Check for duplicate leave type or ID
-    const existingLeaveType = await LeaveType.findOne({
-      $or: [ { id: uniqueId }],
-    });
-    if (existingLeaveType) {
-      return res.status(400).json({
-        message: "Leave type or ID already exists",
-        status: "Fail",
-      });
-    }
-
-    // Insert new leave type
-    const insertLeaveType = await LeaveType.create({
-      id: uniqueId,
-    });
-
-    return res.status(201).json({
-      message: "Leave type added successfully",
-      status: "Success",
-      data: insertLeaveType,
-    });
-
-  } catch (error) {
-    if (error.code === 11000) {
-      // Handle MongoDB duplicate key error
-      return res.status(400).json({
-        message: "Leave type or ID already exists",
-        status: "Fail",
-      });
-    }
-
-    return res.status(500).json({
-      message: "Internal server error",
-      error: error.message,
-    });
+  }catch(error){
+      return res.status(500).json({messae:"Internal server error", error:error.message})
   }
-};
+
+}
+
 
   
   

@@ -14,6 +14,6 @@ const leaveSchema = Schema({
     supervisorStatus: {type:String, default:"Pending" }
 })
 
-const Leave = model("Leave", leaveSchema)
+const Leave = model("LeaveRequests", leaveSchema)
 
 export default Leave

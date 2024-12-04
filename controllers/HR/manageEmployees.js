@@ -44,16 +44,16 @@ const updateEmployee = async (req, res) => {
  */
 const deleteEmployee = async (req, res) => {
   try {
-    const { id } = req.params;
-    const userToDelete = await Users.delete({ _id: id });
+    const { id } = req.params; // Accessing ID from path params
+    const userToDelete = await Users.findByIdAndDelete(id); // Using `id` directly
+
     if (!userToDelete) {
-      return res.status({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" }); // Corrected status code and response
     }
-    return res.status({ message: "User deleted" });
+
+    return res.status(200).json({ message: "User deleted" }); // Corrected status code and response
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Internal server error", error: error.message });
+    return res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
 
