@@ -189,75 +189,246 @@ const categoryPaths = {
         },
       },
      },
-     '/api/Inventory/category/update/{id}':
-     {
-       put: {
-       summary: 'Update Category',
-       tags: ['Categories'],
-       description: 'This endpoint updates an existing category.',
-       parameters: [
-         {
-           name: 'id',
-           in: 'path',
-           required: true,
-           description: 'ID of the category',
-           schema: { type: 'string' },
-         },
-       ],
-       requestBody: {
-         required: true,
-         content: {
-           'application/json': {
-             schema: {
-               type: 'object',
-               properties: {
-                 name: { type: 'string' },
-                 description: { type: 'string' },
-               },
-               required: ['name', 'description'],
-             },
-           },
-         },
-       },
-       responses: {
-         '200': {
-           description: 'Category updated successfully',
-           content: {
-             'application/json': {
-               schema: {
-                 type: 'object',
-                 properties: {
-                   message: { type: 'string' },
-                   category: {
-                     type: 'object',
-                     properties: {
-                       id: { type: 'string' },
-                       name: { type: 'string' },
-                       description: { type: 'string' },
-                     },
-                   },
-                 },
-               },
-             },
-           },
-         },
-         '404': {
-           description: 'Category not found',
-           content: {
-             'application/json': {
-               schema: {
-                 type: 'object',
-                 properties: {
-                   message: { type: 'string' },
-                 },
-               },
-             },
-           },
-         },
-       },
-     },
+     '/api/Inventory/category/update/{id}':{
+     "put": {
+      "summary": "Update a category",
+      "description": "Updates the name of a category by its ID.",
+      "tags": ["Categories"],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "The ID of the category to update",
+          "schema": {
+            "type": "string",
+            "example": "60d21b4667d0d8992e610c85"
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "categoryName": {
+                  "type": "string",
+                  "description": "The new name for the category",
+                  "example": "Updated Category Name"
+                }
+              },
+              "required": ["categoryName"]
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Category updated successfully",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "Category updated successfully"
+                  },
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "60d21b4667d0d8992e610c85"
+                      },
+                      "categoryName": {
+                        "type": "string",
+                        "example": "Updated Category Name"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-12-03T10:00:00Z"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-12-03T10:30:00Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "Category name is required and cannot be empty."
+                  },
+                  "errors": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "Validation Error Message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Category not found",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "Category not found."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Duplicate category name",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "A category with this name already exists."
+                  },
+                  "duplicateField": {
+                    "type": "string",
+                    "example": "categoryName"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "Internal server error"
+                  },
+                  "error": {
+                    "type": "string",
+                    "example": "Detailed error message"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
    
    },
+
+   "/api/Inventory/category/product-count": {
+      "get": {
+        "summary": "Get product count by category",
+        "description": "Retrieves the count of products in each category.",
+        "tags": ["Categories"],
+        "responses": {
+          "200": {
+            "description": "Product counts retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Product counts retrieved successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "categoryName": {
+                            "type": "string",
+                            "example": "Electronics"
+                          },
+                          "productCount": {
+                            "type": "integer",
+                            "example": 10
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No categories found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No categories found"
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Error fetching product counts"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
 };
 
 export default categoryPaths;

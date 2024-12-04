@@ -1023,6 +1023,8 @@ const productPaths = {
     },
   },
 
+  
+
 
   
   "/api/Inventory/product/product-status": {

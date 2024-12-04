@@ -7,7 +7,7 @@ import Router from './routes/index.js';
 import mongoose from 'mongoose';
 import swaggerUi from 'swagger-ui-express';
 import bodyParser from 'body-parser';
-import specs from './docs/swagger.js'; 
+import specs from './Docs/swagger.js'; 
 
 // Initialize express app
 const app = express();

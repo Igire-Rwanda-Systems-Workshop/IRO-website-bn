@@ -204,7 +204,7 @@ export default class ProductController {
       res.status(500).json({ message: 'Failed to update product', error: error.message });
     }
   };
-  
+ 
   
   getProductStatusByMonth = async (req, res) => {
     try {
@@ -313,7 +313,6 @@ export default class ProductController {
 
   updateProductStatusCondition = async (req, res) => {
     try {
-      console.log("jkkjkjre", req.params);
       
       // Check if user is an Operations Manager
       const { role: userRole } = req.user;
