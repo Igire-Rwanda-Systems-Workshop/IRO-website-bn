@@ -1,0 +1,33 @@
+{
+    "name": "leave-request-inventory-System-bn",
+    "version": "1.0.0",
+    "description": "igire org's employees leave request & inventory backend project",
+    "main": "server.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon server.js",
+        "build": "webpack --config webpack.dev.js --mode development"
+    },
+    "author": "Igire",
+    "license": "ISC",
+    "devDependencies": {
+        "bcrypt": "^5.1.1",
+        "bcryptjs": "^2.4.3",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5",
+        "ejs": "^3.1.10",
+        "express": "^4.21.1",
+        "express-validator": "^7.1.0",
+        "jsonwebtoken": "^9.0.2",
+        "moment": "^2.30.1",
+        "mongoose": "^8.8.2",
+        "nodemailer": "^6.9.16",
+        "nodemon": "^3.1.7"
+    },
+    "dependencies": {
+        "swagger-ui-express": "^5.0.1",
+        "uuid": "^11.0.3"
+    }
+}

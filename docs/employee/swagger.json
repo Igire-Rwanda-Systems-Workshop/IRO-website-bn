@@ -1,0 +1,946 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Leave Management API",
+    "description": "API documentation for managing users, leave types, and roles in the Leave Management System."
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/users/register": {
+      "post": {
+        "summary": "Register a new user",
+        "description": "Registers a new user with provided details.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "supervisorId": {
+                  "type": "string"
+                },
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "position": {
+                  "type": "string"
+                },
+                "gender": {
+                  "type": "string"
+                },
+                "telephone": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "required": ["firstName", "lastName", "email", "password"]
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "User registered successfully"
+          },
+          "400": {
+            "description": "User already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "Login user",
+        "description": "Authenticates a user and returns a token upon successful login.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "credentials",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "required": ["email", "password"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login successful"
+          },
+          "404": {
+            "description": "Invalid username"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/{id}/make-admin": {
+      "patch": {
+        "summary": "Make user an admin",
+        "description": "Assigns admin role to a user.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User successfully made an admin"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/leave-types": {
+      "post": {
+        "summary": "Add a new leave type",
+        "description": "Creates a new leave type.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "leaveType",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": ["id"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Leave type added successfully"
+          },
+          "400": {
+            "description": "Leave type or ID already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all leave types",
+        "description": "Fetches all leave types.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/LeaveType"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/leave-types/{id}": {
+      "get": {
+        "summary": "Get leave type by ID",
+        "description": "Fetches details of a specific leave type.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Leave type ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Leave type found"
+          },
+          "404": {
+            "description": "Leave type not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update leave type",
+        "description": "Updates details of a leave type.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Leave type ID"
+          },
+          {
+            "in": "body",
+            "name": "leaveType",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "leaveType": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Leave type updated successfully"
+          },
+          "404": {
+            "description": "Leave type not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete leave type",
+        "description": "Deletes a leave type.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Leave type ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Leave type deleted successfully"
+          },
+          "404": {
+            "description": "Leave type not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/employees/{id}": {
+      "put": {
+        "summary": "Update Employee",
+        "description": "Updates the details of an employee.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the employee to update.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "name": "employee",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "supervisorId": {
+                  "type": "string"
+                },
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "position": {
+                  "type": "string"
+                },
+                "gender": {
+                  "type": "string"
+                },
+                "telephone": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employee successfully updated."
+          },
+          "300": {
+            "description": "Employee not updated."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+      },
+
+      "/delete": {
+        "delete": {
+        "summary": "Delete Employee",
+        "description": "Deletes an employee by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the employee to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted."
+          },
+          "404": {
+            "description": "User not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+
+    "/hr/{hrId}": {
+      "put": {
+        "summary": "Update HR",
+        "description": "Updates the details of an HR resource.",
+        "parameters": [
+          {
+            "name": "hrId",
+            "in": "path",
+            "description": "ID of the HR resource to update.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "name": "hr",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "position": {
+                  "type": "string"
+                },
+                "gender": {
+                  "type": "string"
+                },
+                "telephone": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "HR updated."
+          },
+          "400": {
+            "description": "Invalid data."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/forgot-password": {
+      "post": {
+        "summary": "Send password reset link",
+        "description": "Sends a password reset link to the user's email address.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "email",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "user@example.com"
+                }
+              },
+              "required": ["email"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password reset link sent successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Password reset link was sent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, email parameter missing"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/reset-password/{token}": {
+      "put": {
+        "summary": "Update password",
+        "description": "Updates the user's password after validating the reset token.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "type": "string",
+            "description": "Password reset token"
+          },
+          {
+            "in": "body",
+            "name": "password",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string",
+                  "example": "newpassword123"
+                }
+              },
+              "required": ["password"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password updated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Password updated successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, token or password missing"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    
+"/leave/view-all": {
+          "get": {
+            "summary": "View all leave requests",
+            "operationId": "viewAllRequest",
+            "tags": ["Leave Requests"],
+            "responses": {
+              "200": {
+                "description": "Successfully retrieved leave requests",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Success"
+                        },
+                        "leaveRequests": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "userId": {
+                                "type": "object",
+                                "properties": {
+                                  "firstName": { "type": "string" },
+                                  "lastName": { "type": "string" },
+                                  "email": { "type": "string" }
+                                }
+                              },
+                              "description": { "type": "string" },
+                              "startDate": { "type": "string", "format": "date" },
+                              "endDate": { "type": "string", "format": "date" },
+                              "status": { "type": "string" }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "500": {
+                "description": "Internal server error",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string" },
+                        "error": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/leave/send-request": {
+          "post": {
+            "summary": "Submit a leave request",
+            "operationId": "sendRequest",
+            "tags": ["Leave Requests"],
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "leaveTypeId": { "type": "string" },
+                      "description": { "type": "string" },
+                      "startDate": { "type": "string", "format": "date" },
+                      "endDate": { "type": "string", "format": "date" }
+                    },
+                    "required": ["leaveTypeId", "description", "startDate", "endDate"]
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "Successfully submitted leave request",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string", "example": "Request sent successfully" },
+                        "leave": {
+                          "type": "object",
+                          "properties": {
+                            "userId": { "type": "string" },
+                            "supervisorId": { "type": "string" },
+                            "leaveTypeId": { "type": "string" },
+                            "description": { "type": "string" },
+                            "startDate": { "type": "string", "format": "date" },
+                            "endDate": { "type": "string", "format": "date" },
+                            "numberOfDays": { "type": "integer" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "400": {
+                "description": "Bad Request",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string", "example": "Fill all fields in the form" }
+                      }
+                    }
+                  }
+                }
+              },
+              "500": {
+                "description": "Internal server error",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string" },
+                        "error": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/leave/confirm/{id}": {
+          "put": {
+            "summary": "Approve a leave request",
+            "operationId": "confirmRequest",
+            "tags": ["Leave Requests"],
+            "parameters": [
+              {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Successfully approved leave request",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string", "example": "Leave request Approved" },
+                        "leaveRequest": {
+                          "type": "object",
+                          "properties": {
+                            "userId": { "type": "string" },
+                            "supervisorId": { "type": "string" },
+                            "leaveTypeId": { "type": "string" },
+                            "description": { "type": "string" },
+                            "startDate": { "type": "string", "format": "date" },
+                            "endDate": { "type": "string", "format": "date" },
+                            "status": { "type": "string", "example": "Approved" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "404": {
+                "description": "Leave request not found",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string", "example": "No request found" }
+                      }
+                    }
+                  }
+                }
+              },
+              "500": {
+                "description": "Internal server error",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string" },
+                        "error": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/leave/deny/{id}": {
+          "put": {
+            "summary": "Reject a leave request",
+            "operationId": "denyRequest",
+            "tags": ["Leave Requests"],
+            "parameters": [
+              {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Successfully rejected leave request",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string", "example": "Leave request Rejected" },
+                        "leaveRequest": {
+                          "type": "object",
+                          "properties": {
+                            "userId": { "type": "string" },
+                            "supervisorId": { "type": "string" },
+                            "leaveTypeId": { "type": "string" },
+                            "description": { "type": "string" },
+                            "startDate": { "type": "string", "format": "date" },
+                            "endDate": { "type": "string", "format": "date" },
+                            "status": { "type": "string", "example": "Denied" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "404": {
+                "description": "Leave request not found",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string", "example": "No request found" }
+                      }
+                    }
+                  }
+                }
+              },
+              "500": {
+                "description": "Internal server error",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "message": { "type": "string" },
+                        "error": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+
+    "/leave/summary": {
+      "get": {
+        "summary": "Get a summary of leave request statuses",
+        "description": "Fetch a summary of leave requests grouped by their status (e.g., Pending, Approved, Denied).",
+        "responses": {
+          "200": {
+            "description": "Summary of leave requests statuses",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pending": {
+                      "type": "integer",
+                      "example": 5
+                    },
+                    "approved": {
+                      "type": "integer",
+                      "example": 10
+                    },
+                    "denied": {
+                      "type": "integer",
+                      "example": 2
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/leave/my-request/{employeeId}": {
+      "get": {
+        "summary": "View a specific leave request of the employee",
+        "description": "Allows an employee to view the leave request they have submitted.",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the employee whose leave request is to be viewed.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully fetched leave request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "request": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "507f1f77bcf86cd799439011"
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "Pending"
+                        },
+                        "startDate": {
+                          "type": "string",
+                          "example": "2024-12-01T00:00:00Z"
+                        },
+                        "endDate": {
+                          "type": "string",
+                          "example": "2024-12-05T00:00:00Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Leave request not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Request not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+        "components": {
+          "securitySchemes": {
+            "bearerAuth": {
+              "type": "http",
+              "scheme": "bearer",
+              "bearerFormat": "JWT"
+            }
+          }
+        }
+      
+}
