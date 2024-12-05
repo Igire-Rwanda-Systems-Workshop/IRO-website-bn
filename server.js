@@ -2,7 +2,7 @@ import express from "express"
 import dotenv from "dotenv"
 import connection from "./db/connection.js"
 import router from "./routes/router.js"
-import swaggerUi from "swagger-ui-express";
+// import swaggerUi from "swagger-ui-express";
 // import swagger from "./docs/swagger.json" assert { type: "json" };
 
 dotenv.config()
