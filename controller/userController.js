@@ -16,7 +16,7 @@ let otpStorage = {};
 
 
 const adminSignup = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name,userId, email, password } = req.body;
     
     // Validate inputs
     if (!name || !email || !password) {
@@ -35,6 +35,7 @@ const adminSignup = async (req, res) => {
 
       const user = {
         name,
+        userId,
         email,
         password,
         role: 'admin',
@@ -145,11 +146,11 @@ const createUser = async (req, res) => {
     }
 
     // Extract data from the request body
-    const { name, email, role } = req.body;
+    const { name,userId, email, role } = req.body;
     const plainPassword = Math.random().toString(36).slice(-8); // Generate a random password
 
     // Create a new user with the plain password (hashed in the model pre-save hook)
-    const newUser = new userModel({ name, email, password: plainPassword, role });
+    const newUser = new userModel({ name,userId, email, password: plainPassword, role });
     await newUser.save();
 
     // Log credentials (for debugging purposes only)
@@ -174,9 +175,9 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     const { id } = req.params;
-    const { name, email, role } = req.body;
+    const { name,userId, email, role } = req.body;
 
-    const updatedUser = await userModel.findByIdAndUpdate(id, { name, email, role ,isVerified:true }, { new: true });
+    const updatedUser = await userModel.findByIdAndUpdate(id, { name,userId, email, role ,isVerified:true }, { new: true });
     if (!updatedUser) return res.status(404).json({ message: 'User not found' });
 
     res.json({ message: 'User updated successfully', updatedUser });

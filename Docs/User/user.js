@@ -13,10 +13,11 @@ const userPaths = {
               type: 'object',
               properties: {
                 name: { type: 'string' },
+                userId: { type: 'string'},
                 email: { type: 'string' },
                 password: { type: 'string' },
               },
-              required: ['name', 'email', 'password'],
+              required: ['name', 'email', 'password', 'userId'],
             },
           },
         },
@@ -167,6 +168,7 @@ const userPaths = {
               type: 'object',
               properties: {
                 name: { type: 'string' },
+                userId: { type: 'string'},
                 email: { type: 'string' },
                 role: { type: 'string' },
               },
@@ -277,6 +279,7 @@ const userPaths = {
               type: 'object',
               properties: {
                 name: { type: 'string' },
+                userId: { type: 'string'},
                 email: { type: 'string' },
                 role: { type: 'string' },
               },
