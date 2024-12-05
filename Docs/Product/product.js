@@ -1023,12 +1023,9 @@ const productPaths = {
     },
   },
 
-  
-
-
-  
   "/api/Inventory/product/product-status": {
         "get": {
+          tags: ["Products"],
           "summary": "Get Product Status by Month",
           "description": "Retrieve daily aggregation of product statuses (borrowed, stolen, damaged, available) for a specific month.",
           "parameters": [

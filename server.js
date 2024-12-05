@@ -13,7 +13,7 @@ import specs from './Docs/swagger.js';
 const app = express();
 
 const corsOptions = {
-    origin: ['http://localhost:8000', 'https://iro-website-bn.onrender.com'], // Add your deployed URL
+    origin: ['http://localhost:8000', 'https://iro-website-bn-1.onrender.com'], // Add your deployed URL
     credentials: true, // Allow credentials like cookies
     allowedHeaders: ['Authorization', 'Content-Type'],
     methods: ['GET', 'POST', 'PUT', 'UPDATE', 'DELETE'],
@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(bodyParser.json()); // To parse JSON bodies
 app.use('/api/Inventory', Router);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs)); // <-- Use 'specs' from the Swagger config file
-console.log('our specs are',specs);
+
 
 // Connect to MongoDB
 const connectDB = async () => {
