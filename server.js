@@ -14,18 +14,15 @@ app.use(express.json())
 app.use( router )
 // cors
 const corsOptions = {
-    origin: ['http://localhost:3000', 'https://iro-employee-bn.onrender.com/'], // Add your deployed URL
-    credentials: true, // Allow credentials like cookies
+    origin: ['http://localhost:3000', 'https://iro-employee-bn.onrender.com/'], 
+    credentials: true, 
     allowedHeaders: ['Authorization', 'Content-Type'],
     methods: ['GET', 'POST', 'PUT', 'UPDATE', 'DELETE'],
 };
-app.use( cors() )
+app.use( cors(corsOptions) )
 
 // Swagger Documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
-
-
-
 
 
 app.listen(process.env.PORT,async ()=>{
