@@ -37,11 +37,11 @@ router.post("/forget-password", managePassword.forgotPassword)
 router.put("/reset-password/:token", managePassword.updatePassword)
 
 // MANAGING LEAVE REQUEST
-router.get("/leave-requests", manageRequest.viewAllRequest)
+router.get("/view-leave-requests", manageRequest.viewAllRequest)
 router.post("/leave-requests", manageRequest.sendRequest)
-router.put("/leave-requests/:id/approve", manageRequest.confirmRequest)
+router.put("/leave-requests/approve/:id", manageRequest.confirmRequest)
 router.put("/leave-requests/:id/deny", manageRequest.denyRequest)
-router.get("/leave-requests/employee/:employeeId", Employees.viewMyRequest)
-router.put("/leave-requests/:id/cancel", Employees.cancelRequest)
+router.get("/view-employee-requests/:employeeId", Employees.viewMyRequest)
+router.put("/leave-requests/cancel/:id/", Employees.cancelRequest)
 
 export default router

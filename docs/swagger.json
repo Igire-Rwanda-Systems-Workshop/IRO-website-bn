@@ -650,128 +650,51 @@
       }
       },
 
-      "/addLeaveType": {
-        "post": {
-          "summary": "Add a New Leave Type",
-          "description": "Create a new leave type.",
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "body": {
-                      "type": "object",
-                      "properties": {
-                        "leaveType": {
-                          "type": "string",
-                          "description": "The name of the leave type (e.g., Annual Leave)."
-                        },
-                        "description": {
-                          "type": "string",
-                          "description": "A brief description of the leave type."
-                        }
-                      },
-                      "required": ["leaveType", "description"]
-                    }
+   "/addLeaveType": {
+  "post": {
+    "summary": "Add a New Leave Type",
+    "description": "Create a new leave type.",
+    "parameters": [
+      {
+        "name": "body",
+        "in": "body",
+        "description": "Leave type details to be added.",
+        "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+                  "leaveType": {
+                    "type": "string",
+                    "description": "The name of the leave type (e.g., Annual Leave)."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "A brief description of the leave type."
+                  },
+                  "daysAllowed": {
+                    "type": "integer",
+                    "description": "The maximum number of days allowed for this leave type."
                   }
                 },
-                "example": {
-                  "body": {
-                    "leaveType": "this is new leave type",
-                    "description": "no description"
-                  }
-                }
+                "required": ["leaveType", "description", "daysAllowed"]
               }
             }
-          },
-          "responses": {
-            "201": {
-              "description": "Leave type added successfully.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string"
-                      },
-                      "status": {
-                        "type": "string"
-                      },
-                      "data": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "description": "ID of the new leave type."
-                          },
-                          "leaveType": {
-                            "type": "string"
-                          },
-                          "description": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "example": {
-                    "message": "Leave type added successfully",
-                    "status": "Success",
-                    "data": {
-                      "id": "12345",
-                      "leaveType": "this is new leave type",
-                      "description": "no description"
-                    }
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Bad request or duplicate leave type.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string"
-                      }
-                    }
-                  },
-                  "example": {
-                    "message": "Leave type already exists."
-                  }
-                }
-              }
-            },
-            "500": {
-              "description": "Internal server error.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string"
-                      },
-                      "error": {
-                        "type": "string"
-                      }
-                    }
-                  },
-                  "example": {
-                    "message": "Internal server error",
-                    "error": "Detailed error message"
-                  }
-                }
-              }
-            }
-          }
-        }
+    ],
+    "responses": {
+      "202": {
+        "description": "Leave type added successfully."
       },
+    "400":{
+      "description": "Invalid request."
+    },
+    "500": {
+      "description": "Internal server error."
+      }
+    }
+  }
+     
+},
+
 
    "/getleaveType/{id}": {
     "get": {
@@ -868,8 +791,7 @@
   },
 
 
-
-    "/update/LeaveType/{id}": {
+    "/updateLeaveType/{id}": {
       "put": {
         "summary": "Update a leave type",
         "description": "Updates a specific leave type by its ID.",
@@ -878,71 +800,69 @@
           {
             "in": "path",
             "name": "id",
-            "required": true,
             "description": "The ID of the leave type to update.",
-            "schema": {
+            "required":true,
               "type": "string"
+            },
+
+            {
+            "in":"body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "leaveType": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "daysAllowed": {
+                  "type": "integer"
+                }
+              },
+              "required": ["leaveType", "description", "daysAllowed"]
             }
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "leaveType": {
-                    "type": "string",
-                    "example": "Updated leaveType"
-                  },
-                  "description": {
-                    "type": "string",
-                    "example": "Updated description"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Leave type updated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    },
-                    "leaveType": {
+            "responses": {
+              "200": {
+                "description": "Leave type updated successfully",
+                "content": {
+                  "application/json": {
+                    "schema": {
                       "type": "object",
                       "properties": {
-                        "_id": {
+                        "message": {
                           "type": "string"
                         },
                         "leaveType": {
-                          "type": "string"
-                        },
-                        "description": {
-                          "type": "string"
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "type": "string"
+                            },
+                            "leaveType": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            }
+                          }
                         }
                       }
                     }
                   }
                 }
+              },
+              "404": {
+                "description": "Leave type not found"
+              },
+              "500": {
+                "description": "Internal server error"
               }
             }
-          },
-          "404": {
-            "description": "Leave type not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
+          }    
   },
 
 
@@ -1038,165 +958,132 @@
 },
     
    "/update/employee/{id}": {
-      "put": {
-        "summary": "Update HR",
-        "description": "Update details of an HR record.",
-        "operationId": "updateHR",
-        "parameters": [
+    "put": {
+      "summary": "Update employee",
+      "description": "Updates a specific employee by id.",
+      "operationId": "update employee",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "description": "The ID of the employee  type to update.",
+          "required":true,
+            "type": "string"
+          },
+
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "ID of the HR record to update.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "firstName": {
-                    "type": "string",
-                    "example": "Jane"
-                  },
-                  "lastName": {
-                    "type": "string",
-                    "example": "Smith"
-                  },
-                  "email": {
-                    "type": "string",
-                    "example": "jane.smith@example.com"
-                  }
-                }
+          "in":"body",
+          "name": "body",
+          "schema": {
+            "type": "object",
+            "properties": {
+
+               "supervisorId": {
+                "type": "string",
+                "required":true
+
+              },
+
+              "firstName": {
+                "type": "string",
+                "required":true
+
+              },
+              "lastName": {
+                "type": "string",
+                "required":true
+              },
+              "email": {
+                "type": "string",
+                "required":true
+              },
+              "position": {
+                "type": "string",
+                "required":true
+              },
+              "gender": {
+                "type": "string",
+                "required":true
+              },
+              "telephone": {
+                "type": "string",
+                "required":true
               }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "HR successfully updated.",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "Human Resource updated",
-                  "hrToUpdate": {
-                    "firstName": "Jane",
-                    "lastName": "Smith",
-                    "email": "jane.smith@example.com"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "HR record not found.",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "HR record not found"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error.",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "Internal server error",
-                  "error": "Error message"
-                }
-              }
-            }
+            },
+            "required": ["supervisorId", "firstName",  "lastName", "email","position","gender","telephone"]
           }
         }
-      }
+      ],
+          "responses": {
+            "200": {
+              "description": "Employee found successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      },
+                      "employee": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "employee": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "employee not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }  
     
   },
 
 "/forget-password": {
-      "post": {
-        "summary": "Send Reset Password Link",
-        "description": "Sends a password reset link to the user's email.",
-        "operationId": "sendResetPasswordLink",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "description": "The email address of the user requesting the password reset.",
-            "schema": {
+  "post": {
+    "summary": "incase you forgot your password",
+    "description": "if you forgot your password",
+    "tags": ["User-Auth"],
+    "parameters": [
+      {
+        "in": "body",
+        "name": "body",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "email": {
               "type": "string",
-              "format": "email",
-              "example": "user@example.com"
+              "example": "john.doe@example.com"
             }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "format": "email",
-                    "example": "user@example.com"
-                  }
-                }
-              }
-            }
-          }
+          },
+          "required": ["email"]
         },
-        "responses": {
-          "200": {
-            "description": "Password reset link sent successfully.",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "Password reset link was sent"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request. Email is missing or user does not exist.",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "Missing Email": {
-                    "value": {
-                      "message": "Email is required"
-                    }
-                  },
-                  "User Not Found": {
-                    "value": {
-                      "message": "User does not exist"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error.",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "Something went wrong",
-                  "error": "Error message"
-                }
-              }
-            }
-          }
-        }
+        "required": true,
+        "description": "forgotPassword object"
       }
+    ],
+    "responses": {
+      "201": {
+        "description": "Account click on forgotPassword"
+      }
+    }
+  }
     
   },
     "/api/auth/reset-password/{token}": {
@@ -1268,7 +1155,7 @@
         }
       }
     },
-    "/leave/viewAllRequests": {
+    "/view-leave-requests": {
       "get": {
         "summary": "View all leave requests",
         "description": "Retrieve all leave requests from the database.",
@@ -1381,8 +1268,8 @@
     },
 
 
-    "/leave/confirmRequest/{id}": {
-      "patch": {
+    "/leave-requests/approve/{id}": {
+      "put": {
         "summary": "Approve a leave request",
         "description": "Approve a leave request by its ID.",
         "tags": ["Leave Requests"],
@@ -1411,7 +1298,7 @@
       }
     },
     "/leave/denyRequest/{id}": {
-      "patch": {
+      "put": {
         "summary": "Deny a leave request",
         "description": "Deny a leave request by its ID.",
         "tags": ["Leave Requests"],
@@ -1439,7 +1326,7 @@
         }
       }
     },
-    "/leave/cancel/{id}": {
+    "/leave-requests/cancel/{id}": {
       "put": {
         "summary": "Cancel a leave request",
         "description": "Allows an employee to cancel their leave request.",
@@ -1497,7 +1384,7 @@
       }
     },
 
-    "/leave/view/{employeeId}": {
+    "/view-employee-requests/{employeeId}": {
       "get": {
         "summary": "View leave request",
         "description": "Allows an employee to view their leave request.",

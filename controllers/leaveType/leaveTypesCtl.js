@@ -12,8 +12,8 @@ import LeaveType from "../../schemas/leaveType.js";
 const addLeaveType = async (req, res) => {
 
   try{
-      const {leaveType, description} = req.body
-      const insertLeaveType = await LeaveType.create({leaveType, description})
+      const {leaveType, description,daysAllowed} = req.body
+      const insertLeaveType = await LeaveType.create({leaveType, description,daysAllowed})
 
       // if(!insertLeaveType){
       //     return res.status(300).json({message:"Leave Type not added"})
