@@ -16,62 +16,60 @@ let otpStorage = {};
 
 
 const adminSignup = async (req, res) => {
-    const { name,userId, email, password } = req.body;
-    
-    // Validate inputs
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: 'Name, email, and password are required' });
-    }
-  
-    try {
-      // Check if email is already in use
-      const existingUser = await userModel.findOne({ email: email });
-      if (existingUser) {
-        return res.status(400).json({ message: 'Email is already exists' });
-      }
-  
-      // Hash password
-      // const hashedPassword = bcrypt.hashSync(password, 10);
+  const { name, userId, email, role = 'admin' } = req.body;
 
-      const user = {
-        name,
-        userId,
-        email,
-        password,
-        role: 'admin',
-      }
-      
-  
-      // Create admin user
-      const newAdmin = new userModel(user);
-  
-      await newAdmin.save();
-      console.log('New Admin Created:', newAdmin);
-      // Generate OTP
-      const otp = otpService.generateOTP();
-      otpStorage[email] = otp;
-      console.log('Generated OTP:', otp);
-      console.log('OTP Storage:', otpStorage);
-  
-      // Send OTP to email
-      await emailServices.sendOTP(email, otp);
-  
-      // Generate a JWT
-      const token = generateAccessToken(
-        { id: newAdmin._id, role: newAdmin.role },
-        process.env.JWT_SECRET,
-        '1d'
-      );
-  
-      res.status(201).json({
-        message: 'Signup successful. Check your email for the OTP.',
-        token,
-      });
-    } catch (error) {
-      console.error('Error during admin signup:', error); // Log error for debugging
-      res.status(500).json({ message: 'Signup failed', error: error.message });
+  // Validate inputs
+  if (!name || !email) {
+    return res.status(400).json({ message: 'Name and email are required' });
+  }
+
+  try {
+    // Check if email is already in use
+    const existingUser = await userModel.findOne({ email: email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already exists' });
     }
-  };
+
+    // Create user with pending password status
+    const newAdmin = new userModel({
+      name,
+      userId,
+      email,
+      role,
+      password: null, // No immediate password
+      accountStatus: 'Pending'
+    });
+
+    // Generate password setup token
+    const passwordSetupToken = newAdmin.generatePasswordSetupToken();
+
+    // Save the user
+    await newAdmin.save();
+
+    // Prepare password setup email
+    const passwordSetupLink = `${process.env.CLIENT_URL}/setup-password/${passwordSetupToken}`;
+
+    // Send email with password setup instructions
+    await emailServices.sendPasswordSetupEmail(email, passwordSetupLink);
+
+    // Generate a JWT for initial authentication if needed
+    const token = generateAccessToken(
+      { id: newAdmin._id, role: newAdmin.role },
+      process.env.JWT_SECRET,
+      '1d'
+    );
+
+    res.status(201).json({
+      message: 'Account created. Check your email to set up your password.',
+      token,
+      userId: newAdmin._id
+    });
+
+  } catch (error) {
+    console.error('Error during admin signup:', error);
+    res.status(500).json({ message: 'Signup failed', error: error.message });
+  }
+};
   
 
 
@@ -140,35 +138,79 @@ const createUser = async (req, res) => {
   try {
     // Extract the role from the token (set by the checkRole middleware)
     const { role: userRole } = req.user;
-
+    
     if (userRole !== 'admin') {
       return res.status(403).json({ message: 'Access denied. Only admins can create users.' });
     }
-
+    
     // Extract data from the request body
-    const { name,userId, email, role } = req.body;
-    const plainPassword = Math.random().toString(36).slice(-8); // Generate a random password
-
-    // Create a new user with the plain password (hashed in the model pre-save hook)
-    const newUser = new userModel({ name,userId, email, password: plainPassword, role });
+    const { name, userId, email, role } = req.body;
+    
+    // Generate a temporary token for password setup
+    const passwordSetupToken = crypto.randomBytes(32).toString('hex');
+    const tokenExpiration = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
+    
+    // Create a new user with a pending password status
+    const newUser = new userModel({ 
+      name, 
+      userId, 
+      email, 
+      role, 
+      password: null, // No password initially
+      passwordSetupToken,
+      passwordSetupTokenExpiration: tokenExpiration,
+      accountStatus: 'Pending'
+    });
+    
     await newUser.save();
-
-    // Log credentials (for debugging purposes only)
-    console.log(`Credentials sent to user: 
-      Email: ${email}, 
-      Password: ${plainPassword}, 
-      Role: ${role}`);
-
-    // Send credentials via email
-    await emailServices.sendCredentials(email, plainPassword, role);
-
-    res.status(201).json({ 
-      message: 'User created and credentials sent',
-      user: newUser, // Be cautious: this will include the hashed password
+    
+    // Prepare email with password setup link
+    const passwordSetupLink = `${process.env.CLIENT_URL}/setup-password/${passwordSetupToken}`;
+    
+    // Send email with password setup instructions
+    await emailServices.sendPasswordSetupEmail(email, passwordSetupLink);
+    
+    res.status(201).json({
+      message: 'User created. Please check email for password setup instructions.',
+      user: {
+        name: newUser.name,
+        email: newUser.email,
+        role: newUser.role
+      }
     });
   } catch (error) {
-    console.error('Error creating user:', error); // Debugging log
+    console.error('Error creating user:', error);
     res.status(500).json({ message: 'Failed to create user', error: error.message });
+  }
+};
+
+// New route handler for password setup
+export const setupUserPassword = async (req, res) => {
+  try {
+    const { token, password } = req.body;
+    
+    // Find user with matching token that hasn't expired
+    const user = await userModel.findOne({
+      passwordSetupToken: token,
+      passwordSetupTokenExpiration: { $gt: new Date() }
+    });
+    
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired token' });
+    }
+    
+    // Set the new password
+    user.password = password; // This will be hashed by the pre-save hook
+    user.passwordSetupToken = undefined;
+    user.passwordSetupTokenExpiration = undefined;
+    user.accountStatus = 'Active';
+    
+    await user.save();
+    
+    res.status(200).json({ message: 'Password set successfully. You can now log in.' });
+  } catch (error) {
+    console.error('Error setting up password:', error);
+    res.status(500).json({ message: 'Failed to set up password', error: error.message });
   }
 };
 

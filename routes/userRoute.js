@@ -3,7 +3,7 @@ import checkRole from '../middleware/permission.js';
 import  userController from '../controller/userController.js';
 const  userRouter = express.Router();
 import authenticate from '../middleware/authmiddleware.js';
-
+import { setupUserPassword } from '../controller/userController.js'
 
 
 
@@ -13,6 +13,8 @@ import authenticate from '../middleware/authmiddleware.js';
 userRouter.post('/signup', userController.adminSignup);
 userRouter.post('/verify-otp', userController.verifyOTP);
 userRouter.get('/', userController.getAll)
+// set user password
+userRouter.post('/setup-password', setupUserPassword);
 // Login for both admin and users
 userRouter.post('/login', userController.login);
 
