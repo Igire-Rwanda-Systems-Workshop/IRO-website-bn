@@ -8,14 +8,14 @@ const productRouter = express.Router();
 const productController = new ProductController();
 
 // Create product
-productRouter.post('/create-product',authenticate , productController.createProduct);
+productRouter.post('/create-product', productController.createProduct);
 productRouter.get('/products-by-category/:categoryId', productController.getProductsByCategoryId);
-productRouter.get('/getAll',authenticate , productController.getAllProducts);
-productRouter.get('/getById/:id',authenticate, productController.getProductById);
-productRouter.put('/updateStatus/:id',authenticate, productController.updateProductStatusCondition)
-productRouter.get('/products/category/:categoryId',authenticate, productController.getProductsByCategoryId);
-productRouter.put('/update/:id',authenticate, productController.updateProduct);
+productRouter.get('/getAll', productController.getAllProducts);
+productRouter.get('/getById/:id', productController.getProductById);
+productRouter.put('/updateStatus/:id', productController.updateProductStatusCondition)
+productRouter.get('/products/category/:categoryId', productController.getProductsByCategoryId);
+productRouter.put('/update/:id', productController.updateProduct);
 productRouter.get('/product-status', productController.getProductStatusByMonth);
 
-productRouter.delete('/:id',authenticate, productController.deleteProduct);
+productRouter.delete('/:id', productController.deleteProduct);
 export default productRouter;
